@@ -20,7 +20,7 @@ namespace ToDoListServer
     {
         private IPAddress IpAddress;
         private int Port;
-        private Classes.DataBaseContext dbContext;
+        private DataBaseContext dbContext;
         private TcpListener tcpListener;
 
         private int DataGridCounter = 0;
@@ -28,7 +28,7 @@ namespace ToDoListServer
         public Form1()
         {
             InitializeComponent();
-            dbContext = new Classes.DataBaseContext();
+            dbContext = new DataBaseContext();
             DrawDataGrid();
         }
 
