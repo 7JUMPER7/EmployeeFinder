@@ -1,17 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ToDoListServer
@@ -32,7 +26,6 @@ namespace ToDoListServer
             DrawDataGrid();
         }
 
-
         //События
         private void StartBut_Click(object sender, EventArgs e)
         {
@@ -49,6 +42,7 @@ namespace ToDoListServer
             thread.Start();
             WriteToConsole("Server started.");
         }
+
         private void leftBut_Click(object sender, EventArgs e)
         {
             if (DataGridCounter > 0)
@@ -57,6 +51,7 @@ namespace ToDoListServer
                 UpdateDataGrid();
             }
         }
+
         private void rightBut_Click(object sender, EventArgs e)
         {
             if (DataGridCounter < 2)
@@ -65,7 +60,6 @@ namespace ToDoListServer
                 UpdateDataGrid();
             }
         }
-
 
         //Ожидание запросов
         private void ListenerMethod()
@@ -251,10 +245,9 @@ namespace ToDoListServer
                 catch (Exception ex)
                 {
                     WriteToConsole(ex.Message);
-                }             
+                }
             }
         }
-
 
         //Работа с потоком
         private string ReadFromStream(NetworkStream stream)
@@ -270,12 +263,12 @@ namespace ToDoListServer
             } while (len >= buf.Length);
             return Encoding.Unicode.GetString(allBytes.ToArray(), 0, sum);
         }
+
         private void WriteToStream(NetworkStream stream, string message)
         {
             byte[] buf = Encoding.Unicode.GetBytes(message);
             stream.Write(buf, 0, buf.Length);
         }
-
 
         //DataGrid
         private void UpdateDataGrid()
@@ -283,6 +276,7 @@ namespace ToDoListServer
             Action action = () => DrawDataGrid();
             this.Invoke(action);
         }
+
         private void DrawDataGrid()
         {
             switch (DataGridCounter)
@@ -292,7 +286,6 @@ namespace ToDoListServer
                 case 2: { DataBox.DataSource = dbContext.Notes.ToArray(); break; }
             }
         }
-
 
         //Console
         private void WriteToConsole(string message)
