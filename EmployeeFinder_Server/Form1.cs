@@ -135,6 +135,22 @@ namespace EmployeeFinder_Server
         }
 
         //DataGrid
+        private void UpdateDataGrid()
+        {
+            Action action = () => DrawDataGrid();
+            this.Invoke(action);
+        }
+
+        private void DrawDataGrid()
+        {
+            switch (DataGridCounter)
+            {
+                case 0: { DataBox.DataSource = dbContext.Users.ToArray(); break; }
+                case 1: { DataBox.DataSource = dbContext.Groups.ToArray(); break; }
+                case 2: { DataBox.DataSource = dbContext.Notes.ToArray(); break; }
+            }
+        }
+
 
         //Console
         private void WriteToConsole(string message)
