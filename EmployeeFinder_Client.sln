@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeFinder_Client", "EmployeeFinder_Client\EmployeeFinder_Client.csproj", "{EABAA106-5F10-4306-9378-FF21BF503C2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeFinder_Server", "EmployeeFinder_Server\EmployeeFinder_Server.csproj", "{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EABAA106-5F10-4306-9378-FF21BF503C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EABAA106-5F10-4306-9378-FF21BF503C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EABAA106-5F10-4306-9378-FF21BF503C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EABAA106-5F10-4306-9378-FF21BF503C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EF0FA1F4-8CD9-4158-B832-60AF4389781E}
+	EndGlobalSection
+EndGlobal
