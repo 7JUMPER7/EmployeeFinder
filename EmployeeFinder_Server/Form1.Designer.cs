@@ -1,5 +1,5 @@
 ﻿
-namespace ToDoListServer
+namespace EmployeeFinder_Server
 {
     partial class Form1
     {
