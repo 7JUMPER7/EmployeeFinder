@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using EmployeeFinder_Server.DbClasses;
 
 namespace EmployeeFinder_Server
 {
@@ -18,9 +19,13 @@ namespace EmployeeFinder_Server
 
         private int DataGridCounter = 0;
 
+        private DataBaseContext dataBase;
+
         public Form1()
         {
             InitializeComponent();
+            dataBase = new DataBaseContext();
+            dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
         }
 
         //События
