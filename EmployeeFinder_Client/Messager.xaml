@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmployeeFinder_Client"
         mc:Ignorable="d"
-        Title="Messager" Height="450" Width="800">
+        Title="Messager" Height="474.59" Width="292.213">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ListView Grid.ColumnSpan="2"></ListView>
+        <TextBox Grid.Row="1" Margin="6px" Text="help" FontSize="20px"></TextBox>
+        <Button Grid.Column="1" Grid.Row="1" Margin="7px" Content="&gt;" FontSize="40px" Click="Button_Click" >
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="24"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>
