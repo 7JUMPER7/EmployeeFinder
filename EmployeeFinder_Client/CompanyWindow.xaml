@@ -61,11 +61,11 @@
                 <Label>Портфолио:</Label>
             </StackPanel>
             <StackPanel HorizontalAlignment="Left" Grid.Column="1">
-                <TextBox Margin="0, 3, 0, 5">ФИО:</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Специализация:</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Возраст:</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Город</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Портфолио:</TextBox>
+                <TextBox x:Name="CNameBox" Margin="0, 3, 0, 5">ФИО:</TextBox>
+                <TextBox x:Name="CSpecBox" Margin="0, 3, 0, 5">Специализация:</TextBox>
+                <TextBox x:Name="CAgeBox" Margin="0, 3, 0, 5">Возраст:</TextBox>
+                <TextBox x:Name="CCityBox" Margin="0, 3, 0, 5">Город</TextBox>
+                <TextBox x:Name="CPortfolioBox" Margin="0, 3, 0, 5">Портфолио:</TextBox>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">

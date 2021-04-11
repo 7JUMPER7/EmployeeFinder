@@ -9,6 +9,41 @@
       Title="CandidateWindow" Background="White">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+            <Label HorizontalAlignment="Center">Анкета:</Label>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!--Labels-->
+                <StackPanel>
+                    <Label>ФИО:</Label>
+                    <Label>Специализация:</Label>
+                    <Label>Возраст:</Label>
+                    <Label>Город:</Label>
+                    <Label>Портфолио:</Label>
+                </StackPanel>
+                <!--Text boxes-->
+                <StackPanel Grid.Column="1">
+                    <TextBox x:Name="ENameBox" Margin="0, 0, 0, 10"></TextBox>
+                    <TextBox x:Name="CSpecBox" Margin="0, 0, 0, 10"></TextBox>
+                    <TextBox x:Name="CAgeBox" Margin="0, 0, 0, 10"></TextBox>
+                    <TextBox x:Name="CCityBox" Margin="0, 0, 0, 10"></TextBox>
+                    <TextBox x:Name="CPortfolioBox"></TextBox>
+                </StackPanel>
+            </Grid>
+            <StackPanel Margin="0, 20, 0, 0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="SaveBut">Сохранить</Button>
+                <Button x:Name="DelBut">Удалить</Button>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>
