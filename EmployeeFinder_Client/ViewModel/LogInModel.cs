@@ -103,12 +103,12 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         /// Переход к отображению RegisterPage
         /// </summary>
-        private RelayCommand _RegisterCommand;
-        public RelayCommand RegisterCommand
+        private RelayCommand _RegisterPageCommand;
+        public RelayCommand RegisterPageCommand
         {
             get
             {
-                return _RegisterCommand = _RegisterCommand ??
+                return _RegisterPageCommand = _RegisterPageCommand ??
                   new RelayCommand(OnRegisterUC, CanRegisterUC);
             }
         }
