@@ -14,7 +14,7 @@ namespace EmployeeFinder_Server
         public DBController()
         {
             dataBase = new DataBaseContext();
-            //dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
+            dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
         }
 
         /// <summary>

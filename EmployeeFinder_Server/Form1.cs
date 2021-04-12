@@ -34,11 +34,12 @@ namespace EmployeeFinder_Server
             PortBox.ReadOnly = true;
             StartBut.Enabled = false;
 
-            tcpListener = new TcpListener(IpAddress, Port);
-            tcpListener.Start();
-            Thread thread = new Thread(ListenerMethod);
-            thread.IsBackground = true;
-            thread.Start();
+            ServerLogical sl = new ServerLogical();
+            //tcpListener = new TcpListener(IpAddress, Port);
+            //tcpListener.Start();
+            //Thread thread = new Thread(ListenerMethod);
+            //thread.IsBackground = true;
+            //thread.Start();
             WriteToConsole("Server started.");
         }
 
@@ -118,7 +119,7 @@ namespace EmployeeFinder_Server
         //Работа с потоком
         private string ReadFromStream(NetworkStream stream)
         {
-            byte[] buf = new byte[64];
+            byte[] buf = new byte[1024];
             int len = 0, sum = 0;
             List<byte> allBytes = new List<byte>();
             do

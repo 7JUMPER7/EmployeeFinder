@@ -35,6 +35,6 @@
 
         <Button Content="Рег" Grid.Row="4" Margin="225,0,0,0" Height="50" Width="120"
                 Background="#219ebc" Foreground="White" BorderBrush="White" FontSize="16"
-                Command="{Binding LoadMainViewCommand}"></Button>
+                Command="{Binding RegisterCommand}"></Button>
     </Grid>
 </UserControl>

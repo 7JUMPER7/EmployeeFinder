@@ -11,9 +11,9 @@ namespace EmployeeFinder_Server
 {
     internal class ServerLogical
     {
-        private static DBController controller;
+        private DBController controller;
 
-        private ServerLogical()
+        public ServerLogical()
         {
             controller = new DBController();
             NewThread();
@@ -22,9 +22,9 @@ namespace EmployeeFinder_Server
         /// <summary>
         /// Ожидает подключение новых пользователей и в новом потоке начинает с ними работать
         /// </summary>
-        private static void NewThread()
+        private void NewThread()
         {
-            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8081);
+            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 1024);
             server.Start();
 
             new Thread(() =>
@@ -52,7 +52,7 @@ namespace EmployeeFinder_Server
         /// </summary>
         /// <param name="client"></param>
         /// <param name="controller"></param>
-        private static void Logical(TcpClient client, DBController controller)
+        private void Logical(TcpClient client, DBController controller)
         {
             Message message = MessagesAsistent.ReadMessage(client);
             try

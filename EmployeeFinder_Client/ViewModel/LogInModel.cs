@@ -109,7 +109,7 @@ namespace EmployeeFinder_Client.ViewModel
                 Login = InputLogin,
                 Password = InputPassword
             };
-            if (_IsLikeCompanyCheck == true)
+            if (IsLikeCompanyCheck)
             {
                 //LogIn like company
                 message.MessageProcessing = "LOGC";
