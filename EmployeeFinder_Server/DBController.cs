@@ -7,7 +7,7 @@ using EmployeeFinder_Server.DbClasses;
 
 namespace EmployeeFinder_Server
 {
-    class DBController
+    internal class DBController
     {
         private DataBaseContext dataBase;
 
@@ -17,43 +17,51 @@ namespace EmployeeFinder_Server
             //dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
         }
 
-        private Message IsLoginCorrect(Message message)
+        /// <summary>
+        /// Проверяет есть ли филиал с такими данными в базе данных
+        /// </summary>
+        /// <param name="message">Сообщение с данными о филиале</param>
+        /// <returns>Сообщение с обработаными данными</returns>
+        public Message IsLoginCorrectCompany(Message message)
         {
             Message answer = new Message();
-
-            switch (message.MessageProcessing)
-            {
-                case "LOGC": //Вход как компания
-                    {
-                        foreach (Companies company in dataBase.Companies)
-                        {
-                            if (message.Login == company.Login)
-                            {
-                                //Если пароль совпал
-                                if (message.Password == company.Password)
-                                    answer.MessageProcessing = "ALOK";
-                                //Если пароль не совпал
-                                else
-                                    answer.MessageProcessing = "PASS";
-                                break;
-                            }
-                        }
-
-                        if (message.MessageProcessing == null)
-                        {
-                            answer.MessageProcessing = "LOGN";
-                        }
-                        break;
-                    }
-                case "LOGE": //Вход как работник
-                    {
-
-                        break;
-                    }
-                default:
+            foreach (Companies company in dataBase.Companies)
+                if (message.Login == company.Login)
+                {
+                    //Если пароль совпал
+                    if (message.Password == company.Password)
+                        answer.MessageProcessing = "ALOK";
+                    //Если пароль не совпал
+                    else
+                        answer.MessageProcessing = "PASS";
                     break;
-            }
+                }
+            if (message.MessageProcessing == null)
+                answer.MessageProcessing = "LOGN";
+            return answer;
+        }
 
+        /// <summary>
+        /// Проверяет есть ли роботник с такими данными в базе данных
+        /// </summary>
+        /// <param name="message">Сообщение с данными о пользователи</param>
+        /// <returns>Сообщение с обработаными данными</returns>
+        public Message IsLoginCorrectEmployee(Message message)
+        {
+            Message answer = new Message();
+            foreach (Candidates candidate in dataBase.Candidates)
+                if (message.Login == candidate.Login)
+                {
+                    //Если пароль совпал
+                    if (message.Password == candidate.Password)
+                        answer.MessageProcessing = "ALOK";
+                    //Если пароль не совпал
+                    else
+                        answer.MessageProcessing = "PASS";
+                    break;
+                }
+            if (message.MessageProcessing == null)
+                answer.MessageProcessing = "LOGN";
             return answer;
         }
     }

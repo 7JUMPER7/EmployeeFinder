@@ -32,6 +32,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Ввод логина
         /// </summary>
         private string _InputLogin;
+
         public string InputLogin
         {
             get { return _InputLogin; }
@@ -46,6 +47,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Ввод пароля
         /// </summary>
         private string _InputPassword;
+
         public string InputPassword
         {
             get { return _InputPassword; }
@@ -60,6 +62,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Проверка является ли компанией
         /// </summary>
         private bool _IsLikeCompanyCheck;
+
         public bool IsLikeCompanyCheck
         {
             get { return _IsLikeCompanyCheck; }
@@ -74,6 +77,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Переход к отображению CompanyWindow или CandidateWindow
         /// </summary>
         private RelayCommand _LoginCommand;
+
         public RelayCommand LoginCommand
         {
             get
@@ -82,10 +86,12 @@ namespace EmployeeFinder_Client.ViewModel
                   new RelayCommand(OnLoadUC, CanLoadUC);
             }
         }
+
         private bool CanLoadUC()
         {
             return true;
         }
+
         private void OnLoadUC()
         {
             //
@@ -94,11 +100,15 @@ namespace EmployeeFinder_Client.ViewModel
 
             TcpClient client = new TcpClient();
             client.Connect("127.0.0.1", 1024);
+            Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
+            thread.IsBackground = true;
+            thread.Start(client);
+
             Message message = new Message()
             {
                 Login = InputLogin,
                 Password = InputPassword
-            };         
+            };
             if (_IsLikeCompanyCheck == true)
             {
                 //LogIn like company
@@ -110,11 +120,8 @@ namespace EmployeeFinder_Client.ViewModel
                 message.MessageProcessing = "LOGE";
             }
             MessagesAsistent.SendMessage(client, message);
-
-            Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
-            thread.IsBackground = true;
-            thread.Start(client);
         }
+
         //Метод ожидание ответа сервера для потока
         private void CheckForLogin(object obj)
         {
@@ -132,12 +139,10 @@ namespace EmployeeFinder_Client.ViewModel
                     }
                 case "LOGN": //Неверный логин
                     {
-
                         break;
                     }
                 case "PASS": //Неверный пароль
                     {
-
                         break;
                     }
                 default: //Прочая ошибка
@@ -150,6 +155,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Переход к отображению RegisterPage
         /// </summary>
         private RelayCommand _RegisterCommand;
+
         public RelayCommand RegisterCommand
         {
             get
@@ -158,10 +164,12 @@ namespace EmployeeFinder_Client.ViewModel
                   new RelayCommand(OnRegisterUC, CanRegisterUC);
             }
         }
+
         private bool CanRegisterUC()
         {
             return true;
         }
+
         private void OnRegisterUC()
         {
             _MainCodeBehind.LoadView(ViewType.RegisterPage);
