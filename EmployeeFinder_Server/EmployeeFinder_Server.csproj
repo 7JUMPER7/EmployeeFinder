@@ -64,6 +64,7 @@
     <Compile Include="DbClasses\DbContext.cs" />
     <Compile Include="DbClasses\Messages.cs" />
     <Compile Include="DbClasses\Specialisations.cs" />
+    <Compile Include="DBController.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

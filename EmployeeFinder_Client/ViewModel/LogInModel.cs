@@ -8,6 +8,8 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using EmployeeFinder_Client.View;
 using System.Windows.Controls;
+using System.Net.Sockets;
+using System.Threading;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -90,13 +92,57 @@ namespace EmployeeFinder_Client.ViewModel
             //логика проверки логина и пароля
             //
 
+            TcpClient client = new TcpClient();
+            client.Connect("127.0.0.1", 1024);
+            Message message = new Message()
+            {
+                Login = InputLogin,
+                Password = InputPassword
+            };         
             if (_IsLikeCompanyCheck == true)
             {
-                _MainCodeBehind.LoadView(ViewType.CompanyWindow);
+                //LogIn like company
+                message.MessageProcessing = "LOGC";
             }
             else
             {
-                _MainCodeBehind.LoadView(ViewType.CandidateWindow);
+                //LogIn like employee
+                message.MessageProcessing = "LOGE";
+            }
+            MessagesAsistent.SendMessage(client, message);
+
+            Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
+            thread.IsBackground = true;
+            thread.Start(client);
+        }
+        //Метод ожидание ответа сервера для потока
+        private void CheckForLogin(object obj)
+        {
+            TcpClient client = obj as TcpClient;
+            Message answer = MessagesAsistent.ReadMessage(client);
+            switch (answer.MessageProcessing)
+            {
+                case "ALOK": //Всё правильно
+                    {
+                        if (_IsLikeCompanyCheck == true)
+                            _MainCodeBehind.LoadView(ViewType.CompanyWindow);
+                        else
+                            _MainCodeBehind.LoadView(ViewType.CandidateWindow);
+                        break;
+                    }
+                case "LOGN": //Неверный логин
+                    {
+
+                        break;
+                    }
+                case "PASS": //Неверный пароль
+                    {
+
+                        break;
+                    }
+                default: //Прочая ошибка
+
+                    break;
             }
         }
 

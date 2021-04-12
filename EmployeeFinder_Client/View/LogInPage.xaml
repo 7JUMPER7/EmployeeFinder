@@ -21,6 +21,7 @@
             <StackPanel Orientation="Horizontal">
                 <Label>Пароль:</Label>
                 <TextBox Text="{Binding InputPassword}" Padding="0, 0, 190, 0"></TextBox>
+                <CheckBox x:Name="ShowPassCheckBox"></CheckBox>
             </StackPanel>
             <CheckBox IsChecked="{Binding IsLikeCompanyCheck}">Как компания</CheckBox>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
