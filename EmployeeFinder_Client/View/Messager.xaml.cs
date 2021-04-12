@@ -18,7 +18,7 @@ namespace EmployeeFinder_Client.View
     /// <summary>
     /// Interaction logic for Messager.xaml
     /// </summary>
-    public partial class Messager : UserControl
+    public partial class Messager : Window
     {
         public Messager()
         {
