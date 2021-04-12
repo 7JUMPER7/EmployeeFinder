@@ -14,7 +14,7 @@ namespace EmployeeFinder_Server
         public DBController()
         {
             dataBase = new DataBaseContext();
-            //dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
+            dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace EmployeeFinder_Server
         }
 
         /// <summary>
-        /// Проверяет есть ли роботник с такими данными в базе данных
+        /// Проверяет есть ли роботник с такими данными в базе данных. ALOK - всё ок, PASS - неверный пароль, LOGN - неверный логин.
         /// </summary>
         /// <param name="message">Сообщение с данными о пользователи</param>
         /// <returns>Сообщение с обработаными данными</returns>
@@ -63,6 +63,172 @@ namespace EmployeeFinder_Server
             if (message.MessageProcessing == null)
                 answer.MessageProcessing = "LOGN";
             return answer;
+        }
+
+        /// <summary>
+        /// Добавляет новую компанию в БД. Возвращает ALOK если всё хорошо, LOGN - логин занят, EROR - ошибка.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Message RegisterCompany(Message message)
+        {
+            Message answer = new Message();
+            bool LoginIsNotAvailable = false;
+
+            foreach (Companies company in dataBase.Companies)
+            {
+                if (message.Login == company.Login)
+                {
+                    LoginIsNotAvailable = true;
+                    break;
+                }
+            }
+
+            if (LoginIsNotAvailable == true)
+            {
+                answer.MessageProcessing = "LOGN";
+            }
+            else
+            {
+                Companies company = new Companies()
+                {
+                    Login = message.Login,
+                    Password = message.Password,
+                    Name = message.MessageText
+                };
+                try
+                {
+                    dataBase.Companies.Add(company);
+                    dataBase.SaveChanges();
+                    answer.MessageProcessing = "ALOK";
+                }
+                catch (Exception ex)
+                {
+                    answer.MessageProcessing = "EROR";
+                    answer.MessageText = ex.Message;
+                    throw;
+                }
+            }
+            return answer;
+        }
+
+        /// <summary>
+        /// Добавляет нового работника в БД. Возвращает ALOK если всё хорошо, LOGN - логин занят, EROR - ошибка.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Message RegisterEmployee(Message message)
+        {
+            Message answer = new Message();
+            bool LoginIsNotAvailable = false;
+
+            foreach (Candidates candidate in dataBase.Candidates)
+            {
+                if (message.Login == candidate.Login)
+                {
+                    LoginIsNotAvailable = true;
+                    break;
+                }
+            }
+
+            if (LoginIsNotAvailable == true)
+            {
+                answer.MessageProcessing = "LOGN";
+            }
+            else
+            {
+                Candidates candidate = new Candidates()
+                {
+                    Login = message.Login,
+                    Password = message.Password
+                };
+                try
+                {
+                    dataBase.Candidates.Add(candidate);
+                    dataBase.SaveChanges();
+                    answer.MessageProcessing = "ALOK";
+                }
+                catch (Exception ex)
+                {
+                    answer.MessageProcessing = "EROR";
+                    answer.MessageText = ex.Message;
+                    throw;
+                }
+            }
+            return answer;
+        }
+
+        /// <summary>
+        /// Сохраняет анкету работника в базу данных. Возвращает ALOK если всё хорошо, EROR - ошибка.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Message SaveEmployeeInfo(Message message)
+        {
+            Message answer = new Message();
+            //Структура строки:
+            // 0    1        2        3            4                5
+            //Id|||Name|||CityName|||Age|||SpecialisationName|||Portfolio
+            string[] EmployeeInfo = message.MessageText.Split(new string[] { "|||" }, StringSplitOptions.None);
+
+            Candidates candidate = dataBase.Candidates.Where(c => c.Login == message.Login).FirstOrDefault();
+            candidate.Name = EmployeeInfo[1];
+            candidate.Age = Int32.Parse(EmployeeInfo[3]);
+            candidate.Portfolio = EmployeeInfo[5];
+
+            try
+            {
+                //Проверка города
+                int CityId = IsCityInTable(EmployeeInfo[2]);
+                if (CityId != -1)
+                    candidate.CityId = CityId;
+                else
+                    candidate.CityId = CreateAndAddCity(EmployeeInfo[2]).Id;
+
+                //Проверка специализации
+                int SpecId = IsSpecialisationInTable(EmployeeInfo[4]);
+                if (SpecId != -1)
+                    candidate.SpecialisationId = SpecId;
+                else
+                    candidate.SpecialisationId = CreateAndAddSpecialisation(EmployeeInfo[4]).Id;
+
+                //Формирование ответа
+                answer.MessageProcessing = "ALOK";
+            }
+            catch (Exception ex)
+            {
+                answer.MessageProcessing = "EROR";
+                answer.MessageText = ex.Message;
+            }
+            return answer;
+        }
+        private int IsCityInTable(string cityName)
+        {
+            Cities city = dataBase.Cities.Where(c => c.Name == cityName).FirstOrDefault();
+            if (city != null)
+                return city.Id;
+            return -1;
+        }
+        private Cities CreateAndAddCity(string cityName)
+        {
+            Cities city = new Cities() { Name = cityName };
+            dataBase.Cities.Add(city);
+            dataBase.SaveChanges();
+            return city;
+        }
+        private int IsSpecialisationInTable(string specName)
+        {
+            Specialisations specialisation = dataBase.Specialisations.Where(s => s.Name == specName).FirstOrDefault();
+            if (specialisation != null)
+                return specialisation.Id;
+            return -1;
+        }
+        private Specialisations CreateAndAddSpecialisation(string specName)
+        {
+            Specialisations specialisation = new Specialisations() { Name = specName };
+            dataBase.Specialisations.Add(specialisation);
+            dataBase.SaveChanges();
+            return specialisation;
         }
 
         /// <summary>

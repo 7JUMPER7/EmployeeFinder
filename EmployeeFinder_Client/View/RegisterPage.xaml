@@ -6,7 +6,35 @@
              xmlns:local="clr-namespace:EmployeeFinder_Client.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
-    <Grid>
-            
+    <Grid Height="380" Width="400" Background="#e7ecef" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Background="#219ebc"/>
+        <TextBlock Text="Регистрация" FontSize="24" 
+                   VerticalAlignment="Center" HorizontalAlignment="Left"
+                   Background="#219ebc" Foreground="White" Margin="25"></TextBlock>
+
+
+        <TextBox Grid.Row="1" Text="{Binding InputLogin}" Margin="20" 
+                 FontSize="18" FontWeight="Bold" Height="35" BorderBrush="White"
+                 VerticalContentAlignment="Center" ></TextBox>
+
+        <TextBox x:Name="pwdTextBox" Grid.Row="2" Text="{Binding InputPassword}" Height="35"
+                 VerticalContentAlignment="Center" BorderBrush="White"
+                 FontSize="18" FontWeight="Bold" Margin="20"></TextBox>
+        
+        <TextBox x:Name="pwd2TextBox" Grid.Row="3" Text="{Binding InputPassword2}" Height="35"
+                 VerticalContentAlignment="Center" BorderBrush="White"
+                 FontSize="18" FontWeight="Bold" Margin="20"></TextBox>
+
+        <Button Content="Рег" Grid.Row="4" Margin="225,0,0,0" Height="50" Width="120"
+                Background="#219ebc" Foreground="White" BorderBrush="White" FontSize="16"
+                Command="{Binding RegisterCommand}"></Button>
     </Grid>
 </UserControl>

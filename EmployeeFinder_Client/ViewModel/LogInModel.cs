@@ -109,7 +109,7 @@ namespace EmployeeFinder_Client.ViewModel
                 Login = InputLogin,
                 Password = InputPassword
             };
-            if (_IsLikeCompanyCheck == true)
+            if (IsLikeCompanyCheck)
             {
                 //LogIn like company
                 message.MessageProcessing = "LOGC";
@@ -154,13 +154,13 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         /// Переход к отображению RegisterPage
         /// </summary>
-        private RelayCommand _RegisterCommand;
+        private RelayCommand _RegisterPageCommand;
+        public RelayCommand RegisterPageCommand
 
-        public RelayCommand RegisterCommand
         {
             get
             {
-                return _RegisterCommand = _RegisterCommand ??
+                return _RegisterPageCommand = _RegisterPageCommand ??
                   new RelayCommand(OnRegisterUC, CanRegisterUC);
             }
         }

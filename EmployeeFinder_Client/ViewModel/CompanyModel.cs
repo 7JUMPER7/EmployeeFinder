@@ -1,4 +1,5 @@
 ﻿using EmployeeFinder_Client.Model;
+using EmployeeFinder_Client.View;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -52,6 +53,28 @@ namespace EmployeeFinder_Client.ViewModel
             }
         }
 
-
+        /// <summary>
+        /// Открытие нового окна Messager
+        /// </summary>
+        private RelayCommand _OpenMessagerCommand;
+        public RelayCommand OpenMessagerCommand
+        {
+            get
+            {
+                return _OpenMessagerCommand = _OpenMessagerCommand ??
+                  new RelayCommand(OnMessagerrUC, CanMessagerUC);
+            }
+        }
+        private bool CanMessagerUC()
+        {
+            return true;
+        }
+        private void OnMessagerrUC()
+        {
+            Messager messager = new Messager();
+            messager.Height = 400;
+            messager.Width = 400;
+            messager.Show();
+        }
     }
 }

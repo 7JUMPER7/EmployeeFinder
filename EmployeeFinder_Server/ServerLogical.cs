@@ -25,7 +25,7 @@ namespace EmployeeFinder_Server
         /// </summary>
         private void NewThread()
         {
-            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8081);
+            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 1024);
             server.Start();
             new Thread(() =>
             {

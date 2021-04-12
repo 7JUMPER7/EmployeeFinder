@@ -39,7 +39,14 @@
                 <!--<ComboBox x:Name="AgeFilter" Height="20" Margin="10, 0, 10, 0"></ComboBox>-->
             </StackPanel>
         </StackPanel>
-
+        <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" 
+                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding OpenMessagerCommand}">
+            <Button.Content>
+                <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets ">
+                    <Run Text="&#xE715;" FontSize="24" Foreground="#219ebc" />
+                </TextBlock>
+            </Button.Content>
+        </Button>
         <!--Отображение всех кандидатов-->
         <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10">
 
