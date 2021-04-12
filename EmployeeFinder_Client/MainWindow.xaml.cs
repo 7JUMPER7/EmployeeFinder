@@ -12,17 +12,87 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EmployeeFinder_Client.ViewModel;
+using EmployeeFinder_Client.View;
+
 
 namespace EmployeeFinder_Client
 {
+    public interface IMainWindowsCodeBehind
+    {
+        void ShowMessage(string message);
+        void LoadView(ViewType typeView);
+    }
+
+    public enum ViewType
+    {
+        LogInPage,
+        RegisterPage,
+        CompanyWindow,
+        CandidateWindow,
+        Messager
+    }
+
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IMainWindowsCodeBehind
     {
         public MainWindow()
         {
             InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadView(ViewType.LogInPage);
+        }
+
+        public void LoadView(ViewType typeView)
+        {
+            switch (typeView)
+            {
+                case ViewType.LogInPage:
+                    LogInPage viewLogin = new LogInPage();
+                    LogInModel modelLogin = new LogInModel(this);
+                    viewLogin.DataContext = modelLogin;
+                    this.OutputView.Content = viewLogin;
+                    break;
+
+                case ViewType.RegisterPage:
+                    RegisterPage viewRegister = new RegisterPage();
+                    RegisterModel modelRegister = new RegisterModel(this);
+                    viewRegister.DataContext = modelRegister;
+                    this.OutputView.Content = viewRegister;
+                    break;
+
+                case ViewType.CompanyWindow:
+                    CompanyWindow viewCompany = new CompanyWindow();
+                    CompanyModel modelCompany = new CompanyModel(this);
+                    viewCompany.DataContext = modelCompany;
+                    this.OutputView.Content = viewCompany;
+                    break;
+
+                case ViewType.CandidateWindow:
+                    CandidateWindow viewCandidate = new CandidateWindow();
+                    CandidateModel modelCandidate = new CandidateModel(this);
+                    viewCandidate.DataContext = modelCandidate;
+                    this.OutputView.Content = viewCandidate;
+                    break;
+
+                case ViewType.Messager:
+                    Messager viewMessager = new Messager();
+                    MessagerModel modelMessager = new MessagerModel(this);
+                    viewMessager.DataContext = modelMessager;
+                    this.OutputView.Content = viewMessager;
+                    break;
+            }
+        }
+
+        public void ShowMessage(string message)
+        {
+            MessageBox.Show(message);
         }
     }
 }

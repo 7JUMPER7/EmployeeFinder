@@ -7,25 +7,22 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using EmployeeFinder_Server.DbClasses;
 
 namespace EmployeeFinder_Server
 {
     public partial class Form1 : Form
     {
+        //Тест
         private IPAddress IpAddress;
         private int Port;
         private TcpListener tcpListener;
 
         private int DataGridCounter = 0;
 
-        private DataBaseContext dataBase;
 
         public Form1()
         {
             InitializeComponent();
-            dataBase = new DataBaseContext();
-            dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
         }
 
         //События
