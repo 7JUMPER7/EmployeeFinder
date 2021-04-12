@@ -64,5 +64,59 @@ namespace EmployeeFinder_Server
                 answer.MessageProcessing = "LOGN";
             return answer;
         }
+
+        /// <summary>
+        /// Возвращает список кандидатов
+        /// </summary>
+        /// <returns>список кандидатов</returns>
+        public object GetCandidates()
+        {
+            return dataBase.Candidates.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список городов
+        /// </summary>
+        /// <returns>список городов</returns>
+        public object GetCities()
+        {
+            return dataBase.Cities.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список компаний
+        /// </summary>
+        /// <returns>список компаний</returns>
+        public object GetCompanies()
+        {
+            return dataBase.Companies.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список пожеланий компании
+        /// </summary>
+        /// <returns>список пожеланий компании</returns>
+        public object GetCompaniesWishLists()
+        {
+            return dataBase.CompaniesWishLists.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список специальностей
+        /// </summary>
+        /// <returns>список специальностей</returns>
+        public object GetSpecialisations()
+        {
+            return dataBase.Specialisations.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список сообщений
+        /// </summary>
+        /// <returns>список сообщений</returns>
+        public object GetMessages()
+        {
+            return dataBase.Messages.ToList();
+        }
     }
 }
