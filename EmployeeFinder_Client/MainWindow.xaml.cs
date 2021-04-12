@@ -30,7 +30,6 @@ namespace EmployeeFinder_Client
         RegisterPage,
         CompanyWindow,
         CandidateWindow,
-        Messager
     }
 
     /// <summary>
@@ -81,12 +80,6 @@ namespace EmployeeFinder_Client
                     this.OutputView.Content = viewCandidate;
                     break;
 
-                case ViewType.Messager:
-                    Messager viewMessager = new Messager();
-                    MessagerModel modelMessager = new MessagerModel(this);
-                    viewMessager.DataContext = modelMessager;
-                    this.OutputView.Content = viewMessager;
-                    break;
             }
         }
 
