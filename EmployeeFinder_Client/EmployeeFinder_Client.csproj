@@ -55,21 +55,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="test.xaml.cs">
-      <DependentUpon>test.xaml</DependentUpon>
+    <Compile Include="Model\DataAccess.cs" />
+    <Compile Include="ViewModel\CandidateModel.cs" />
+    <Compile Include="ViewModel\CompanyModel.cs" />
+    <Compile Include="ViewModel\LogInModel.cs" />
+    <Compile Include="ViewModel\MessagerModel.cs" />
+    <Compile Include="ViewModel\RegisterModel.cs" />
+    <Compile Include="ViewModel\RelayComand.cs" />
+    <Compile Include="View\CandidateWindow.xaml.cs">
+      <DependentUpon>CandidateWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="CompanyWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CandidateWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LogInPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="View\CompanyWindow.xaml.cs">
+      <DependentUpon>CompanyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LogInPage.xaml.cs">
+      <DependentUpon>LogInPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Messager.xaml.cs">
+      <DependentUpon>Messager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RegisterPage.xaml.cs">
+      <DependentUpon>RegisterPage.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,32 +85,32 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompanyWindow.xaml.cs">
-      <DependentUpon>CompanyWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="CandidateWindow.xaml.cs">
-      <DependentUpon>CandidateWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LogInPage.xaml.cs">
-      <DependentUpon>LogInPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Messager.xaml">
+    <Page Include="View\CandidateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="test.xaml">
+    <Page Include="View\CompanyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LogInPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Messager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RegisterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Messager.xaml.cs">
-      <DependentUpon>Messager.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -129,5 +136,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

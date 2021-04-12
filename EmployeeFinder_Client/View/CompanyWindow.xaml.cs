@@ -10,18 +10,24 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeFinder_Client
+namespace EmployeeFinder_Client.View
 {
     /// <summary>
-    /// Логика взаимодействия для Messager.xaml
+    /// Interaction logic for CompanyWindow.xaml
     /// </summary>
-    public partial class Messager : Window
+    public partial class CompanyWindow : UserControl
     {
-        public Messager()
+        public CompanyWindow()
         {
             InitializeComponent();
+        }
+
+        private void NumberInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !(Char.IsDigit(e.Text, 0));
         }
     }
 }
