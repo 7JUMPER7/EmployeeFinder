@@ -57,14 +57,11 @@ namespace EmployeeFinder_Server
             Message message = MessagesAsistent.ReadMessage(client);
             try
             {
-                while (true)
+                switch (message.MessageProcessing)
                 {
-                    switch (message.MessageProcessing)
-                    {
-                        case "LOGC": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message)); } break;
-                        case "LOGE": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message)); } break;
-                        case "SMES": { } break;
-                    }
+                    case "LOGC": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message)); } break;
+                    case "LOGE": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message)); } break;
+                    case "SMES": { } break;
                 }
             }
             catch (Exception ex)

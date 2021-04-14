@@ -10,6 +10,8 @@ using EmployeeFinder_Client.View;
 using System.Windows.Controls;
 using System.Net.Sockets;
 using System.Threading;
+using EmployeeFinder_Client.Model;
+using System.Resources;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -132,9 +134,17 @@ namespace EmployeeFinder_Client.ViewModel
                 case "ALOK": //Всё правильно
                     {
                         if (_IsLikeCompanyCheck == true)
-                            _MainCodeBehind.LoadView(ViewType.CompanyWindow);
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow)));
+                            DataAccess.Login = InputLogin;
+                            DataAccess.Password = InputPassword;
+                        }    
                         else
-                            _MainCodeBehind.LoadView(ViewType.CandidateWindow);
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow)));
+                            DataAccess.Login = InputLogin;
+                            DataAccess.Password = InputPassword;
+                        }
                         break;
                     }
                 case "LOGN": //Неверный логин
