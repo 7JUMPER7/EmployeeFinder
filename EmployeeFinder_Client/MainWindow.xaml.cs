@@ -43,6 +43,10 @@ namespace EmployeeFinder_Client
         public MainWindow()
         {
             InitializeComponent();
+
+            buttonMinimized.Click += (s, e) => WindowState = WindowState.Minimized;
+            buttonClose.Click += (s, e) => Close();
+
             this.Loaded += MainWindow_Loaded;
         }
 
@@ -82,7 +86,6 @@ namespace EmployeeFinder_Client
                     viewCandidate.DataContext = modelCandidate;
                     this.OutputView.Content = viewCandidate;
                     break;
-
             }
         }
 

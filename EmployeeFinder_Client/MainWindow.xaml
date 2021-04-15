@@ -5,12 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmployeeFinder_Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" ResizeMode="CanMinimize"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Window.Clip>
+        <RectangleGeometry Rect="0,0,800,450" RadiusX="10" RadiusY="10"></RectangleGeometry>
+    </Window.Clip>
+    
     <Window.Resources>
         <ResourceDictionary Source="Dictionary.xaml" />
     </Window.Resources>
-    <Grid>
-        <ContentPresenter x:Name="OutputView" Margin="5"/>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="20"></WindowChrome>
+    </WindowChrome.WindowChrome>
+    
+    <Grid Background="#003459">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Background="AliceBlue" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
+            <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" Orientation="Horizontal" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right">
+                <Button Style="{StaticResource BarButtonStyle}" x:Name="buttonMinimized"></Button>
+                <Button Style="{StaticResource BarButtonStyle}" x:Name="buttonClose" Background="#e63946"></Button>
+            </StackPanel>
+        </Grid>
+       
+        <ContentPresenter Grid.Row="1" x:Name="OutputView" Margin="5"/>
 
         <!--Окно уведомлений-->
         <Grid x:Name="InfoWindow" Visibility="Visible"

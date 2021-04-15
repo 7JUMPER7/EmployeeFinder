@@ -14,22 +14,23 @@ namespace EmployeeFinder_Client.ViewModel
         public string[] CityFilter { get; set; }
         public string[] SpecFilter { get; set; }
 
+        public bool NewMessage { get; set; }
+
         /// <summary>
         //конструктор страницы
         /// </summary>
         public CompanyModel(IMainWindowsCodeBehind codeBehind)
         {
-            DataAccess data = new DataAccess();
-            CityFilter = data.CityFilter;
-            SpecFilter = data.SpecFilter;
+            //DataAccess data = new DataAccess();
+            //CityFilter = data.CityFilter;
+            //SpecFilter = data.SpecFilter;
 
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
         }
 
-
         /// <summary>
-        //Значения фильтра
+        //Значения фильтра возраста
         /// </summary>
         private int _FromAgeFilter;
         public int FromAgeFilter
@@ -41,7 +42,6 @@ namespace EmployeeFinder_Client.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(FromAgeFilter)));
             }
         }
-
         private int _ToAgeFilter;
         public int ToAgeFilter
         {

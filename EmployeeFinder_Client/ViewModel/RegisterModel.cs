@@ -47,21 +47,35 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
         /// <summary>
-        /// Ввод пароля
+        /// Повторный ввод пароля
         /// </summary>
-        private string _InputPassword2;
-        public string InputPassword2
+        private string _InputReapeatPassword;
+        public string InputReapeatPassword
         {
-            get { return _InputPassword2; }
+            get { return _InputReapeatPassword; }
             set
             {
-                _InputPassword2 = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputPassword2)));
+                _InputReapeatPassword = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputReapeatPassword)));
             }
         }
 
         /// <summary>
-        /// Переход к отображению RegisterPage
+        /// Ввод названия компании
+        /// </summary>
+        private string _InputCompanyName;
+        public string InputCompanyName
+        {
+            get { return _InputCompanyName; }
+            set
+            {
+                _InputCompanyName = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputCompanyName)));
+            }
+        }
+
+        /// <summary>
+        /// Завершение регистрации
         /// </summary>
         private RelayCommand _RegisterCommand;
         public RelayCommand RegisterCommand

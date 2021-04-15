@@ -24,5 +24,10 @@ namespace EmployeeFinder_Client.View
         {
             InitializeComponent();
         }
+
+        private void NumberInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !(Char.IsDigit(e.Text, 0));
+        }
     }
 }
