@@ -93,8 +93,8 @@
                                 Background="Transparent"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Width="25"
-                                Height="25"
+                                Width="20"
+                                Height="20"
                                 Opacity="1">
                     </Border>
                     <ControlTemplate.Triggers>
@@ -280,5 +280,37 @@
                 <Setter Property="CornerRadius" Value="5"/>
             </Style>
         </Style.Resources>
+    </Style>
+    <Style x:Key="MessageButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                Width="50"
+                                Height="50"
+                                BorderBrush="#00171f"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                TextBlock.Foreground="White">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          TextBlock.FontFamily="Century Gothic Bold"
+                                          TextBlock.FontSize="18"
+                                          TextBlock.TextAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="White"/>
+                            <Setter TargetName="border" Property="TextBlock.Foreground" Value="#00171f"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Opacity" Value=".7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

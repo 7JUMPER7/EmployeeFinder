@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EmployeeFinder_Client.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="White">
-
+             d:DesignHeight="450" d:DesignWidth="800" Background="#003459">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -21,35 +20,61 @@
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
             <!--Город-->
             <StackPanel Width="150">
-                <Label>Город</Label>
+                <Label Content="Город:" Foreground="#FFFFFF" FontSize="14" Margin="5, 0, 0, 0"></Label>
                 <ComboBox ItemsSource = "{Binding CityFilter}" Height="20" Margin="10, 0, 10, 0"></ComboBox>
             </StackPanel>
             <!--Специализация-->
             <StackPanel Width="150">
-                <Label>Специализация</Label>
+                <Label Content="Специализация:" Foreground="#FFFFFF" FontSize="14"  Margin="5, 0, 0, 0"></Label>
                 <ComboBox ItemsSource = "{Binding SpecFilter}" Height="20" Margin="10, 0, 10, 0"></ComboBox>
             </StackPanel>
             <!--Возраст-->
             <StackPanel Width="150">
-                <Label>Возраст от до</Label>
+                <Label Content="Возраст от до:" Foreground="#FFFFFF" FontSize="14"  Margin="5, 0, 0, 0"></Label>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding FromAgeFilter}" Width="30" Height="20" Margin="5, 0, 10, 0" PreviewTextInput="NumberInput"></TextBox>
-                    <TextBox Text="{Binding ToAgeFilter}" Width="30" Height="20" Margin="5, 0, 10, 0" PreviewTextInput="NumberInput"></TextBox>
+                    <TextBox Text="{Binding FromAgeFilter}" Width="30" Height="20" Margin="5, 0, 10, 0" PreviewTextInput="NumberInput" Style="{StaticResource TextBoxStyle}"></TextBox>
+                    <TextBox Text="{Binding ToAgeFilter}" Width="30" Height="20" Margin="5, 0, 10, 0" PreviewTextInput="NumberInput" Style="{StaticResource TextBoxStyle}"></TextBox>
                 </StackPanel>
                 <!--<ComboBox x:Name="AgeFilter" Height="20" Margin="10, 0, 10, 0"></ComboBox>-->
             </StackPanel>
         </StackPanel>
-        <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" 
-                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding OpenMessagerCommand}">
-            <Button.Content>
-                <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets ">
-                    <Run Text="&#xE715;" FontSize="24" Foreground="#219ebc" />
-                </TextBlock>
-            </Button.Content>
-        </Button>
+        <Grid Grid.Column="2">
+            <Button Grid.Column="2" Style="{StaticResource MessageButtonStyle}"
+                VerticalAlignment="Top" HorizontalAlignment="Right"
+                Background="#007EA7" Margin="10"
+                Command="{Binding OpenMessagerCommand}">
+                <Button.Content>
+                    <TextBlock FontFamily="Segoe MDL2 Assets">
+                    <Run Text="&#xE715;" FontSize="24" Foreground="#FFFFFF" />
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+
+            <TextBlock Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <TextBlock FontFamily="Segoe MDL2 Assets">
+                    <Run Text="&#xE7C8;" FontSize="24" Foreground="#e63946" />
+            </TextBlock>
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding NewMessage }" Value="true">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Style.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        </Grid>
+        
         <!--Отображение всех кандидатов-->
         <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10">
-
+            
         </DataGrid>
 
         <!--Подробная информация о кандидате-->
@@ -60,24 +85,46 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel HorizontalAlignment="Right">
-                <Label>ФИО:</Label>
-                <Label>Специализация:</Label>
-                <Label>Возраст:</Label>
-                <Label>Город</Label>
-                <Label>Портфолио:</Label>
+                <Label Content="ФИО:" Foreground="#FFFFFF" FontSize="14" ></Label>
+                <Label Content="Специализация:" Foreground="#FFFFFF" FontSize="14"></Label>
+                <Label Content="Возраст:" Foreground="#FFFFFF" FontSize="14"></Label>
+                <Label Content="Город:" Foreground="#FFFFFF" FontSize="14"></Label>
+                <Label Content="Портфолио:" Foreground="#FFFFFF" FontSize="14"></Label>
             </StackPanel>
+            
             <StackPanel HorizontalAlignment="Left" Grid.Column="1">
-                <TextBox Margin="0, 3, 0, 5">ФИО:</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Специализация:</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Возраст:</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Город</TextBox>
-                <TextBox Margin="0, 3, 0, 5">Портфолио:</TextBox>
+                <TextBox Text="" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"></TextBox>
+                <TextBox Text="" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"></TextBox>
+                <TextBox Text="" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"></TextBox>
+                <TextBox Text="" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"></TextBox>
+                <TextBox Text="" Style="{StaticResource TextBoxStyle}" Height="100"  Width="250" Margin="0, 3, 0, 5"></TextBox>
             </StackPanel>
-
+            
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
-                <Button x:Name="ChatBut" Margin="10, 0, 0, 0">Чат</Button>
-                <Button x:Name="CopyBut" Margin="10, 0, 0, 0">Скопировать</Button>
-                <Button x:Name="WishBut" Margin="10, 0, 0, 0">В избранное</Button>
+                <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7"
+                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding OpenMessagerCommand}">
+                    <Button.Content>
+                        <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets">
+                    <Run Text="&#xE715;" FontSize="24" Foreground="#FFFFFF" />
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7"
+                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding OpenMessagerCommand}">
+                    <Button.Content>
+                        <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets">
+                    <Run Text="&#xEA35;" FontSize="24" Foreground="#FFFFFF" />
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7"
+                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding OpenMessagerCommand}">
+                    <Button.Content>
+                        <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets">
+                    <Run Text="&#xE734;" FontSize="24" Foreground="#FFFFFF" />
+                        </TextBlock>
+                    </Button.Content>
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>
