@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="InfoWindow.cs" />
     <Compile Include="Model\DataAccess.cs" />
     <Compile Include="ViewModel\CandidateModel.cs" />
     <Compile Include="ViewModel\CompanyModel.cs" />

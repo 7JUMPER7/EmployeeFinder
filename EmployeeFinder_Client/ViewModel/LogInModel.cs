@@ -145,14 +145,17 @@ namespace EmployeeFinder_Client.ViewModel
                             DataAccess.Login = InputLogin;
                             DataAccess.Password = InputPassword;
                         }
+                        _MainCodeBehind.ShowSuccessWindow("Упешно");
                         break;
                     }
                 case "LOGN": //Неверный логин
                     {
+                        _MainCodeBehind.ShowErrorWindow("Неверный логин");
                         break;
                     }
                 case "PASS": //Неверный пароль
                     {
+                        _MainCodeBehind.ShowErrorWindow("Неверный пароль");
                         break;
                     }
                 default: //Прочая ошибка

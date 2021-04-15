@@ -36,7 +36,7 @@ namespace EmployeeFinder_Server
                         answer.MessageProcessing = "PASS";
                     break;
                 }
-            if (message.MessageProcessing == null)
+            if (answer.MessageProcessing == null)
                 answer.MessageProcessing = "LOGN";
             return answer;
         }
@@ -60,7 +60,7 @@ namespace EmployeeFinder_Server
                         answer.MessageProcessing = "PASS";
                     break;
                 }
-            if (message.MessageProcessing == null)
+            if (answer.MessageProcessing == null)
                 answer.MessageProcessing = "LOGN";
             return answer;
         }
