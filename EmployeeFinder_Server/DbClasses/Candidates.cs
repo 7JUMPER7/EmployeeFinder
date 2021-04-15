@@ -9,7 +9,7 @@ namespace EmployeeFinder_Server.DbClasses
 {
     class Candidates
     {
-        public TcpClient tcpClient { get; set; }
+        //public TcpClient tcpClient { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public int CityId { get; set; }

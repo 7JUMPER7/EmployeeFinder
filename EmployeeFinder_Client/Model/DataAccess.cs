@@ -10,5 +10,7 @@ namespace EmployeeFinder_Client.Model
     {
         public string[] CityFilter = new string[] { "city1", "city2", "city3" };
         public string[] SpecFilter = new string[] { "Spec1", "Spec2", "Spec3" };
+        public static string Login;
+        public static string Password;
     }
 }

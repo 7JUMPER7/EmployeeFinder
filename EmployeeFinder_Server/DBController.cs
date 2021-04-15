@@ -14,7 +14,7 @@ namespace EmployeeFinder_Server
         public DBController()
         {
             dataBase = new DataBaseContext();
-            //dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
+            dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace EmployeeFinder_Server
                         answer.MessageProcessing = "PASS";
                     break;
                 }
-            if (message.MessageProcessing == null)
+            if (answer.MessageProcessing == null)
                 answer.MessageProcessing = "LOGN";
             return answer;
         }
@@ -60,7 +60,7 @@ namespace EmployeeFinder_Server
                         answer.MessageProcessing = "PASS";
                     break;
                 }
-            if (message.MessageProcessing == null)
+            if (answer.MessageProcessing == null)
                 answer.MessageProcessing = "LOGN";
             return answer;
         }
@@ -167,7 +167,7 @@ namespace EmployeeFinder_Server
         {
             Message answer = new Message();
             //Структура строки:
-            // 0    1        2        3            4                5    
+            // 0    1        2        3            4                5
             //Id|||Name|||CityName|||Age|||SpecialisationName|||Portfolio
             string[] EmployeeInfo = message.MessageText.Split(new string[] { "|||" }, StringSplitOptions.None);
 
@@ -229,6 +229,60 @@ namespace EmployeeFinder_Server
             dataBase.Specialisations.Add(specialisation);
             dataBase.SaveChanges();
             return specialisation;
+        }
+
+        /// <summary>
+        /// Возвращает список кандидатов
+        /// </summary>
+        /// <returns>список кандидатов</returns>
+        public object GetCandidates()
+        {
+            return dataBase.Candidates.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список городов
+        /// </summary>
+        /// <returns>список городов</returns>
+        public object GetCities()
+        {
+            return dataBase.Cities.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список компаний
+        /// </summary>
+        /// <returns>список компаний</returns>
+        public object GetCompanies()
+        {
+            return dataBase.Companies.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список пожеланий компании
+        /// </summary>
+        /// <returns>список пожеланий компании</returns>
+        public object GetCompaniesWishLists()
+        {
+            return dataBase.CompaniesWishLists.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список специальностей
+        /// </summary>
+        /// <returns>список специальностей</returns>
+        public object GetSpecialisations()
+        {
+            return dataBase.Specialisations.ToList();
+        }
+
+        /// <summary>
+        /// Возвращает список сообщений
+        /// </summary>
+        /// <returns>список сообщений</returns>
+        public object GetMessages()
+        {
+            return dataBase.Messages.ToList();
         }
     }
 }
