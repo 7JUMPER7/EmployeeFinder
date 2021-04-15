@@ -8,6 +8,8 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using EmployeeFinder_Client.View;
 using System.Windows.Controls;
+using System.Net.Sockets;
+using System.Threading;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -30,6 +32,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Ввод логина
         /// </summary>
         private string _InputLogin;
+
         public string InputLogin
         {
             get { return _InputLogin; }
@@ -44,6 +47,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Ввод пароля
         /// </summary>
         private string _InputPassword;
+
         public string InputPassword
         {
             get { return _InputPassword; }
@@ -58,6 +62,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Проверка является ли компанией
         /// </summary>
         private bool _IsLikeCompanyCheck;
+
         public bool IsLikeCompanyCheck
         {
             get { return _IsLikeCompanyCheck; }
@@ -72,6 +77,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// Переход к отображению CompanyWindow или CandidateWindow
         /// </summary>
         private RelayCommand _LoginCommand;
+
         public RelayCommand LoginCommand
         {
             get
@@ -80,23 +86,68 @@ namespace EmployeeFinder_Client.ViewModel
                   new RelayCommand(OnLoadUC, CanLoadUC);
             }
         }
+
         private bool CanLoadUC()
         {
             return true;
         }
+
         private void OnLoadUC()
         {
             //
             //логика проверки логина и пароля
             //
 
+            TcpClient client = new TcpClient();
+            client.Connect("127.0.0.1", 1024);
+            Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
+            thread.IsBackground = true;
+            thread.Start(client);
+
+            Message message = new Message()
+            {
+                Login = InputLogin,
+                Password = InputPassword
+            };
             if (_IsLikeCompanyCheck == true)
             {
-                _MainCodeBehind.LoadView(ViewType.CompanyWindow);
+                //LogIn like company
+                message.MessageProcessing = "LOGC";
             }
             else
             {
-                _MainCodeBehind.LoadView(ViewType.CandidateWindow);
+                //LogIn like employee
+                message.MessageProcessing = "LOGE";
+            }
+            MessagesAsistent.SendMessage(client, message);
+        }
+
+        //Метод ожидание ответа сервера для потока
+        private void CheckForLogin(object obj)
+        {
+            TcpClient client = obj as TcpClient;
+            Message answer = MessagesAsistent.ReadMessage(client);
+            switch (answer.MessageProcessing)
+            {
+                case "ALOK": //Всё правильно
+                    {
+                        if (_IsLikeCompanyCheck == true)
+                            _MainCodeBehind.LoadView(ViewType.CompanyWindow);
+                        else
+                            _MainCodeBehind.LoadView(ViewType.CandidateWindow);
+                        break;
+                    }
+                case "LOGN": //Неверный логин
+                    {
+                        break;
+                    }
+                case "PASS": //Неверный пароль
+                    {
+                        break;
+                    }
+                default: //Прочая ошибка
+
+                    break;
             }
         }
 
@@ -105,6 +156,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         private RelayCommand _RegisterPageCommand;
         public RelayCommand RegisterPageCommand
+
         {
             get
             {
@@ -112,10 +164,12 @@ namespace EmployeeFinder_Client.ViewModel
                   new RelayCommand(OnRegisterUC, CanRegisterUC);
             }
         }
+
         private bool CanRegisterUC()
         {
             return true;
         }
+
         private void OnRegisterUC()
         {
             _MainCodeBehind.LoadView(ViewType.RegisterPage);

@@ -19,6 +19,7 @@ namespace EmployeeFinder_Server
 
         private int DataGridCounter = 0;
 
+
         public Form1()
         {
             InitializeComponent();
