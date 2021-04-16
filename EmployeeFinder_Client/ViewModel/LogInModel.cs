@@ -136,15 +136,13 @@ namespace EmployeeFinder_Client.ViewModel
                         if (_IsLikeCompanyCheck == true)
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow)));
-                            DataAccess.Login = InputLogin;
-                            DataAccess.Password = InputPassword;
-                        }    
+                        }
                         else
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow)));
-                            DataAccess.Login = InputLogin;
-                            DataAccess.Password = InputPassword;
                         }
+                        DataAccess.Login = InputLogin;
+                        DataAccess.Password = InputPassword;
                         _MainCodeBehind.ShowSuccessWindow("Упешно");
                         break;
                     }

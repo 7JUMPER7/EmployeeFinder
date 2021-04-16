@@ -44,7 +44,10 @@ namespace EmployeeFinder_Server
                         MessageBox.Show(ex.Message);
                     }
                 }
-            }).Start();
+            })
+            {
+                IsBackground = true
+            }.Start();
         }
 
         /// <summary>
@@ -61,6 +64,8 @@ namespace EmployeeFinder_Server
                 {
                     case "LOGC": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message)); } break;
                     case "LOGE": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message)); } break;
+                    case "REGC": { MessagesAsistent.SendMessage(client, controller.RegisterCompany(message)); } break;
+                    case "REGE": { MessagesAsistent.SendMessage(client, controller.RegisterEmployee(message)); } break;
                     case "SMES": { } break;
                 }
             }

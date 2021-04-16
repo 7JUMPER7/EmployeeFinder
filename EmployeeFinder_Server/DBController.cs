@@ -88,6 +88,10 @@ namespace EmployeeFinder_Server
             {
                 answer.MessageProcessing = "LOGN";
             }
+            else if (message.Login.Contains(" "))
+            {
+                answer.MessageProcessing = "SPAC";
+            }
             else
             {
                 Companies company = new Companies()
@@ -134,6 +138,10 @@ namespace EmployeeFinder_Server
             if (LoginIsNotAvailable == true)
             {
                 answer.MessageProcessing = "LOGN";
+            }
+            else if (message.Login.Contains(" "))
+            {
+                answer.MessageProcessing = "SPAC";
             }
             else
             {

@@ -9,7 +9,6 @@ namespace EmployeeFinder_Server.DbClasses
 {
     class Candidates
     {
-        //public TcpClient tcpClient { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public int CityId { get; set; }
@@ -18,5 +17,6 @@ namespace EmployeeFinder_Server.DbClasses
         public string Portfolio { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public object tcpClient { get; set; }
     }
 }
