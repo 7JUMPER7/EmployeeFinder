@@ -94,7 +94,10 @@ namespace EmployeeFinder_Client.ViewModel
         private string[] ReceiveCities(TcpClient client)
         {
             MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECC" });
-            return MessagesAsistent.ReadMessage(client).obj as string[];
+            Message answer = MessagesAsistent.ReadMessage(client);
+            if (answer.MessageProcessing == "RECC")
+                return answer.obj as string[];
+            return null;
         }
         /// <summary>
         /// Получает массив доступных названий специализаций от сервера.
@@ -104,7 +107,10 @@ namespace EmployeeFinder_Client.ViewModel
         private string[] ReceiveSpecs(TcpClient client)
         {
             MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECS" });
-            return MessagesAsistent.ReadMessage(client).obj as string[];
+            Message answer = MessagesAsistent.ReadMessage(client);
+            if (answer.MessageProcessing == "RECS")
+                return answer.obj as string[];
+            return null;
         }
         /// <summary>
         /// Получает массив всех работников от сервера.
@@ -114,7 +120,10 @@ namespace EmployeeFinder_Client.ViewModel
         private List<Candidates> ReceiveCandidates(TcpClient client)
         {
             MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECE" });
-            return MessagesAsistent.ReadMessage(client).obj as List<Candidates>;
+            Message answer = MessagesAsistent.ReadMessage(client);
+            if (answer.MessageProcessing == "RECE")
+                return answer.obj as List<Candidates>;
+            return null;
         }
     }
 }
