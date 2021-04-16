@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Threading;
 using EmployeeFinder_Client.Model;
 using System.Resources;
+using SharedClasses.ServerQueries;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -105,30 +106,19 @@ namespace EmployeeFinder_Client.ViewModel
             Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
             thread.IsBackground = true;
             thread.Start(client);
-
-            Message message = new Message()
+            Query query = new GetLoginQuery()
             {
                 Login = InputLogin,
                 Password = InputPassword
             };
-            if (IsLikeCompanyCheck)
-            {
-                //LogIn like company
-                message.MessageProcessing = "LOGC";
-            }
-            else
-            {
-                //LogIn like employee
-                message.MessageProcessing = "LOGE";
-            }
-            MessagesAsistent.SendMessage(client, message);
+            MessagesAsistent.SendMessage(client, query);
         }
 
         //Метод ожидание ответа сервера для потока
         private void CheckForLogin(object obj)
         {
             TcpClient client = obj as TcpClient;
-            Message answer = MessagesAsistent.ReadMessage(client);
+            Query answer = MessagesAsistent.ReadMessage(client);
             switch (answer.MessageProcessing)
             {
                 case "ALOK": //Всё правильно

@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using SharedClasses.ServerQueries;
 
 namespace EmployeeFinder_Client
 {
@@ -18,10 +19,10 @@ namespace EmployeeFinder_Client
         /// </summary>
         /// <param name="client">клиент у каторого мы получаем данные</param>
         /// <returns>обьект класса MyMessage</returns>
-        public static Message ReadMessage(TcpClient client)
+        public static Query ReadMessage(TcpClient client)
         {
             string json = ReadFromStream(client.GetStream());
-            Message buf = JsonConvert.DeserializeObject<Message>(json);
+            Query buf = JsonConvert.DeserializeObject<Query>(json);
             //Message buf = new BinaryFormatter().Deserialize(client.GetStream()) as Message;
             return buf;
         }
@@ -31,7 +32,7 @@ namespace EmployeeFinder_Client
         /// </summary>
         /// <param name="client"> клиент каторому вы будите отправлять сообщение</param>
         /// <param name="message">обьект класса сообщения</param>
-        public static void SendMessage(TcpClient client, Message message)
+        public static void SendMessage(TcpClient client, Query message)
         {
             string json = JsonConvert.SerializeObject(message, Newtonsoft.Json.Formatting.Indented);
             WriteToStream(client.GetStream(), json);

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeFinder_Client", "Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeFinder_Server", "EmployeeFinder_Server\EmployeeFinder_Server.csproj", "{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedClasses", "SharedClasses\SharedClasses.csproj", "{261972DB-F333-4071-9432-806190653F93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA85992B-36C4-4A41-8CCF-0FF0E54D28DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{261972DB-F333-4071-9432-806190653F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{261972DB-F333-4071-9432-806190653F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{261972DB-F333-4071-9432-806190653F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{261972DB-F333-4071-9432-806190653F93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
