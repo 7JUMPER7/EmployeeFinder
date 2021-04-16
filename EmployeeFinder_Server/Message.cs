@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,10 +58,15 @@ namespace EmployeeFinder_Server
         /// файл
         /// </summary>
         public byte[] File { get; set; }
+        /// <summary>
+        /// клиент
+        /// </summary>
+        TcpClient client { get; set; }
 
         public Message()
         {
             File = null;
+            client = null;
         }
 
         public override string ToString()
