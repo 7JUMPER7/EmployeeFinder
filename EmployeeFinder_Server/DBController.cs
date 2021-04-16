@@ -248,13 +248,31 @@ namespace EmployeeFinder_Server
             return dataBase.Candidates.ToList();
         }
 
+        public object GetCandidatesName()
+        {
+            return dataBase.Candidates.ToList();
+        }
+
         /// <summary>
         /// Возвращает список городов
         /// </summary>
-        /// <returns>список городов</returns>
+        /// <returns>список городов в виде обьекта</returns>
         public object GetCities()
         {
             return dataBase.Cities.ToList();
+        }
+        /// <summary>
+        /// Возвращает список названий городов
+        /// </summary>
+        /// <returns>список с названиями городов</returns>
+        public object GetCitiesName()
+        {
+            List<string> CitiNames = new List<string>();
+            foreach (var citi in dataBase.Cities)
+            {
+                CitiNames.Add(citi.Name);
+            }
+            return CitiNames;
         }
 
         /// <summary>
@@ -282,6 +300,19 @@ namespace EmployeeFinder_Server
         public object GetSpecialisations()
         {
             return dataBase.Specialisations.ToList();
+        }
+        /// <summary>
+        /// Возвращает список названий Специализаций
+        /// </summary>
+        /// <returns>список с названиями Специализаций</returns>
+        public object GetSpecialisationsName()
+        {
+            List<string> CitiSpecialisations = new List<string>();
+            foreach (var Specialisations in dataBase.Cities)
+            {
+                CitiSpecialisations.Add(Specialisations.Name);
+            }
+            return CitiSpecialisations;
         }
 
         /// <summary>

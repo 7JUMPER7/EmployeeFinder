@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace EmployeeFinder_Server
 {
     [Serializable]
-    class Message
+   public  class Message
     {
         private string messageProcessing;
         
@@ -61,7 +61,11 @@ namespace EmployeeFinder_Server
         /// <summary>
         /// клиент
         /// </summary>
-        TcpClient client { get; set; }
+        public TcpClient client { get; set; }
+        /// <summary>
+        /// обьект
+        /// </summary>
+        public object obj { get; set; }
 
         public Message()
         {
