@@ -3,6 +3,8 @@ using EmployeeFinder_Client.View;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Sockets;
+using System.Collections.Generic;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -13,6 +15,7 @@ namespace EmployeeFinder_Client.ViewModel
 
         public string[] CityFilter { get; set; }
         public string[] SpecFilter { get; set; }
+        public List<Candidates> Candidates { get; set; }
 
         public bool NewMessage { get; set; }
 
@@ -24,6 +27,11 @@ namespace EmployeeFinder_Client.ViewModel
             //DataAccess data = new DataAccess();
             //CityFilter = data.CityFilter;
             //SpecFilter = data.SpecFilter;
+            TcpClient client = new TcpClient();
+            client.Connect("127.0.0.1", 1024);
+            CityFilter = ReceiveCities(client);
+            SpecFilter = ReceiveSpecs(client);
+            Candidates = ReceiveCandidates(client);
 
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
@@ -75,6 +83,38 @@ namespace EmployeeFinder_Client.ViewModel
             messager.Height = 400;
             messager.Width = 400;
             messager.Show();
+        }
+
+
+        /// <summary>
+        /// Получает массив доступных названий городов от сервера
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        private string[] ReceiveCities(TcpClient client)
+        {
+            MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECC" });
+            return MessagesAsistent.ReadMessage(client).obj as string[];
+        }
+        /// <summary>
+        /// Получает массив доступных названий специализаций от сервера.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        private string[] ReceiveSpecs(TcpClient client)
+        {
+            MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECS" });
+            return MessagesAsistent.ReadMessage(client).obj as string[];
+        }
+        /// <summary>
+        /// Получает массив всех работников от сервера.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        private List<Candidates> ReceiveCandidates(TcpClient client)
+        {
+            MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECE" });
+            return MessagesAsistent.ReadMessage(client).obj as List<Candidates>;
         }
     }
 }
