@@ -50,6 +50,7 @@ namespace EmployeeFinder_Server
                 case 5: { DataBox.DataSource = server.GetSpecialisations(); } break;
                 case 6: { DataBox.DataSource = server.GetMessages(); } break;
             }
+            DataBox.Refresh();
         }
     }
 }

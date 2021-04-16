@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EmployeeFinder_Server
@@ -29,14 +25,15 @@ namespace EmployeeFinder_Server
             server.Start();
             new Thread(() =>
             {
+
                 while (true)
                 {
                     try
                     {
                         if (server.AcceptTcpClient() is TcpClient client)
-                            new Thread(() => { Logical(client, controller); })
+                            new Thread(() => { Logical(client, controller); }) 
                             {
-                                IsBackground = true
+                                IsBackground = true 
                             }.Start();
                     }
                     catch (Exception ex)
@@ -44,7 +41,10 @@ namespace EmployeeFinder_Server
                         MessageBox.Show(ex.Message);
                     }
                 }
-            }).Start();
+            })
+            { 
+                IsBackground = true 
+            }.Start();
         }
 
         /// <summary>
