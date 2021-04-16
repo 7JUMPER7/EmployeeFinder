@@ -73,7 +73,7 @@
         </Grid>
         
         <!--Отображение всех кандидатов-->
-        <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10">
+        <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10" ItemsSource="{Binding Candidates}">
             
         </DataGrid>
 
