@@ -122,7 +122,7 @@ namespace EmployeeFinder_Client.ViewModel
             }
             catch
             {
-                _MainCodeBehind.ShowErrorWindow("sorry, can not connect to a server");
+                _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
                 return;
             }
 
@@ -147,10 +147,10 @@ namespace EmployeeFinder_Client.ViewModel
             switch (answer.MessageProcessing)
             {
                 case "ALOK":
-                    _MainCodeBehind.ShowSuccessWindow("Publish successful");
+                    _MainCodeBehind.ShowSuccessWindow("Успешно сохранено");
                     break;
                 case "EROR":
-                    _MainCodeBehind.ShowErrorWindow("Publish failed");
+                    _MainCodeBehind.ShowErrorWindow("Ошибка сохранения");
                     break;
             }
         }
