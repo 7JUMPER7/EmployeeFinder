@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Sockets;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -13,8 +14,8 @@ namespace EmployeeFinder_Client.ViewModel
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private IMainWindowsCodeBehind _MainCodeBehind;
 
-        public string[] CityFilter { get; set; }
-        public string[] SpecFilter { get; set; }
+        public List<string> CityFilter { get; set; }
+        public List<string> SpecFilter { get; set; }
         public List<Candidates> Candidates { get; set; }
 
         public bool NewMessage { get; set; }
@@ -27,11 +28,22 @@ namespace EmployeeFinder_Client.ViewModel
             //DataAccess data = new DataAccess();
             //CityFilter = data.CityFilter;
             //SpecFilter = data.SpecFilter;
+
+            //Тестовые клиенты
             TcpClient client = new TcpClient();
             client.Connect("127.0.0.1", 1024);
             CityFilter = ReceiveCities(client);
+            client.Close();
+
+            client = new TcpClient();
+            client.Connect("127.0.0.1", 1024);
             SpecFilter = ReceiveSpecs(client);
+            client.Close();
+
+            client = new TcpClient();
+            client.Connect("127.0.0.1", 1024);
             Candidates = ReceiveCandidates(client);
+            client.Close();
 
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
@@ -91,12 +103,17 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private string[] ReceiveCities(TcpClient client)
+        private List<string> ReceiveCities(TcpClient client)
         {
             MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECC" });
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECC")
-                return answer.obj as string[];
+            {
+                if (answer.obj is JArray && answer.obj != null)
+                {
+                    return (answer.obj as JArray).ToObject<List<string>>();
+                }
+            }
             return null;
         }
         /// <summary>
@@ -104,12 +121,17 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private string[] ReceiveSpecs(TcpClient client)
+        private List<string> ReceiveSpecs(TcpClient client)
         {
             MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECS" });
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECS")
-                return answer.obj as string[];
+            {
+                if (answer.obj is JArray && answer.obj != null)
+                {
+                    return (answer.obj as JArray).ToObject<List<string>>();
+                }
+            }
             return null;
         }
         /// <summary>
@@ -122,7 +144,12 @@ namespace EmployeeFinder_Client.ViewModel
             MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECE" });
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECE")
-                return answer.obj as List<Candidates>;
+            {
+                if (answer.obj is JArray && answer.obj != null)
+                {
+                    return (answer.obj as JArray).ToObject<List<Candidates>>();
+                }
+            }
             return null;
         }
     }

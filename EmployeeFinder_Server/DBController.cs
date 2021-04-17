@@ -299,12 +299,12 @@ namespace EmployeeFinder_Server
         /// <returns>список с названиями Специализаций</returns>
         public object GetSpecialisationsName()
         {
-            List<string> CitiSpecialisations = new List<string>();
-            foreach (var Specialisations in dataBase.Cities)
+            List<string> Specialisations = new List<string>();
+            foreach (var Specialisation in dataBase.Specialisations)
             {
-                CitiSpecialisations.Add(Specialisations.Name);
+                Specialisations.Add(Specialisation.Name);
             }
-            return CitiSpecialisations;
+            return Specialisations;
         }
 
         /// <summary>

@@ -107,7 +107,7 @@ namespace EmployeeFinder_Client.ViewModel
             }
             catch (SocketException)
             {
-                _MainCodeBehind.ShowErrorWindow("sorry, can not connect to server");
+                _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
                 return;
             }
             Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
