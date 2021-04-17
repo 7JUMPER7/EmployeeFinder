@@ -101,7 +101,15 @@ namespace EmployeeFinder_Client.ViewModel
             //
 
             TcpClient client = new TcpClient();
-            client.Connect("127.0.0.1", 1024);
+            try
+            {
+                client.Connect("127.0.0.1", 1024);
+            }
+            catch (SocketException e)
+            {
+                _MainCodeBehind.ShowErrorWindow("sorry, can not connect to server");
+                return;
+            }
             Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
             thread.IsBackground = true;
             thread.Start(client);
