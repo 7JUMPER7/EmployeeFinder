@@ -11,7 +11,7 @@ using System.Xml;
 
 namespace EmployeeFinder_Client
 {
-    internal static class MessagesAsistent
+    internal static class MessagesAsistant
     {
         /// <summary>
         /// Получение даных из TcpClient и их конвертация в класс MyMessage

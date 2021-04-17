@@ -12,7 +12,7 @@ namespace EmployeeFinder_Server
 {
     public partial class Form1 : Form
     {
-        private int DataGridCounter = 0;
+        private int DataGridCounter = 1;
         private ServerLogical server;
 
         public Form1()
@@ -51,6 +51,11 @@ namespace EmployeeFinder_Server
                 case 6: { DataBox.DataSource = server.GetMessages(); } break;
             }
             DataBox.Refresh();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            TableDisplay();
         }
     }
 }

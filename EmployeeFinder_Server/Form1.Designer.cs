@@ -91,6 +91,7 @@ namespace EmployeeFinder_Server
             this.Controls.Add(this.ConsoleBox);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataBox)).EndInit();
             this.ResumeLayout(false);
 

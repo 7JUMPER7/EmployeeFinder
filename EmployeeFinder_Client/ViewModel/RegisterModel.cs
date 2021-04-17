@@ -113,7 +113,20 @@ namespace EmployeeFinder_Client.ViewModel
             if (InputPassword == InputReapeatPassword)
             {
                 TcpClient client = new TcpClient();
-                client.Connect("127.0.0.1", 1024);
+                try
+                {
+                    client.Connect("127.0.0.1", 1024);
+                }
+                catch (SocketException)
+                {
+                    _MainCodeBehind.ShowErrorWindow("sorry, can not connect to server");
+                    return;
+                }
+                if (InputLogin.Contains(" "))
+                {
+                    _MainCodeBehind.ShowErrorWindow("sorry, login cannot have spaces");
+                    return;
+                }
                 Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
                 thread.IsBackground = true;
                 thread.Start(client);
@@ -134,7 +147,7 @@ namespace EmployeeFinder_Client.ViewModel
                     //Reg like employee
                     message.MessageProcessing = "REGE";
                 }
-                MessagesAsistent.SendMessage(client, message);
+                MessagesAsistant.SendMessage(client, message);
             }
             else
             {
@@ -145,7 +158,7 @@ namespace EmployeeFinder_Client.ViewModel
         private void CheckForLogin(object obj)
         {
             TcpClient client = obj as TcpClient;
-            Message answer = MessagesAsistent.ReadMessage(client);
+            Message answer = MessagesAsistant.ReadMessage(client);
             switch (answer.MessageProcessing)
             {
                 case "ALOK": //Всё правильно
@@ -166,11 +179,6 @@ namespace EmployeeFinder_Client.ViewModel
                 case "LOGN": //Неверный логин
                     {
                         _MainCodeBehind.ShowErrorWindow("Логин занят");
-                        break;
-                    }
-                case "SPAC": //Есть пробел
-                    {
-                        _MainCodeBehind.ShowErrorWindow("Нельзя использовать пробелы");
                         break;
                     }
                 default: //Прочая ошибка

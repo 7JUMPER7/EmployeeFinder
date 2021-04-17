@@ -93,8 +93,8 @@ namespace EmployeeFinder_Client.ViewModel
         /// <returns></returns>
         private string[] ReceiveCities(TcpClient client)
         {
-            MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECC" });
-            Message answer = MessagesAsistent.ReadMessage(client);
+            MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECC" });
+            Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECC")
                 return answer.obj as string[];
             return null;
@@ -106,8 +106,8 @@ namespace EmployeeFinder_Client.ViewModel
         /// <returns></returns>
         private string[] ReceiveSpecs(TcpClient client)
         {
-            MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECS" });
-            Message answer = MessagesAsistent.ReadMessage(client);
+            MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECS" });
+            Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECS")
                 return answer.obj as string[];
             return null;
@@ -119,8 +119,8 @@ namespace EmployeeFinder_Client.ViewModel
         /// <returns></returns>
         private List<Candidates> ReceiveCandidates(TcpClient client)
         {
-            MessagesAsistent.SendMessage(client, new Message() { MessageProcessing = "RECE" });
-            Message answer = MessagesAsistent.ReadMessage(client);
+            MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECE" });
+            Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECE")
                 return answer.obj as List<Candidates>;
             return null;

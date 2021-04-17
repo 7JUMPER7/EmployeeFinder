@@ -105,7 +105,7 @@ namespace EmployeeFinder_Client.ViewModel
             {
                 client.Connect("127.0.0.1", 1024);
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 _MainCodeBehind.ShowErrorWindow("sorry, can not connect to server");
                 return;
@@ -129,14 +129,14 @@ namespace EmployeeFinder_Client.ViewModel
                 //LogIn like employee
                 message.MessageProcessing = "LOGE";
             }
-            MessagesAsistent.SendMessage(client, message);
+            MessagesAsistant.SendMessage(client, message);
         }
 
         //Метод ожидание ответа сервера для потока
         private void CheckForLogin(object obj)
         {
             TcpClient client = obj as TcpClient;
-            Message answer = MessagesAsistent.ReadMessage(client);
+            Message answer = MessagesAsistant.ReadMessage(client);
             switch (answer.MessageProcessing)
             {
                 case "ALOK": //Всё правильно

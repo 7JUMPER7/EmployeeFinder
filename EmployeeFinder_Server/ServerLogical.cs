@@ -10,7 +10,7 @@ namespace EmployeeFinder_Server
     public class ServerLogical
     {
         private DBController controller;
-
+        Thread main;
         public ServerLogical()
         {
             controller = new DBController();
@@ -45,6 +45,7 @@ namespace EmployeeFinder_Server
             {
                 IsBackground = true
             }.Start();
+            //main.Start();
         }
 
         /// <summary>
@@ -140,5 +141,10 @@ namespace EmployeeFinder_Server
         {
             return controller.GetMessages();
         }
+        
+        //~ServerLogical()
+        //{
+        //    main.Abort();
+        //}
     }
 }
