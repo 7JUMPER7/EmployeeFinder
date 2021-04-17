@@ -9,10 +9,11 @@ namespace EmployeeFinder_Server
 {
     public class ServerLogical
     {
+        private Form1 Form { get; set; }
         private DBController controller;
-        Thread main;
-        public ServerLogical()
+        public ServerLogical(Form1 form)
         {
+            Form = form;
             controller = new DBController();
             NewThread();
         }
@@ -45,7 +46,6 @@ namespace EmployeeFinder_Server
             {
                 IsBackground = true
             }.Start();
-            //main.Start();
         }
 
         /// <summary>
@@ -60,14 +60,54 @@ namespace EmployeeFinder_Server
             {
                 switch (message.MessageProcessing)
                 {
-                    case "LOGC": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message)); } break;
-                    case "LOGE": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message)); } break;
-                    case "REGC": { MessagesAsistent.SendMessage(client, controller.RegisterCompany(message)); } break;
-                    case "REGE": { MessagesAsistent.SendMessage(client, controller.RegisterEmployee(message)); } break;
-                    case "RECE": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECE", message, controller.GetCandidates())); } break;
-                    case "RECC": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECC", message, controller.GetCitiesName())); } break;
-                    case "RECS": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECS", message, controller.GetSpecialisationsName())); } break;
-                    case "PUBL": { MessagesAsistent.SendMessage(client, controller.SaveEmployeeInfo(message)); break; }
+                    case "LOGC": {
+                            Form.ConsoleBox.Invoke((MethodInvoker) delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked for login as a company");
+                            });
+                            MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message)); } break;
+                    case "LOGE": {
+                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked for login as an employee");
+                            });
+                            MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message)); } break;
+                    case "REGC": {
+                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked to register as a company");
+                            });
+                            MessagesAsistent.SendMessage(client, controller.RegisterCompany(message)); } break;
+                    case "REGE": {
+                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked to register as an employee");
+                            });
+                            MessagesAsistent.SendMessage(client, controller.RegisterEmployee(message)); } break;
+                    case "RECE": {
+                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked for employees");
+                            });
+                            MessagesAsistent.SendMessage(client, MessageGetCandidates("RECE", message, controller.GetCandidates())); } break;
+                    case "RECC": {
+                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked for cities");
+                            });
+                            MessagesAsistent.SendMessage(client, MessageGetCandidates("RECC", message, controller.GetCitiesName())); } break;
+                    case "RECS": {
+                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked for specializations");
+                            });
+                            MessagesAsistent.SendMessage(client, MessageGetCandidates("RECS", message, controller.GetSpecialisationsName())); } break;
+                    case "PUBL": {
+                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                            {
+                                Form.ConsoleBox.Items.Add($"{message.Login} asked for updating CV");
+                            });
+                            MessagesAsistent.SendMessage(client, controller.SaveEmployeeInfo(message)); break; }
                 }
             }
             catch (Exception ex)

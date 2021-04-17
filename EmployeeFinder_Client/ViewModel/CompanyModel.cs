@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using System.Windows;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -105,7 +106,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// <returns></returns>
         private List<string> ReceiveCities(TcpClient client)
         {
-            MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECC" });
+            MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECC" });
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECC")
             {
@@ -123,7 +124,8 @@ namespace EmployeeFinder_Client.ViewModel
         /// <returns></returns>
         private List<string> ReceiveSpecs(TcpClient client)
         {
-            MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECS" });
+            MessageBox.Show(CurrentUser.CurrentUserLogin);
+            MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECS" });
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECS")
             {
@@ -141,7 +143,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// <returns></returns>
         private List<Candidates> ReceiveCandidates(TcpClient client)
         {
-            MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "RECE" });
+            MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECE" });
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECE")
             {

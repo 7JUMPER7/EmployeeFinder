@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Threading;
 using EmployeeFinder_Client.Model;
 using System.Resources;
+using System.Windows;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -141,6 +142,8 @@ namespace EmployeeFinder_Client.ViewModel
             {
                 case "ALOK": //Всё правильно
                     {
+                        CurrentUser.CurrentUserLogin = InputLogin;
+                        CurrentUser.IsCurrentUserCompany = IsLikeCompanyCheck;
                         if (_IsLikeCompanyCheck)
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow)));
@@ -149,8 +152,6 @@ namespace EmployeeFinder_Client.ViewModel
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow)));
                         }
-                        CurrentUser.CurrentUserLogin = InputLogin;
-                        CurrentUser.IsCurrentUserCompany = IsLikeCompanyCheck;
                         _MainCodeBehind.ShowSuccessWindow("Упешно");
                         break;
                     }

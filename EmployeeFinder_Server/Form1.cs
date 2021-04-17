@@ -18,7 +18,7 @@ namespace EmployeeFinder_Server
         public Form1()
         {
             InitializeComponent();
-            server = new ServerLogical();
+            server = new ServerLogical(this);
         }
 
         private void leftBut_Click(object sender, EventArgs e)

@@ -98,10 +98,10 @@ namespace EmployeeFinder_Server
         }
 
         #endregion
-        private System.Windows.Forms.ListBox ConsoleBox;
         private System.Windows.Forms.Button leftBut;
         private System.Windows.Forms.Button rightBut;
         private System.Windows.Forms.DataGridView DataBox;
+        public System.Windows.Forms.ListBox ConsoleBox;
     }
 }
 
