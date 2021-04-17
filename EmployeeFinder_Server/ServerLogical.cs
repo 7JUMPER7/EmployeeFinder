@@ -67,6 +67,7 @@ namespace EmployeeFinder_Server
                     case "RECE": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECE", message, controller.GetCandidates())); } break;
                     case "RECC": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECC", message, controller.GetCitiesName())); } break;
                     case "RECS": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECS", message, controller.GetSpecialisationsName())); } break;
+                    case "PUBL": { MessagesAsistent.SendMessage(client, controller.SaveEmployeeInfo(message)); break; }
                 }
             }
             catch (Exception ex)
@@ -141,7 +142,7 @@ namespace EmployeeFinder_Server
         {
             return controller.GetMessages();
         }
-        
+
         //~ServerLogical()
         //{
         //    main.Abort();

@@ -1,6 +1,10 @@
 ﻿using System;
 using EmployeeFinder_Client.View;
 using System.ComponentModel;
+using System.Net.Sockets;
+using EmployeeFinder_Client.Model;
+using System.Threading;
+using System.Windows;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -111,9 +115,45 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnPublUC()
         {
-            //логика
+            TcpClient client = new TcpClient();
+            try
+            {
+                client.Connect("127.0.0.1", 1024);
+            }
+            catch
+            {
+                _MainCodeBehind.ShowErrorWindow("sorry, can not connect to a server");
+                return;
+            }
+
+            Message message = new Message()
+            {
+                Login = CurrentUser.CurrentUserLogin,
+                MessageProcessing = "PUBL"
+            };
+            message.MessageText = $"d|||{InputName}|||{InputCity}|||{InputAge}|||{InputSpecialisation}|||{InputPortfolio}";
+            MessageBox.Show(message.MessageText);
+            Thread thread = new Thread(new ParameterizedThreadStart(PublishResult));
+            thread.IsBackground = true;
+            thread.Start(client);
+
+            MessagesAsistant.SendMessage(client, message);
         }
 
+        private void PublishResult(object obj)
+        {
+            TcpClient client = obj as TcpClient;
+            Message answer = MessagesAsistant.ReadMessage(client);
+            switch (answer.MessageProcessing)
+            {
+                case "ALOK":
+                    _MainCodeBehind.ShowSuccessWindow("Publish successful");
+                    break;
+                case "EROR":
+                    _MainCodeBehind.ShowErrorWindow("Publish failed");
+                    break;
+            }
+        }
         /// <summary>
         /// Удаление резюме
         /// </summary>
