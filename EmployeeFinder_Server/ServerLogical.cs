@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EmployeeFinder_Server
@@ -44,7 +41,10 @@ namespace EmployeeFinder_Server
                         MessageBox.Show(ex.Message);
                     }
                 }
-            }).Start();
+            })
+            {
+                IsBackground = true
+            }.Start();
         }
 
         /// <summary>
@@ -61,7 +61,11 @@ namespace EmployeeFinder_Server
                 {
                     case "LOGC": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message)); } break;
                     case "LOGE": { MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message)); } break;
-                    case "SMES": { } break;
+                    case "REGC": { MessagesAsistent.SendMessage(client, controller.RegisterCompany(message)); } break;
+                    case "REGE": { MessagesAsistent.SendMessage(client, controller.RegisterEmployee(message)); } break;
+                    case "RECE": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECE", message, controller.GetCandidates())); } break;
+                    case "RECC": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECC", message, controller.GetCitiesName())); } break;
+                    case "RECS": { MessagesAsistent.SendMessage(client, MessageGetCandidates("RECS", message, controller.GetSpecialisationsName())); } break;
                 }
             }
             catch (Exception ex)
@@ -70,6 +74,19 @@ namespace EmployeeFinder_Server
             }
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private Message MessageGetCandidates(string key, Message message, object obj)
+        {
+            message.MessageProcessing = key;
+            message.obj = obj;
+            return message;
+        }
         /// <summary>
         /// Возвращает список кандидатов
         /// </summary>

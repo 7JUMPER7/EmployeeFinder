@@ -1,5 +1,8 @@
-﻿using System;
+﻿using EmployeeFinder_Client.Model;
+using System;
 using System.ComponentModel;
+using System.Net.Sockets;
+using System.Threading;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -75,6 +78,21 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
         /// <summary>
+        /// Проверка является ли компанией
+        /// </summary>
+        private bool _IsLikeCompanyCheck;
+
+        public bool IsLikeCompanyCheck
+        {
+            get { return _IsLikeCompanyCheck; }
+            set
+            {
+                if (_IsLikeCompanyCheck == value) return;
+                _IsLikeCompanyCheck = value;
+            }
+        }
+
+        /// <summary>
         /// Завершение регистрации
         /// </summary>
         private RelayCommand _RegisterCommand;
@@ -92,7 +110,75 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnRegUC()
         {
-            //Логика
+            if (InputPassword == InputReapeatPassword)
+            {
+                TcpClient client = new TcpClient();
+                client.Connect("127.0.0.1", 1024);
+                Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
+                thread.IsBackground = true;
+                thread.Start(client);
+
+                Message message = new Message()
+                {
+                    Login = InputLogin,
+                    Password = InputPassword
+                };
+                if (IsLikeCompanyCheck)
+                {
+                    //Reg like company
+                    message.MessageProcessing = "REGC";
+                    message.MessageText = InputCompanyName;
+                }
+                else
+                {
+                    //Reg like employee
+                    message.MessageProcessing = "REGE";
+                }
+                MessagesAsistent.SendMessage(client, message);
+            }
+            else
+            {
+                _MainCodeBehind.ShowErrorWindow("Пароли не совпадают.");
+            }
+        }
+        //Метод ожидание ответа сервера для потока
+        private void CheckForLogin(object obj)
+        {
+            TcpClient client = obj as TcpClient;
+            Message answer = MessagesAsistent.ReadMessage(client);
+            switch (answer.MessageProcessing)
+            {
+                case "ALOK": //Всё правильно
+                    {
+                        if (_IsLikeCompanyCheck == true)
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow)));
+                        }
+                        else
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow)));
+                        }
+                        DataAccess.Login = InputLogin;
+                        DataAccess.Password = InputPassword;
+                        _MainCodeBehind.ShowSuccessWindow("Упешно");
+                        break;
+                    }
+                case "LOGN": //Неверный логин
+                    {
+                        _MainCodeBehind.ShowErrorWindow("Логин занят");
+                        break;
+                    }
+                case "SPAC": //Есть пробел
+                    {
+                        _MainCodeBehind.ShowErrorWindow("Нельзя использовать пробелы");
+                        break;
+                    }
+                default: //Прочая ошибка
+                    {
+                        _MainCodeBehind.ShowErrorWindow("Что-то пошло не так");
+                    }
+                    break;
+            }
         }
     }
 }

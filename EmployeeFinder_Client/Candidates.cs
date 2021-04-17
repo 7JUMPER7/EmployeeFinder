@@ -5,9 +5,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeFinder_Server.DbClasses
+namespace EmployeeFinder_Client
 {
-    class Candidates
+    public class Candidates
     {
         public int Id { get; set; }
         public string Name { get; set; }

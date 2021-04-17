@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EmployeeFinder_Server
 {
     [Serializable]
-    class Message
+   public  class Message
     {
         private string messageProcessing;
         
@@ -57,10 +58,19 @@ namespace EmployeeFinder_Server
         /// файл
         /// </summary>
         public byte[] File { get; set; }
+        /// <summary>
+        /// клиент
+        /// </summary>
+        public TcpClient client { get; set; }
+        /// <summary>
+        /// обьект
+        /// </summary>
+        public object obj { get; set; }
 
         public Message()
         {
             File = null;
+            client = null;
         }
 
         public override string ToString()
