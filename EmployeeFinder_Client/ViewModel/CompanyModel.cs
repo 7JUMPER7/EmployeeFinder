@@ -183,8 +183,7 @@ namespace EmployeeFinder_Client.ViewModel
                 candidates = candidates.Where(c => c.Age <= ToAgeFilter).ToList();
             }
             Candidates = new ObservableCollection<CandidatesChosen>(candidates); 
-            MessageBox.Show(Candidates.Count.ToString());
-
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
 
         }
 
