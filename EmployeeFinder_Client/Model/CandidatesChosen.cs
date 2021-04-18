@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeFinder_Client
+namespace EmployeeFinder_Client.Model
 {
-    public class Candidates
+    public class CandidatesChosen
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,7 +15,5 @@ namespace EmployeeFinder_Client
         public string Specialisation { get; set; }
         public string Portfolio { get; set; }
         public string Login { get; set; }
-        public string Password { get; set; }
-        public object tcpClient { get; set; }
     }
 }

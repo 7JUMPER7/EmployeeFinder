@@ -259,12 +259,8 @@ namespace EmployeeFinder_Server
         /// <returns>список с названиями городов</returns>
         public object GetCitiesName()
         {
-            List<string> CitiNames = new List<string>();
-            foreach (var citi in dataBase.Cities)
-            {
-                CitiNames.Add(citi.Name);
-            }
-            return CitiNames;
+            
+            return dataBase.Cities.Select(c => c.Name).ToList();
         }
 
         /// <summary>
@@ -299,12 +295,7 @@ namespace EmployeeFinder_Server
         /// <returns>список с названиями Специализаций</returns>
         public object GetSpecialisationsName()
         {
-            List<string> Specialisations = new List<string>();
-            foreach (var Specialisation in dataBase.Specialisations)
-            {
-                Specialisations.Add(Specialisation.Name);
-            }
-            return Specialisations;
+            return dataBase.Specialisations.Select(s => s.Name).ToList();
         }
 
         /// <summary>

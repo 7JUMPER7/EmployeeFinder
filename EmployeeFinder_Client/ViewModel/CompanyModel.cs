@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Windows;
+using System.Linq;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -17,7 +18,7 @@ namespace EmployeeFinder_Client.ViewModel
 
         public List<string> CityFilter { get; set; }
         public List<string> SpecFilter { get; set; }
-        public List<Candidates> Candidates { get; set; }
+        public List<CandidatesChosen> Candidates { get; set; }
 
         public bool NewMessage { get; set; }
 
@@ -33,18 +34,49 @@ namespace EmployeeFinder_Client.ViewModel
             //Тестовые клиенты
             TcpClient client = new TcpClient();
             client.Connect("127.0.0.1", 1024);
-            CityFilter = ReceiveCities(client);
+            List<Cities> cities = ReceiveCities(client);
+            CityFilter = cities.Select(c => c.Name).ToList();
             client.Close();
 
             client = new TcpClient();
             client.Connect("127.0.0.1", 1024);
-            SpecFilter = ReceiveSpecs(client);
+            List<Specialisations> specialisations = ReceiveSpecs(client);
+            SpecFilter = specialisations.Select(s => s.Name).ToList();
             client.Close();
 
             client = new TcpClient();
             client.Connect("127.0.0.1", 1024);
-            Candidates = ReceiveCandidates(client);
+            var candidates = ReceiveCandidates(client);
             client.Close();
+            MessageBox.Show(candidates.Count.ToString());
+            Candidates = candidates
+                .Join(cities,
+                cand => cand.CityId,
+                city => city.Id,
+                (cand, city) => new Candidates
+                {
+                    Id = cand.Id,
+                    Name = cand.Name,
+                    City = city.Name,
+                    Age = cand.Age,
+                    SpecialisationId = cand.SpecialisationId,
+                    Portfolio = cand.Portfolio,
+                    Login = cand.Login
+                })
+                .Join(specialisations,
+                cand => cand.SpecialisationId,
+                spec => spec.Id,
+                (cand, spec) => new CandidatesChosen
+                {
+                    Id = cand.Id,
+                    Name = cand.Name,
+                    City = cand.City,
+                    Age = cand.Age,
+                    Specialisation = spec.Name,
+                    Portfolio = cand.Portfolio,
+                    Login = cand.Login
+                }).ToList();
+            MessageBox.Show(Candidates.Count.ToString());
 
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
@@ -104,7 +136,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private List<string> ReceiveCities(TcpClient client)
+        private List<Cities> ReceiveCities(TcpClient client)
         {
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECC" });
             Message answer = MessagesAsistant.ReadMessage(client);
@@ -112,7 +144,7 @@ namespace EmployeeFinder_Client.ViewModel
             {
                 if (answer.obj is JArray && answer.obj != null)
                 {
-                    return (answer.obj as JArray).ToObject<List<string>>();
+                    return (answer.obj as JArray).ToObject<List<Cities>>();
                 }
             }
             return null;
@@ -122,16 +154,15 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private List<string> ReceiveSpecs(TcpClient client)
+        private List<Specialisations> ReceiveSpecs(TcpClient client)
         {
-            MessageBox.Show(CurrentUser.CurrentUserLogin);
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECS" });
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "RECS")
             {
                 if (answer.obj is JArray && answer.obj != null)
                 {
-                    return (answer.obj as JArray).ToObject<List<string>>();
+                    return (answer.obj as JArray).ToObject<List<Specialisations>>();
                 }
             }
             return null;
