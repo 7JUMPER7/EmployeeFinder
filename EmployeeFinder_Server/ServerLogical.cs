@@ -19,7 +19,6 @@ namespace EmployeeFinder_Server
             controller = new DBController();
             NewThread();
 
-            MessageBox.Show((controller.GetCandidates() as List<Candidates>)[0].SpecialisationId.ToString());
         }
 
         /// <summary>
