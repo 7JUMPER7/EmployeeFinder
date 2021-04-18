@@ -34,11 +34,10 @@ namespace EmployeeFinder_Server
             {
                 if (value.Length == 4)
                     foreach (char c in value)
-                        if (c >= 65 && c <= 90)
+                        if (char.IsUpper(c))
                             messageProcessing = value;
             }
         }
-
         /// <summary>
         /// текст сообщения
         /// </summary>

@@ -29,5 +29,10 @@ namespace EmployeeFinder_Client.View
         {
             e.Handled = !(Char.IsDigit(e.Text, 0));
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

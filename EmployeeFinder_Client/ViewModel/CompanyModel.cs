@@ -18,7 +18,8 @@ namespace EmployeeFinder_Client.ViewModel
 
         public List<string> CityFilter { get; set; }
         public List<string> SpecFilter { get; set; }
-        public List<CandidatesChosen> Candidates { get; set; }
+        public ObservableCollection<CandidatesChosen> Candidates { get; set; }
+        public List<CandidatesChosen> AllCandidates { get; set; }
 
         public bool NewMessage { get; set; }
 
@@ -48,8 +49,7 @@ namespace EmployeeFinder_Client.ViewModel
             client.Connect("127.0.0.1", 1024);
             var candidates = ReceiveCandidates(client);
             client.Close();
-            MessageBox.Show(candidates.Count.ToString());
-            Candidates = candidates
+            AllCandidates = candidates
                 .Join(cities,
                 cand => cand.CityId,
                 city => city.Id,
@@ -76,11 +76,41 @@ namespace EmployeeFinder_Client.ViewModel
                     Portfolio = cand.Portfolio,
                     Login = cand.Login
                 }).ToList();
-            MessageBox.Show(Candidates.Count.ToString());
-
+            Candidates = new ObservableCollection<CandidatesChosen>(AllCandidates);
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
         }
+
+        private string _SelectedCity;
+        public string SelectedCity
+        {
+            get
+            {
+                return _SelectedCity;
+            }
+            set
+            {
+                _SelectedCity = value;
+                UpdateTable();
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedCity)));
+            }
+        }
+        private string _SelectedSpec;
+        public string SelectedSpec
+        {
+            get
+            {
+                return _SelectedSpec;
+            }
+            set
+            {
+                _SelectedSpec = value;
+                UpdateTable();
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedSpec)));
+            }
+        }
+
+
 
         /// <summary>
         //Значения фильтра возраста
@@ -92,6 +122,7 @@ namespace EmployeeFinder_Client.ViewModel
             set
             {
                 _FromAgeFilter = value;
+                UpdateTable();
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(FromAgeFilter)));
             }
         }
@@ -102,7 +133,8 @@ namespace EmployeeFinder_Client.ViewModel
             set
             {
                 _ToAgeFilter = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(FromAgeFilter)));
+                UpdateTable();
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ToAgeFilter)));
             }
         }
 
@@ -130,6 +162,31 @@ namespace EmployeeFinder_Client.ViewModel
             messager.Show();
         }
 
+
+        private void UpdateTable()
+        {
+            var candidates = AllCandidates;
+            if (SelectedCity != null)
+            {
+                candidates = candidates.Where(c => c.City == SelectedCity).ToList();
+            }
+            if (SelectedSpec != null)
+            {
+                candidates = candidates.Where(c => c.Specialisation == SelectedSpec).ToList();
+            }
+            if (FromAgeFilter != 0)
+            {
+                candidates = candidates.Where(c => c.Age >= FromAgeFilter).ToList();
+            }
+            if (ToAgeFilter != 0)
+            {
+                candidates = candidates.Where(c => c.Age <= ToAgeFilter).ToList();
+            }
+            Candidates = new ObservableCollection<CandidatesChosen>(candidates); 
+            MessageBox.Show(Candidates.Count.ToString());
+
+
+        }
 
         /// <summary>
         /// Получает массив доступных названий городов от сервера
