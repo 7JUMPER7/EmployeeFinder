@@ -13,12 +13,12 @@ namespace EmployeeFinder_Server
     {
         private Form1 Form { get; set; }
         private DBController controller;
+
         public ServerLogical(Form1 form)
         {
             Form = form;
             controller = new DBController();
             NewThread();
-
         }
 
         /// <summary>
@@ -62,81 +62,16 @@ namespace EmployeeFinder_Server
             {
                 while (true)
                 {
-                    Message message = MessagesAsistent.ReadMessage(client);
-
                     switch (message.MessageProcessing)
                     {
-                        case "LOGC":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                               {
-                                   Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for login as a company");
-                               });
-                                MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message));
-                            }
-                            break;
-                        case "LOGE":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                                {
-                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for login as an employee");
-                                });
-                                MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message));
-                            }
-                            break;
-                        case "REGC":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                                {
-                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked to register as a company");
-                                });
-                                MessagesAsistent.SendMessage(client, controller.RegisterCompany(message));
-                            }
-                            break;
-                        case "REGE":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                                {
-                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked to register as an employee");
-                                });
-                                MessagesAsistent.SendMessage(client, controller.RegisterEmployee(message));
-                            }
-                            break;
-                        case "RECE":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                                {
-                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for employees");
-                                });
-                                MessagesAsistent.SendMessage(client, MessageGetCandidates("RECE", message, controller.GetCandidates()));
-                            }
-                            break;
-                        case "RECC":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                                {
-                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for cities");
-                                });
-                                MessagesAsistent.SendMessage(client, MessageGetCandidates("RECC", message, controller.GetCities()));
-                            }
-                            break;
-                        case "RECS":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                                {
-                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for specializations");
-                                });
-                                MessagesAsistent.SendMessage(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()));
-                            }
-                            break;
-                        case "PUBL":
-                            {
-                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                                {
-                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for updating CV");
-                                });
-                                MessagesAsistent.SendMessage(client, controller.SaveEmployeeInfo(message)); break;
-                            }
+                        case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
+                        case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message), "asked for login as an employee"); break; }
+                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message), "asked to register as an company"); break; }
+                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message), "asked to register as an employee"); break; }
+                        case "RECE": { ConsoleWrite(client, MessageGetCandidates("RECE", message, controller.GetCandidates()), "asked for employees"); break; }
+                        case "RECC": { ConsoleWrite(client, MessageGetCandidates("RECC", message, controller.GetCities()), "asked for cities"); break; }
+                        case "RECS": { ConsoleWrite(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()), "asked for specializations"); break; }
+                        case "PUBL": { ConsoleWrite(client, controller.SaveEmployeeInfo(message), "asked for updating CV"); break; }
                     }
                 }
             }
@@ -144,22 +79,39 @@ namespace EmployeeFinder_Server
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
 
+        /// <summary>
+        /// отображает данные в консоле сервера
+        /// </summary>
+        /// <param name="client">клиент каторему нужно отправить сообщение</param>
+        /// <param name="message">сообщение каторое нужно отправить клиенту</param>
+        /// <param name="messageText">сообщение каторое нужно отобразить на консоле сервера</param>
+        private void ConsoleWrite(TcpClient client, Message message, string messageText)
+        {
+            lock (Form)
+            {
+                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                {
+                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} {messageText}");
+                });
+            }
+            MessagesAsistent.SendMessage(client, message);
+        }
 
         /// <summary>
-        /// 
+        ///  Добавляет колекцию данных, в виде обьекта, в клас Message
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="message">сообщение</param>
+        /// <param name="obj">колекция в виде обьекта</param>
+        /// <returns>сообщение в каторое сохранена колекция</returns>
         private Message MessageGetCandidates(string key, Message message, object obj)
         {
             message.MessageProcessing = key;
             message.obj = obj;
             return message;
         }
+
         /// <summary>
         /// Возвращает список кандидатов
         /// </summary>
