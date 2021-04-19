@@ -58,88 +58,93 @@ namespace EmployeeFinder_Server
         /// <param name="controller">клас взаемодействий с базой данных</param>
         private void Logical(TcpClient client, DBController controller)
         {
-            Message message = MessagesAsistent.ReadMessage(client);
             try
             {
-                switch (message.MessageProcessing)
+                while (true)
                 {
-                    case "LOGC":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
-                           {
-                               Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for login as a company");
-                           });
-                            MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message));
-                        }
-                        break;
-                    case "LOGE":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                    Message message = MessagesAsistent.ReadMessage(client);
+
+                    switch (message.MessageProcessing)
+                    {
+                        case "LOGC":
                             {
-                                Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for login as an employee");
-                            });
-                            MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message));
-                        }
-                        break;
-                    case "REGC":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                               {
+                                   Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for login as a company");
+                               });
+                                MessagesAsistent.SendMessage(client, controller.IsLoginCorrectCompany(message));
+                            }
+                            break;
+                        case "LOGE":
                             {
-                                Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked to register as a company");
-                            });
-                            MessagesAsistent.SendMessage(client, controller.RegisterCompany(message));
-                        }
-                        break;
-                    case "REGE":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                {
+                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for login as an employee");
+                                });
+                                MessagesAsistent.SendMessage(client, controller.IsLoginCorrectEmployee(message));
+                            }
+                            break;
+                        case "REGC":
                             {
-                                Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked to register as an employee");
-                            });
-                            MessagesAsistent.SendMessage(client, controller.RegisterEmployee(message));
-                        }
-                        break;
-                    case "RECE":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                {
+                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked to register as a company");
+                                });
+                                MessagesAsistent.SendMessage(client, controller.RegisterCompany(message));
+                            }
+                            break;
+                        case "REGE":
                             {
-                                Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for employees");
-                            });
-                            MessagesAsistent.SendMessage(client, MessageGetCandidates("RECE", message, controller.GetCandidates()));
-                        }
-                        break;
-                    case "RECC":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                {
+                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked to register as an employee");
+                                });
+                                MessagesAsistent.SendMessage(client, controller.RegisterEmployee(message));
+                            }
+                            break;
+                        case "RECE":
                             {
-                                Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for cities");
-                            });
-                            MessagesAsistent.SendMessage(client, MessageGetCandidates("RECC", message, controller.GetCities()));
-                        }
-                        break;
-                    case "RECS":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                {
+                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for employees");
+                                });
+                                MessagesAsistent.SendMessage(client, MessageGetCandidates("RECE", message, controller.GetCandidates()));
+                            }
+                            break;
+                        case "RECC":
                             {
-                                Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for specializations");
-                            });
-                            MessagesAsistent.SendMessage(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()));
-                        }
-                        break;
-                    case "PUBL":
-                        {
-                            Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                {
+                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for cities");
+                                });
+                                MessagesAsistent.SendMessage(client, MessageGetCandidates("RECC", message, controller.GetCities()));
+                            }
+                            break;
+                        case "RECS":
                             {
-                                Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for updating CV");
-                            });
-                            MessagesAsistent.SendMessage(client, controller.SaveEmployeeInfo(message)); break;
-                        }
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                {
+                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for specializations");
+                                });
+                                MessagesAsistent.SendMessage(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()));
+                            }
+                            break;
+                        case "PUBL":
+                            {
+                                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                                {
+                                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} asked for updating CV");
+                                });
+                                MessagesAsistent.SendMessage(client, controller.SaveEmployeeInfo(message)); break;
+                            }
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+
         }
 
 

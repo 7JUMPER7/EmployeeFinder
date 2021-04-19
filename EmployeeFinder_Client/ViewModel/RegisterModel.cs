@@ -11,14 +11,16 @@ namespace EmployeeFinder_Client.ViewModel
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         private IMainWindowsCodeBehind _MainCodeBehind;
+        private TcpClient client;
 
         /// <summary>
-        //конструктор страницы
+        /// конструктор страницы
         /// </summary>
-        public RegisterModel(IMainWindowsCodeBehind codeBehind)
+        public RegisterModel(IMainWindowsCodeBehind codeBehind, TcpClient client)
         {
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
+            this.client = client;
         }
 
         /// <summary>
@@ -165,11 +167,11 @@ namespace EmployeeFinder_Client.ViewModel
                     {
                         if (_IsLikeCompanyCheck == true)
                         {
-                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow)));
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow, client)));
                         }
                         else
                         {
-                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow)));
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow, client)));
                         }
                         CurrentUser.CurrentUserLogin = InputLogin;
                         CurrentUser.IsCurrentUserCompany = IsLikeCompanyCheck;

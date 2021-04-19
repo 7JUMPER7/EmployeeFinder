@@ -15,6 +15,7 @@ namespace EmployeeFinder_Client.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private IMainWindowsCodeBehind _MainCodeBehind;
+        private TcpClient client;
 
         public List<string> CityFilter { get; set; }
         public List<string> SpecFilter { get; set; }
@@ -24,31 +25,23 @@ namespace EmployeeFinder_Client.ViewModel
         public bool NewMessage { get; set; }
 
         /// <summary>
-        //конструктор страницы
+        /// конструктор страницы
         /// </summary>
-        public CompanyModel(IMainWindowsCodeBehind codeBehind)
+        public CompanyModel(IMainWindowsCodeBehind codeBehind, TcpClient _client)
         {
             //DataAccess data = new DataAccess();
             //CityFilter = data.CityFilter;
             //SpecFilter = data.SpecFilter;
 
             //Тестовые клиенты
-            TcpClient client = new TcpClient();
-            client.Connect("127.0.0.1", 1024);
+            client = _client;
+
             List<Cities> cities = ReceiveCities(client);
             CityFilter = cities.Select(c => c.Name).ToList();
-            client.Close();
-
-            client = new TcpClient();
-            client.Connect("127.0.0.1", 1024);
             List<Specialisations> specialisations = ReceiveSpecs(client);
             SpecFilter = specialisations.Select(s => s.Name).ToList();
-            client.Close();
-
-            client = new TcpClient();
-            client.Connect("127.0.0.1", 1024);
             var candidates = ReceiveCandidates(client);
-            client.Close();
+
             AllCandidates = candidates
                 .Join(cities,
                 cand => cand.CityId,
@@ -81,6 +74,10 @@ namespace EmployeeFinder_Client.ViewModel
             _MainCodeBehind = codeBehind;
         }
 
+
+        /// <summary>
+        /// Сортировка по городам
+        /// </summary>
         private string _SelectedCity;
         public string SelectedCity
         {
@@ -95,6 +92,9 @@ namespace EmployeeFinder_Client.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedCity)));
             }
         }
+        /// <summary>
+        /// Сортировка по специализации
+        /// </summary>
         private string _SelectedSpec;
         public string SelectedSpec
         {
@@ -113,7 +113,7 @@ namespace EmployeeFinder_Client.ViewModel
 
 
         /// <summary>
-        //Значения фильтра возраста
+        /// Значения фильтра возраста
         /// </summary>
         private int _FromAgeFilter;
         public int FromAgeFilter
@@ -163,6 +163,9 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
 
+        /// <summary>
+        /// Обновление таблицы с работниками
+        /// </summary>
         private void UpdateTable()
         {
             var candidates = AllCandidates;

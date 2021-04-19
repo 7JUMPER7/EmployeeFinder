@@ -16,6 +16,7 @@ using EmployeeFinder_Client.ViewModel;
 using EmployeeFinder_Client.View;
 using System.Threading;
 using System.Windows.Media.Animation;
+using System.Net.Sockets;
 
 namespace EmployeeFinder_Client
 {
@@ -24,7 +25,9 @@ namespace EmployeeFinder_Client
         void ShowMessage(string message);
         void ShowSuccessWindow(string message);
         void ShowErrorWindow(string message);
-        void LoadView(ViewType typeView);
+        void LoadView(ViewType typeView, TcpClient client);
+        bool GetIsConnected();
+        TcpClient GetClient();
     }
 
     public enum ViewType
@@ -40,9 +43,15 @@ namespace EmployeeFinder_Client
     /// </summary>
     public partial class MainWindow : Window, IMainWindowsCodeBehind
     {
+        TcpClient client;
+        bool IsConnected = false;
+
+        
+
         public MainWindow()
         {
             InitializeComponent();
+
 
             buttonMinimized.Click += (s, e) => WindowState = WindowState.Minimized;
             buttonClose.Click += (s, e) => Close();
@@ -50,12 +59,43 @@ namespace EmployeeFinder_Client
             this.Loaded += MainWindow_Loaded;
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Попытка подключиться к серверу
+        /// </summary>
+        private void TryToConnect()
         {
-            LoadView(ViewType.LogInPage);
+            while (!IsConnected)
+            {
+                try
+                {
+                    client = new TcpClient();
+                    client.Connect("127.0.0.1", 1024);
+                    IsConnected = client.Connected;
+                    ShowSuccessWindow("Подключено к серверу");
+                }
+                catch (Exception)
+                {
+                    ShowErrorWindow("Сервер не отвечает");
+                    Thread.Sleep(3000);
+                }
+            }
+        }
+        public bool GetIsConnected()
+        {
+            return IsConnected;
+        }
+        public TcpClient GetClient()
+        {
+            return client;
         }
 
-        public void LoadView(ViewType typeView)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadView(ViewType.LogInPage, client);
+            new Thread(() => { TryToConnect(); }) { IsBackground = true }.Start();
+        }
+
+        public void LoadView(ViewType typeView, TcpClient client)
         {
             switch (typeView)
             {
@@ -68,21 +108,21 @@ namespace EmployeeFinder_Client
 
                 case ViewType.RegisterPage:
                     RegisterPage viewRegister = new RegisterPage();
-                    RegisterModel modelRegister = new RegisterModel(this);
+                    RegisterModel modelRegister = new RegisterModel(this, client);
                     viewRegister.DataContext = modelRegister;
                     this.OutputView.Content = viewRegister;
                     break;
 
                 case ViewType.CompanyWindow:
                     CompanyWindow viewCompany = new CompanyWindow();
-                    CompanyModel modelCompany = new CompanyModel(this);
+                    CompanyModel modelCompany = new CompanyModel(this, client);
                     viewCompany.DataContext = modelCompany;
                     this.OutputView.Content = viewCompany;
                     break;
 
                 case ViewType.CandidateWindow:
                     CandidateWindow viewCandidate = new CandidateWindow();
-                    CandidateModel modelCandidate = new CandidateModel(this);
+                    CandidateModel modelCandidate = new CandidateModel(this, client);
                     viewCandidate.DataContext = modelCandidate;
                     this.OutputView.Content = viewCandidate;
                     break;

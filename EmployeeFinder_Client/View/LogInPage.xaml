@@ -27,11 +27,11 @@
                 <Label Content="Как компания" Foreground="#FFFFFF" FontSize="14" Margin="5,10,0,10"></Label>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Войти" Style="{StaticResource LogInButtonStyle}" 
-                        Background="#007EA7" Command="{Binding LoginCommand}"></Button>
+                <Button x:Name="LogInBut" Content="Войти" Style="{StaticResource LogInButtonStyle}" 
+                        Background="#007EA7" Command="{Binding LoginCommand}" IsEnabled="{Binding IsConnected}"></Button>
                 <Label></Label>
-                <Button Content="Регистрация" Style="{StaticResource LogInButtonStyle}"
-                        Background="#007EA7" Command="{Binding RegisterPageCommand}"></Button>
+                <Button x:Name="RegBut" Content="Регистрация" Style="{StaticResource LogInButtonStyle}"
+                        Background="#007EA7" Command="{Binding RegisterPageCommand}" IsEnabled="{Binding IsConnected}"></Button>
             </StackPanel>
         </StackPanel>
     </Grid>

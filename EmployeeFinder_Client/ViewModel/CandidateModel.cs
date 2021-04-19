@@ -13,15 +13,17 @@ namespace EmployeeFinder_Client.ViewModel
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         private IMainWindowsCodeBehind _MainCodeBehind;
+        private TcpClient client;
 
         /// <summary>
         //конструктор страницы
         /// </summary>
-        public CandidateModel(IMainWindowsCodeBehind codeBehind)
+        public CandidateModel(IMainWindowsCodeBehind codeBehind, TcpClient client)
         {
             NewMessage = true;
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
+            this.client = client;
         }
 
         //Индикатор нового сообщения
@@ -115,16 +117,16 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnPublUC()
         {
-            TcpClient client = new TcpClient();
-            try
-            {
-                client.Connect("127.0.0.1", 1024);
-            }
-            catch
-            {
-                _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
-                return;
-            }
+            //TcpClient client = new TcpClient();
+            //try
+            //{
+            //    client.Connect("127.0.0.1", 1024);
+            //}
+            //catch
+            //{
+            //    _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
+            //    return;
+            //}
 
             Message message = new Message()
             {

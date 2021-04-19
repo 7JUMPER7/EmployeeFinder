@@ -21,21 +21,49 @@ namespace EmployeeFinder_Client.ViewModel
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         private IMainWindowsCodeBehind _MainCodeBehind;
+        private TcpClient client;
+
 
         /// <summary>
-        //конструктор страницы
+        /// конструктор страницы
         /// </summary>
         public LogInModel(IMainWindowsCodeBehind codeBehind)
         {
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
+
+            new Thread(() =>
+            {
+                do
+                {
+                    //Thread.Sleep(1000);
+                    IsConnected = _MainCodeBehind.GetIsConnected();
+                } while (!IsConnected);
+
+                client = _MainCodeBehind.GetClient();
+            })
+            { IsBackground = true }.Start();
+        }
+
+
+        /// <summary>
+        /// Проверка подлючения
+        /// </summary>
+        private bool _IsConnected;
+        public bool IsConnected
+        {
+            get { return _IsConnected; }
+            set
+            {
+                _IsConnected = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(IsConnected)));
+            }
         }
 
         /// <summary>
         /// Ввод логина
         /// </summary>
         private string _InputLogin;
-
         public string InputLogin
         {
             get { return _InputLogin; }
@@ -50,7 +78,6 @@ namespace EmployeeFinder_Client.ViewModel
         /// Ввод пароля
         /// </summary>
         private string _InputPassword;
-
         public string InputPassword
         {
             get { return _InputPassword; }
@@ -65,7 +92,6 @@ namespace EmployeeFinder_Client.ViewModel
         /// Проверка является ли компанией
         /// </summary>
         private bool _IsLikeCompanyCheck;
-
         public bool IsLikeCompanyCheck
         {
             get { return _IsLikeCompanyCheck; }
@@ -80,7 +106,6 @@ namespace EmployeeFinder_Client.ViewModel
         /// Переход к отображению CompanyWindow или CandidateWindow
         /// </summary>
         private RelayCommand _LoginCommand;
-
         public RelayCommand LoginCommand
         {
             get
@@ -101,16 +126,16 @@ namespace EmployeeFinder_Client.ViewModel
             //логика проверки логина и пароля
             //
 
-            TcpClient client = new TcpClient();
-            try
-            {
-                client.Connect("127.0.0.1", 1024);
-            }
-            catch (SocketException)
-            {
-                _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
-                return;
-            }
+            //TcpClient client = new TcpClient();
+            //try
+            //{
+            //    client.Connect("127.0.0.1", 1024);
+            //}
+            //catch (SocketException)
+            //{
+            //    _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
+            //    return;
+            //}
             Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
             thread.IsBackground = true;
             thread.Start(client);
@@ -136,7 +161,7 @@ namespace EmployeeFinder_Client.ViewModel
         //Метод ожидание ответа сервера для потока
         private void CheckForLogin(object obj)
         {
-            TcpClient client = obj as TcpClient;
+            //TcpClient client = obj as TcpClient;
             Message answer = MessagesAsistant.ReadMessage(client);
             switch (answer.MessageProcessing)
             {
@@ -146,11 +171,11 @@ namespace EmployeeFinder_Client.ViewModel
                         CurrentUser.IsCurrentUserCompany = IsLikeCompanyCheck;
                         if (_IsLikeCompanyCheck)
                         {
-                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow)));
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow, client)));
                         }
                         else
                         {
-                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow)));
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow, client)));
                         }
                         _MainCodeBehind.ShowSuccessWindow("Упешно");
                         break;
@@ -192,7 +217,7 @@ namespace EmployeeFinder_Client.ViewModel
 
         private void OnRegisterUC()
         {
-            _MainCodeBehind.LoadView(ViewType.RegisterPage);
+            _MainCodeBehind.LoadView(ViewType.RegisterPage, client);
         }
     }
 }
