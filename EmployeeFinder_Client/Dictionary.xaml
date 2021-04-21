@@ -25,12 +25,12 @@
     <Style x:Key="TextBoxStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="Century Gothic"></Setter>
         <Setter Property="FontSize" Value="17"></Setter>
-        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="#ef233c"/>
         <Style.Resources>
             <Style TargetType="{x:Type Border}">
-                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="CornerRadius" Value="4"/>
             </Style>
         </Style.Resources>
     </Style>

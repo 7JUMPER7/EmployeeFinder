@@ -34,5 +34,18 @@ namespace EmployeeFinder_Client.View
         {
 
         }
+
+        private void AllEmployees_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Model.CandidatesChosen candidate = AllEmployees.SelectedItem as Model.CandidatesChosen;
+            if (candidate != null)
+            {
+                ENameBox.Text = candidate.Name;
+                ESpecBox.Text = candidate.Specialisation;
+                EAgeBox.Text = candidate.Age.ToString();
+                ECityBox.Text = candidate.City;
+                EPortBox.Text = candidate.Portfolio;
+            }
+        }
     }
 }

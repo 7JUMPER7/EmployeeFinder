@@ -29,11 +29,6 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         public CompanyModel(IMainWindowsCodeBehind codeBehind, TcpClient _client)
         {
-            //DataAccess data = new DataAccess();
-            //CityFilter = data.CityFilter;
-            //SpecFilter = data.SpecFilter;
-
-            //Тестовые клиенты
             client = _client;
 
             List<Cities> cities = ReceiveCities(client);

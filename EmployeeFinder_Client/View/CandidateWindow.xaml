@@ -28,13 +28,13 @@
 
                 <StackPanel Grid.Column="1">
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputName}"></TextBox>
+                             Text="{Binding InputName}" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputSpecialisation}"></TextBox>
+                             Text="{Binding InputSpecialisation}" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputAge}" PreviewTextInput="NumberInput"></TextBox>
+                             Text="{Binding InputAge}" PreviewTextInput="NumberInput" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputCity}"></TextBox>
+                             Text="{Binding InputCity}" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" 
                              Text="{Binding InputPortfolio}" Height="200" Width="365"></TextBox>
                 </StackPanel>

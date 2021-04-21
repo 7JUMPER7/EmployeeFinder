@@ -36,7 +36,6 @@ namespace EmployeeFinder_Client.ViewModel
             {
                 do
                 {
-                    //Thread.Sleep(1000);
                     IsConnected = _MainCodeBehind.GetIsConnected();
                 } while (!IsConnected);
 
@@ -122,20 +121,6 @@ namespace EmployeeFinder_Client.ViewModel
 
         private void OnLoadUC()
         {
-            //
-            //логика проверки логина и пароля
-            //
-
-            //TcpClient client = new TcpClient();
-            //try
-            //{
-            //    client.Connect("127.0.0.1", 1024);
-            //}
-            //catch (SocketException)
-            //{
-            //    _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
-            //    return;
-            //}
             Thread thread = new Thread(new ParameterizedThreadStart(CheckForLogin));
             thread.IsBackground = true;
             thread.Start(client);
@@ -161,7 +146,6 @@ namespace EmployeeFinder_Client.ViewModel
         //Метод ожидание ответа сервера для потока
         private void CheckForLogin(object obj)
         {
-            //TcpClient client = obj as TcpClient;
             Message answer = MessagesAsistant.ReadMessage(client);
             switch (answer.MessageProcessing)
             {

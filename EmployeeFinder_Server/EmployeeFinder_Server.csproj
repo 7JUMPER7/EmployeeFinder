@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbClasses\Candidates.cs" />
+    <Compile Include="DbClasses\CandidatesChosen.cs" />
     <Compile Include="DbClasses\Cities.cs" />
     <Compile Include="DbClasses\Companies.cs" />
     <Compile Include="DbClasses\CompaniesWishLists.cs" />

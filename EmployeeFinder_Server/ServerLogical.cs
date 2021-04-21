@@ -62,6 +62,7 @@ namespace EmployeeFinder_Server
             {
                 while (true)
                 {
+                    Message message = MessagesAsistent.ReadMessage(client);
                     switch (message.MessageProcessing)
                     {
                         case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
@@ -72,6 +73,7 @@ namespace EmployeeFinder_Server
                         case "RECC": { ConsoleWrite(client, MessageGetCandidates("RECC", message, controller.GetCities()), "asked for cities"); break; }
                         case "RECS": { ConsoleWrite(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()), "asked for specializations"); break; }
                         case "PUBL": { ConsoleWrite(client, controller.SaveEmployeeInfo(message), "asked for updating CV"); break; }
+                        case "RCBL": { ConsoleWrite(client, MessageGetCandidates("RCBL", message, controller.GetCandidateByLogin(message.Login)), "asked for candidate by login"); break; } //Receive candidate by login
                     }
                 }
             }

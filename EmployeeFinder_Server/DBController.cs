@@ -239,10 +239,23 @@ namespace EmployeeFinder_Server
         {
             return dataBase.Candidates.ToList();
         }
-
         public object GetCandidatesName()
         {
             return dataBase.Candidates.ToList();
+        }
+        public object GetCandidateByLogin(string login)
+        {
+            Candidates buf = dataBase.Candidates.Where(c => c.Login == login).FirstOrDefault();
+            CandidatesChosen toSend = new CandidatesChosen()
+            {
+                Login = buf.Login,
+                Name = buf.Name,
+                Specialisation = dataBase.Specialisations.Where(s => s.Id == buf.SpecialisationId).FirstOrDefault().Name,
+                Age = buf.Age,
+                City = dataBase.Cities.Where(c => c.Id == buf.CityId).FirstOrDefault().Name,
+                Portfolio = buf.Portfolio
+            };
+            return toSend;
         }
 
         /// <summary>

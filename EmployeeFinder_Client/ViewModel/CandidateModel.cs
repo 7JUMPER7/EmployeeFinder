@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using EmployeeFinder_Client.Model;
 using System.Threading;
 using System.Windows;
+using Newtonsoft.Json.Linq;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -16,7 +17,7 @@ namespace EmployeeFinder_Client.ViewModel
         private TcpClient client;
 
         /// <summary>
-        //конструктор страницы
+        /// конструктор страницы
         /// </summary>
         public CandidateModel(IMainWindowsCodeBehind codeBehind, TcpClient client)
         {
@@ -24,9 +25,23 @@ namespace EmployeeFinder_Client.ViewModel
             if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             _MainCodeBehind = codeBehind;
             this.client = client;
+
+            MessagesAsistant.SendMessage(this.client, new Message() { MessageProcessing = "RCBL", Login = CurrentUser.CurrentUserLogin });
+            Message message = MessagesAsistant.ReadMessage(this.client);
+            if (message.MessageProcessing == "RCBL")
+            {
+                CandidatesChosen candidate = (message.obj as JObject).ToObject<CandidatesChosen>();
+                InputName = candidate.Name;
+                InputSpecialisation = candidate.Specialisation;
+                InputAge = candidate.Age;
+                InputCity = candidate.City;
+                InputPortfolio = candidate.Portfolio;
+            }
         }
 
-        //Индикатор нового сообщения
+        /// <summary>
+        /// Индикатор нового сообщения
+        /// </summary>
         public bool NewMessage { get; set; }
 
         /// <summary>
@@ -117,24 +132,12 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnPublUC()
         {
-            //TcpClient client = new TcpClient();
-            //try
-            //{
-            //    client.Connect("127.0.0.1", 1024);
-            //}
-            //catch
-            //{
-            //    _MainCodeBehind.ShowErrorWindow("Сервер не отвечает");
-            //    return;
-            //}
-
             Message message = new Message()
             {
                 Login = CurrentUser.CurrentUserLogin,
                 MessageProcessing = "PUBL"
             };
             message.MessageText = $"d|||{InputName}|||{InputCity}|||{InputAge}|||{InputSpecialisation}|||{InputPortfolio}";
-            MessageBox.Show(message.MessageText);
             Thread thread = new Thread(new ParameterizedThreadStart(PublishResult));
             thread.IsBackground = true;
             thread.Start(client);
