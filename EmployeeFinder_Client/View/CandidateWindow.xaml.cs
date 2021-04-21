@@ -13,16 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeFinder_Client
+namespace EmployeeFinder_Client.View
 {
     /// <summary>
-    /// Логика взаимодействия для test.xaml
+    /// Interaction logic for CandidateWindow.xaml
     /// </summary>
-    public partial class test : UserControl
+    public partial class CandidateWindow : UserControl
     {
-        public test()
+        public CandidateWindow()
         {
             InitializeComponent();
+        }
+
+        private void NumberInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !(Char.IsDigit(e.Text, 0));
         }
     }
 }

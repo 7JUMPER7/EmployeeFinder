@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeFinder_Client
+namespace EmployeeFinder_Client.View
 {
     /// <summary>
-    /// Логика взаимодействия для CandidatesSearch.xaml
+    /// Interaction logic for RegisterPage.xaml
     /// </summary>
-    public partial class CandidatesSearch : Page
+    public partial class RegisterPage : UserControl
     {
-        public CandidatesSearch()
+        public RegisterPage()
         {
             InitializeComponent();
         }

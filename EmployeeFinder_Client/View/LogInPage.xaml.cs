@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeFinder_Client
+namespace EmployeeFinder_Client.View
 {
     /// <summary>
-    /// Логика взаимодействия для Messager.xaml
+    /// Interaction logic for LogInPage.xaml
     /// </summary>
-    public partial class Messager : Window
+    public partial class LogInPage : UserControl
     {
-        public Messager()
+        public LogInPage()
         {
             InitializeComponent();
         }

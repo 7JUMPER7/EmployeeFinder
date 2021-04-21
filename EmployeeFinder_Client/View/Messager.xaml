@@ -1,13 +1,12 @@
-﻿<UserControl x:Class="EmployeeFinder_Client.test"
+﻿<Window x:Class="EmployeeFinder_Client.View.Messager"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EmployeeFinder_Client"
+             xmlns:local="clr-namespace:EmployeeFinder_Client.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="White">
-    <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">test</TextBlock>
+             d:DesignHeight="450" d:DesignWidth="400">
+    <Grid Height="400" Width="400">
+        <TextBlock Text="Messager"></TextBlock>
     </Grid>
-</UserControl>
- 
+</Window>
