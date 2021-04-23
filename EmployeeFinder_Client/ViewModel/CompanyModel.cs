@@ -110,8 +110,8 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         /// Выбранный работник
         /// </summary>
-        private Candidates _SelectedEmployee;
-        public Candidates SelectedEmployee
+        private CandidatesChosen _SelectedEmployee;
+        public CandidatesChosen SelectedEmployee
         {
             get { return _SelectedEmployee; }
             set

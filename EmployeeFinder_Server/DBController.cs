@@ -248,9 +248,9 @@ namespace EmployeeFinder_Server
             Candidates buf = dataBase.Candidates.Where(c => c.Login == login).FirstOrDefault();
 
             Specialisations specialisations = dataBase.Specialisations.Where(s => s.Id == buf.SpecialisationId).FirstOrDefault();
-            string specialisation = (specialisations != null) ? specialisations.Name : " ";
+            string specialisation = (specialisations != null) ? specialisations.Name : "";
             Cities cities = dataBase.Cities.Where(c => c.Id == buf.CityId).FirstOrDefault();
-            string city = (cities != null) ? cities.Name : " ";
+            string city = (cities != null) ? cities.Name : "";
 
             CandidatesChosen toSend = new CandidatesChosen()
             {
