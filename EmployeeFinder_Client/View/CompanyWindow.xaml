@@ -73,9 +73,7 @@
         </Grid>
         
         <!--Отображение всех кандидатов-->
-        <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10" ItemsSource="{Binding Candidates}" SelectionChanged="AllEmployees_SelectionChanged">
-            
-        </DataGrid>
+        <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10" ItemsSource="{Binding Candidates}" SelectedItem="{Binding SelectedEmployee}" SelectionChanged="AllEmployees_SelectionChanged"/>
 
         <!--Подробная информация о кандидате-->
         <Grid Grid.Column="1" Grid.Row="1">
@@ -93,11 +91,11 @@
             </StackPanel>
             
             <StackPanel HorizontalAlignment="Left" Grid.Column="1">
-                <TextBox x:Name="ENameBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250"></TextBox>
-                <TextBox x:Name="ESpecBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250"></TextBox>
-                <TextBox x:Name="EAgeBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250"></TextBox>
-                <TextBox x:Name="ECityBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250"></TextBox>
-                <TextBox x:Name="EPortBox" Style="{StaticResource TextBoxStyle}" Height="100" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap"></TextBox>
+                <TextBox x:Name="ENameBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputName}"></TextBox>
+                <TextBox x:Name="ESpecBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputSpecialisation}"></TextBox>
+                <TextBox x:Name="EAgeBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputAge}"></TextBox>
+                <TextBox x:Name="ECityBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputCity}"></TextBox>
+                <TextBox x:Name="EPortBox" Style="{StaticResource TextBoxStyle}" Height="100" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding InputPortfolio}"></TextBox>
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
@@ -110,7 +108,7 @@
                     </Button.Content>
                 </Button>
                 <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7"
-                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding OpenMessagerCommand}">
+                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding CopyEmployeeInfoCommand}">
                     <Button.Content>
                         <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets">
                     <Run Text="&#xEA35;" FontSize="24" Foreground="#FFFFFF" />

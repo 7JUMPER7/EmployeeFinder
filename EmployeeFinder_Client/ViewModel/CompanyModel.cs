@@ -29,6 +29,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         public CompanyModel(IMainWindowsCodeBehind codeBehind, TcpClient _client)
         {
+            ObservableCollection<Candidates> SelectedEmployee = new ObservableCollection<Candidates>();
             client = _client;
 
             List<Cities> cities = ReceiveCities(client);
@@ -106,6 +107,82 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
 
+        /// <summary>
+        /// Выбранный работник
+        /// </summary>
+        public ObservableCollection<Candidates> SelectedEmployee;
+
+        /// <summary>
+        /// Ввод имени
+        /// </summary>
+        private string _InputName;
+        public string InputName
+        {
+            get { return _InputName; }
+            set
+            {
+                _InputName = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputName)));
+            }
+        }
+
+        /// <summary>
+        /// Ввод специализации
+        /// </summary>
+        private string _InputSpecialisation;
+        public string InputSpecialisation
+        {
+            get { return _InputSpecialisation; }
+            set
+            {
+                _InputSpecialisation = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputSpecialisation)));
+            }
+        }
+
+        /// <summary>
+        /// Ввод возраста
+        /// </summary>
+        private int _InputAge;
+        public int InputAge
+        {
+            get { return _InputAge; }
+            set
+            {
+                _InputAge = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputAge)));
+            }
+        }
+
+        /// <summary>
+        /// Ввод города
+        /// </summary>
+        private string _InputCity;
+        public string InputCity
+        {
+            get { return _InputCity; }
+            set
+            {
+                _InputCity = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputCity)));
+            }
+        }
+
+        /// <summary>
+        /// Ввод портфолио
+        /// </summary>
+        private string _InputPortfolio;
+        public string InputPortfolio
+        {
+            get { return _InputPortfolio; }
+            set
+            {
+                _InputPortfolio = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputPortfolio)));
+            }
+        }
+
+
 
         /// <summary>
         /// Значения фильтра возраста
@@ -155,6 +232,32 @@ namespace EmployeeFinder_Client.ViewModel
             messager.Height = 400;
             messager.Width = 400;
             messager.Show();
+        }
+        /// <summary>
+        /// Копирование информации о работнике в буфер обмена
+        /// </summary>
+        private RelayCommand _CopyEmployeeInfoCommand;
+        public RelayCommand CopyEmployeeInfoCommand
+        {
+            get
+            {
+                return _CopyEmployeeInfoCommand = _CopyEmployeeInfoCommand ??
+                  new RelayCommand(OnCopyUC, CanCopyUC);
+            }
+        }
+        private bool CanCopyUC()
+        {
+            return true;
+        }
+        private void OnCopyUC()
+        {
+            string info = "ФИО: " + SelectedEmployee[0].Name + '\n';
+            info += "Специализация: " + SelectedEmployee[0].Age + '\n';
+            info += "Возраст: " + _InputAge + '\n';
+            info += "Город: " + _InputCity + '\n';
+            info += "Портфолио: " + _InputPortfolio + '\n';
+            Clipboard.SetText(info);
+            _MainCodeBehind.ShowSuccessWindow("Скопировано");
         }
 
 

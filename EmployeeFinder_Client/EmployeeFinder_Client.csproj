@@ -62,7 +62,6 @@
     <Compile Include="Model\CandidatesChosen.cs" />
     <Compile Include="Model\Cities.cs" />
     <Compile Include="Model\CurrentUser.cs" />
-    <Compile Include="InfoWindow.cs" />
     <Compile Include="Model\DataAccess.cs" />
     <Compile Include="Model\Specialisations.cs" />
     <Compile Include="ViewModel\CandidateModel.cs" />
