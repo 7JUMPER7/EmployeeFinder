@@ -73,7 +73,7 @@
         </Grid>
         
         <!--Отображение всех кандидатов-->
-        <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10" ItemsSource="{Binding Candidates}" SelectedItem="{Binding SelectedEmployee}" SelectionChanged="AllEmployees_SelectionChanged"/>
+        <DataGrid x:Name="AllEmployees" Grid.Row="1" Margin="10" ItemsSource="{Binding Candidates}" SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!--Подробная информация о кандидате-->
         <Grid Grid.Column="1" Grid.Row="1">
@@ -91,11 +91,11 @@
             </StackPanel>
             
             <StackPanel HorizontalAlignment="Left" Grid.Column="1">
-                <TextBox x:Name="ENameBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputName}"></TextBox>
-                <TextBox x:Name="ESpecBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputSpecialisation}"></TextBox>
-                <TextBox x:Name="EAgeBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputAge}"></TextBox>
-                <TextBox x:Name="ECityBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding InputCity}"></TextBox>
-                <TextBox x:Name="EPortBox" Style="{StaticResource TextBoxStyle}" Height="100" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding InputPortfolio}"></TextBox>
+                <TextBox x:Name="ENameBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding SelectedEmployee.Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox x:Name="ESpecBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding SelectedEmployee.Specialisation, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox x:Name="EAgeBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding SelectedEmployee.Age, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox x:Name="ECityBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Width="250" Text="{Binding SelectedEmployee.City, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox x:Name="EPortBox" Style="{StaticResource TextBoxStyle}" Height="100" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding SelectedEmployee.Portfolio, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
             
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">

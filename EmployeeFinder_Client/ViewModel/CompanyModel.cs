@@ -110,78 +110,16 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         /// Выбранный работник
         /// </summary>
-        public ObservableCollection<Candidates> SelectedEmployee;
-
-        /// <summary>
-        /// Ввод имени
-        /// </summary>
-        private string _InputName;
-        public string InputName
+        private Candidates _SelectedEmployee;
+        public Candidates SelectedEmployee
         {
-            get { return _InputName; }
+            get { return _SelectedEmployee; }
             set
             {
-                _InputName = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputName)));
+                _SelectedEmployee = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedEmployee)));
             }
         }
-
-        /// <summary>
-        /// Ввод специализации
-        /// </summary>
-        private string _InputSpecialisation;
-        public string InputSpecialisation
-        {
-            get { return _InputSpecialisation; }
-            set
-            {
-                _InputSpecialisation = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputSpecialisation)));
-            }
-        }
-
-        /// <summary>
-        /// Ввод возраста
-        /// </summary>
-        private int _InputAge;
-        public int InputAge
-        {
-            get { return _InputAge; }
-            set
-            {
-                _InputAge = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputAge)));
-            }
-        }
-
-        /// <summary>
-        /// Ввод города
-        /// </summary>
-        private string _InputCity;
-        public string InputCity
-        {
-            get { return _InputCity; }
-            set
-            {
-                _InputCity = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputCity)));
-            }
-        }
-
-        /// <summary>
-        /// Ввод портфолио
-        /// </summary>
-        private string _InputPortfolio;
-        public string InputPortfolio
-        {
-            get { return _InputPortfolio; }
-            set
-            {
-                _InputPortfolio = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(InputPortfolio)));
-            }
-        }
-
 
 
         /// <summary>
@@ -251,11 +189,11 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnCopyUC()
         {
-            string info = "ФИО: " + SelectedEmployee[0].Name + '\n';
-            info += "Специализация: " + SelectedEmployee[0].Age + '\n';
-            info += "Возраст: " + _InputAge + '\n';
-            info += "Город: " + _InputCity + '\n';
-            info += "Портфолио: " + _InputPortfolio + '\n';
+            string info = "ФИО: " + SelectedEmployee.Name + '\n';
+            info += "Специализация: " + SelectedEmployee.Specialisation + '\n';
+            info += "Возраст: " + SelectedEmployee.Age + '\n';
+            info += "Город: " + SelectedEmployee.City + '\n';
+            info += "Портфолио: " + SelectedEmployee.Portfolio + '\n';
             Clipboard.SetText(info);
             _MainCodeBehind.ShowSuccessWindow("Скопировано");
         }
