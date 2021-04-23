@@ -246,13 +246,19 @@ namespace EmployeeFinder_Server
         public object GetCandidateByLogin(string login)
         {
             Candidates buf = dataBase.Candidates.Where(c => c.Login == login).FirstOrDefault();
+
+            Specialisations specialisations = dataBase.Specialisations.Where(s => s.Id == buf.SpecialisationId).FirstOrDefault();
+            string specialisation = (specialisations != null) ? specialisations.Name : " ";
+            Cities cities = dataBase.Cities.Where(c => c.Id == buf.CityId).FirstOrDefault();
+            string city = (cities != null) ? cities.Name : " ";
+
             CandidatesChosen toSend = new CandidatesChosen()
             {
                 Login = buf.Login,
                 Name = buf.Name,
-                Specialisation = dataBase.Specialisations.Where(s => s.Id == buf.SpecialisationId).FirstOrDefault().Name,
+                Specialisation = specialisation,
                 Age = buf.Age,
-                City = dataBase.Cities.Where(c => c.Id == buf.CityId).FirstOrDefault().Name,
+                City = city,
                 Portfolio = buf.Portfolio
             };
             return toSend;
