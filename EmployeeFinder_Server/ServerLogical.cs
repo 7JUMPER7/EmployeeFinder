@@ -60,7 +60,8 @@ namespace EmployeeFinder_Server
         {
             try
             {
-                while (true)
+                bool isOnline = true;
+                while (isOnline)
                 {
                     Message message = MessagesAsistent.ReadMessage(client);
                     switch (message.MessageProcessing)
@@ -74,13 +75,15 @@ namespace EmployeeFinder_Server
                         case "RECS": { ConsoleWrite(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()), "asked for specializations"); break; }
                         case "PUBL": { ConsoleWrite(client, controller.SaveEmployeeInfo(message), "asked for updating CV"); break; }
                         case "RCBL": { ConsoleWrite(client, MessageGetCandidates("RCBL", message, controller.GetCandidateByLogin(message.Login)), "asked for candidate by login"); break; } //Receive candidate by login
+                        case "DELE": { ConsoleWrite(client, controller.DeleteCandidate(message), $"try to delete"); break; } //Delete employee
+                        case "EXIT": { client.Close(); isOnline = false; ConsoleWrite(message, "close connection"); break; } //Close connection
                         case "RECM": { MessageFormating(client, message); break; };
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                ConsoleWrite(ex.Message);
             }
         }
 
@@ -94,11 +97,11 @@ namespace EmployeeFinder_Server
         }
 
         /// <summary>
-        /// отображает данные в консоле сервера
+        /// отображает данные в консоли сервера
         /// </summary>
         /// <param name="client">клиент каторему нужно отправить сообщение</param>
         /// <param name="message">сообщение каторое нужно отправить клиенту</param>
-        /// <param name="messageText">сообщение каторое нужно отобразить на консоле сервера</param>
+        /// <param name="messageText">сообщение каторое нужно отобразить на консоли сервера</param>
         private void ConsoleWrite(TcpClient client, Message message, string messageText)
         {
             if (messageText != "")
@@ -112,6 +115,35 @@ namespace EmployeeFinder_Server
                 }
             }
             MessagesAsistent.SendMessage(client, message);
+        }
+        /// <summary>
+        /// отображает данные в консоли сервера
+        /// </summary>
+        /// <param name="message">сообщение каторое нужно отправить клиенту</param>
+        /// <param name="messageText">сообщение каторое нужно отобразить на консоли сервера</param>
+        private void ConsoleWrite(Message message, string messageText)
+        {
+            lock (Form)
+            {
+                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                {
+                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} {messageText}");
+                });
+            }
+        }
+        /// <summary>
+        /// отображает данные в консоли сервера
+        /// </summary>
+        /// <param name="messageText">сообщение каторое нужно отобразить на консоли сервера</param>
+        private void ConsoleWrite(string messageText)
+        {
+            lock (Form)
+            {
+                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                {
+                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {messageText}");
+                });
+            }
         }
 
         /// <summary>

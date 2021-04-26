@@ -171,7 +171,6 @@ namespace EmployeeFinder_Server
                 {
                     answer.MessageProcessing = "EROR";
                     answer.MessageText = ex.Message;
-                    throw;
                 }
             }
             return answer;
@@ -218,7 +217,6 @@ namespace EmployeeFinder_Server
                 {
                     answer.MessageProcessing = "EROR";
                     answer.MessageText = ex.Message;
-                    throw;
                 }
             }
             return answer;
@@ -257,6 +255,7 @@ namespace EmployeeFinder_Server
                     candidate.SpecialisationId = SpecId;
                 else
                     candidate.SpecialisationId = CreateAndAddSpecialisation(EmployeeInfo[4]).Id;
+                dataBase.SaveChanges();
 
                 //Формирование ответа
                 answer.MessageProcessing = "ALOK";
@@ -299,6 +298,35 @@ namespace EmployeeFinder_Server
             dataBase.Specialisations.Add(specialisation);
             dataBase.SaveChanges();
             return specialisation;
+        }
+
+        /// <summary>
+        /// Удаление работника
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Message DeleteCandidate(Message message)
+        {
+            Message answer = new Message();
+            Candidates candidate = dataBase.Candidates.Where(c => c.Login == message.Login).FirstOrDefault();
+            if (candidate == null)
+            {
+                answer.MessageProcessing = "EROR";
+            }
+            else
+            {
+                try
+                {
+                    dataBase.Candidates.Remove(candidate);
+                    dataBase.SaveChanges();
+                    answer.MessageProcessing = "ALOK";
+                }
+                catch (Exception)
+                {
+                    answer.MessageProcessing = "EROR";
+                }
+            }
+            return answer;
         }
 
         /// <summary>

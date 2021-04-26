@@ -28,6 +28,7 @@ namespace EmployeeFinder_Client
         void LoadView(ViewType typeView, TcpClient client);
         bool GetIsConnected();
         TcpClient GetClient();
+        void CloseWindow();
     }
 
     public enum ViewType
@@ -54,10 +55,16 @@ namespace EmployeeFinder_Client
 
 
             buttonMinimized.Click += (s, e) => WindowState = WindowState.Minimized;
-            buttonClose.Click += (s, e) => Close();
+            buttonClose.Click += (s, e) => CloseWindow();
 
             this.Loaded += MainWindow_Loaded;
         }
+        public void CloseWindow()
+        {
+            MessagesAsistant.SendMessage(client, new Message() { MessageProcessing = "EXIT" });
+            this.Close();
+        }
+
 
         /// <summary>
         /// Попытка подключиться к серверу
