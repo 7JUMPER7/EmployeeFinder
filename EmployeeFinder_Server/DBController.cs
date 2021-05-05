@@ -247,6 +247,8 @@ namespace EmployeeFinder_Server
             {
                 try
                 {
+                    DeleteCityIfCandidateOne(candidate.CityId);
+                    DeleteSpecIfCandidateOne(candidate.SpecialisationId);
                     dataBase.Candidates.Remove(candidate);
                     dataBase.SaveChanges();
                     answer.MessageProcessing = "ALOK";
@@ -257,6 +259,24 @@ namespace EmployeeFinder_Server
                 }
             }
             return answer;
+        }
+        private void DeleteCityIfCandidateOne(int cityId)
+        {
+            DbClasses.Cities city = dataBase.Cities.Where(c => c.Id == cityId).FirstOrDefault();
+            int count = dataBase.Candidates.Where(c => c.CityId == city.Id).Count();
+            if (count == 1)
+            {
+                dataBase.Cities.Remove(city);
+            }
+        }
+        private void DeleteSpecIfCandidateOne(int specId)
+        {
+            DbClasses.Specialisations spec = dataBase.Specialisations.Where(s => s.Id == specId).FirstOrDefault();
+            int count = dataBase.Candidates.Where(c => c.SpecialisationId == spec.Id).Count();
+            if (count == 1)
+            {
+                dataBase.Specialisations.Remove(spec);
+            }
         }
 
         /// <summary>

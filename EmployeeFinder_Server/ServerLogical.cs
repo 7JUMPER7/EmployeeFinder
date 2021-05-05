@@ -68,14 +68,14 @@ namespace EmployeeFinder_Server
                     {
                         case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
                         case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message), "asked for login as an employee"); break; }
-                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message), "asked to register as an company"); break; }
-                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message), "asked to register as an employee"); break; }
+                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message), "asked to register as an company"); UpdateDataGrid(); break; }
+                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message), "asked to register as an employee"); UpdateDataGrid(); break; }
                         case "RECE": { ConsoleWrite(client, MessageGetCandidates("RECE", message, controller.GetCandidates()), "asked for employees"); break; }
                         case "RECC": { ConsoleWrite(client, MessageGetCandidates("RECC", message, controller.GetCities()), "asked for cities"); break; }
                         case "RECS": { ConsoleWrite(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()), "asked for specializations"); break; }
-                        case "PUBL": { ConsoleWrite(client, controller.SaveEmployeeInfo(message), "asked for updating CV"); break; }
+                        case "PUBL": { ConsoleWrite(client, controller.SaveEmployeeInfo(message), "asked for updating CV"); UpdateDataGrid(); break; }
                         case "RCBL": { ConsoleWrite(client, MessageGetCandidates("RCBL", message, controller.GetCandidateByLogin(message.Login)), "asked for candidate by login"); break; } //Receive candidate by login
-                        case "DELE": { ConsoleWrite(client, controller.DeleteCandidate(message), $"try to delete"); break; } //Delete employee
+                        case "DELE": { ConsoleWrite(client, controller.DeleteCandidate(message), $"try to delete"); UpdateDataGrid(); break; } //Delete employee
                         case "EXIT": { client.Close(); isOnline = false; ConsoleWrite(message, "close connection"); break; } //Close connection
                     }
                 }
@@ -84,6 +84,15 @@ namespace EmployeeFinder_Server
             {
                 ConsoleWrite(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Обновляет визуальную таблицу в форме
+        /// </summary>
+        private void UpdateDataGrid()
+        {
+            Action action = () => Form.TableDisplay();
+            Form.Invoke(action);
         }
 
         /// <summary>

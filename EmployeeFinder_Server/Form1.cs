@@ -39,7 +39,7 @@ namespace EmployeeFinder_Server
             }
         }
 
-        private void TableDisplay()
+        public void TableDisplay()
         {
             switch (DataGridCounter)
             {
