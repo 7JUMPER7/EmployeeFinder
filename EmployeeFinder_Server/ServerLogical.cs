@@ -68,8 +68,8 @@ namespace EmployeeFinder_Server
                     {
                         case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
                         case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message), "asked for login as an employee"); break; }
-                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message, client), "asked to register as an company"); break; }
-                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message, client), "asked to register as an employee"); break; }
+                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message, client), "asked to register as an company"); UpdateDataGrid(); break; }
+                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message, client), "asked to register as an employee"); UpdateDataGrid(); break; }
                         case "RECE": { ConsoleWrite(client, MessageGetCandidates("RECE", message, controller.GetCandidates()), "asked for employees"); break; }
                         case "RECC": { ConsoleWrite(client, MessageGetCandidates("RECC", message, controller.GetCities()), "asked for cities"); break; }
                         case "RECS": { ConsoleWrite(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()), "asked for specializations"); break; }
