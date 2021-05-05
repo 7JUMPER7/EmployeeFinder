@@ -68,8 +68,8 @@ namespace EmployeeFinder_Server
                     {
                         case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
                         case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message), "asked for login as an employee"); break; }
-                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message), "asked to register as an company"); UpdateDataGrid(); break; }
-                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message), "asked to register as an employee"); UpdateDataGrid(); break; }
+                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message, client), "asked to register as an company"); break; }
+                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message, client), "asked to register as an employee"); break; }
                         case "RECE": { ConsoleWrite(client, MessageGetCandidates("RECE", message, controller.GetCandidates()), "asked for employees"); break; }
                         case "RECC": { ConsoleWrite(client, MessageGetCandidates("RECC", message, controller.GetCities()), "asked for cities"); break; }
                         case "RECS": { ConsoleWrite(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()), "asked for specializations"); break; }
@@ -77,6 +77,7 @@ namespace EmployeeFinder_Server
                         case "RCBL": { ConsoleWrite(client, MessageGetCandidates("RCBL", message, controller.GetCandidateByLogin(message.Login)), "asked for candidate by login"); break; } //Receive candidate by login
                         case "DELE": { ConsoleWrite(client, controller.DeleteCandidate(message), $"try to delete"); UpdateDataGrid(); break; } //Delete employee
                         case "EXIT": { client.Close(); isOnline = false; ConsoleWrite(message, "close connection"); break; } //Close connection
+                        case "RECM": { MessageFormating(client, message); break; };
                     }
                 }
             }
@@ -95,6 +96,15 @@ namespace EmployeeFinder_Server
             Form.Invoke(action);
         }
 
+        private void MessageFormating(TcpClient client, Message message)
+        {
+            controller.AddMessage(message);
+            TcpClient ToWhomClient = controller.GetTcpClient(message) as TcpClient;
+            message.MessageProcessing = "SAVM";
+            if (ToWhomClient != null)
+                ConsoleWrite(ToWhomClient, message, "");
+        }
+
         /// <summary>
         /// отображает данные в консоли сервера
         /// </summary>
@@ -103,12 +113,15 @@ namespace EmployeeFinder_Server
         /// <param name="messageText">сообщение каторое нужно отобразить на консоли сервера</param>
         private void ConsoleWrite(TcpClient client, Message message, string messageText)
         {
-            lock (Form)
+            if (messageText != "")
             {
-                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                lock (Form)
                 {
-                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} {messageText}");
-                });
+                    Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                    {
+                        Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} {messageText}");
+                    });
+                }
             }
             MessagesAsistent.SendMessage(client, message);
         }
