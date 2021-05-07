@@ -167,8 +167,8 @@ namespace EmployeeFinder_Client.ViewModel
         private void OnMessagerrUC()
         {
             Messager messager = new Messager();
-            messager.Height = 400;
-            messager.Width = 400;
+            messager.Height = 450;
+            messager.Width = 600;
             messager.Show();
         }
         /// <summary>

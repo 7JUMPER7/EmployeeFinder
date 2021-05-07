@@ -48,7 +48,7 @@
             </StackPanel>
         </StackPanel>
 
-        <Button Grid.Column="2" Style="{StaticResource MessageButtonStyle}"
+        <Button Grid.Column="2" Style="{StaticResource MessageButton}"
                 VerticalAlignment="Top" HorizontalAlignment="Right"
                 Background="#007EA7" Margin="10"
                 Command="{Binding OpenMessagerCommand}">
