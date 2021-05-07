@@ -1,4 +1,5 @@
 ﻿using EmployeeFinder_Client.Model;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -43,13 +44,13 @@ namespace EmployeeFinder_Client.ViewModel
             users = new ObservableCollection<User>();
             ChatList = new ObservableCollection<Message>();
             
+            Login = login;
             Message answer = MessagesAsistant.ReadMessage(client);
             if (answer.MessageProcessing == "ALOK")
             {
-                UsersList(answer.obj as List<Message>);
+                UsersList((answer.obj as JArray).ToObject<List<Message>>());
             }
             
-            //Login = "User1";//заглушка для тестов
             //UsersList(dataAccess.bufusers);//сообщения для тестов 
 
             //if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));

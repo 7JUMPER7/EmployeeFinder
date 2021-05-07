@@ -95,7 +95,8 @@ namespace EmployeeFinder_Server
 
             if (id != -1)
             {
-                foreach (Messages item in dataBase.Messages)
+                List<Messages> bufMessages = dataBase.Messages.ToList();
+                foreach (Messages item in bufMessages)
                 {
                     if (item.CandidateId == id && item.ToCompany)
                     {
@@ -104,23 +105,20 @@ namespace EmployeeFinder_Server
                             MessageText = item.Message,
                             FromWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
                             ToWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
-                            obj = item.Time
+                            obj = item.Time,
+                            MessageProcessing = "BUFM"
                         });
                     }
                     if (item.CompanyId == id && !item.ToCompany)
                     {
-                        string test1 = dataBase.Candidates.Where(c => c.Id == 1).FirstOrDefault().Login;
-                        //string test2 = dataBase.Companies.Where(c => c.Id == item.CompanyId).ToList().FirstOrDefault().Login;
-                        MessageBox.Show(test1);
-                        //MessageBox.Show(test2);
-                        //messages.Add(new Message()
-                        //{
-                        //    MessageText = item.Message,
-                        //    FromWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
-                        //    ToWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
-
-                        //    obj = item.Time
-                        //});
+                        messages.Add(new Message()
+                        {
+                            MessageText = item.Message,
+                            FromWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
+                            ToWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
+                            obj = item.Time,
+                            MessageProcessing = "BUFM"
+                        });
                     }
                 }
                 answer.obj = messages;
