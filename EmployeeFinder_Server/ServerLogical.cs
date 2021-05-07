@@ -77,7 +77,8 @@ namespace EmployeeFinder_Server
                         case "RCBL": { ConsoleWrite(client, MessageGetCandidates("RCBL", message, controller.GetCandidateByLogin(message.Login)), "asked for candidate by login"); break; } //Receive candidate by login
                         case "DELE": { ConsoleWrite(client, controller.DeleteCandidate(message), $"try to delete"); UpdateDataGrid(); break; } //Delete employee
                         case "EXIT": { client.Close(); isOnline = false; ConsoleWrite(message, "close connection"); break; } //Close connection
-                        case "RECM": { MessageFormating(client, message); break; };
+                        case "RECM": { MessageFormating(client, message); UpdateDataGrid(); break; };
+                        case "SAMG": { ConsoleWrite(client, controller.GetAllMessages(message.Login), "asked for all messages"); break; }; //Send all messages
                     }
                 }
             }

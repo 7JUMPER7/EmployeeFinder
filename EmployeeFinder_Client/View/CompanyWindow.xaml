@@ -115,7 +115,7 @@
 
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
                 <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7" Style="{StaticResource MessageButton}"
-                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding OpenMessagerCommand}">
+                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding NewMessageToCandidate}">
                     <Button.Content>
                         <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets">
                     <Run Text="&#xE715;" FontSize="24" Foreground="#FFFFFF" />

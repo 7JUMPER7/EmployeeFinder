@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Sockets;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -33,14 +34,23 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         //конструктор страницы
         /// </summary>
-        public MessagerModel()//IMainWindowsCodeBehind codeBehind)
+        public MessagerModel(string login, TcpClient client)//IMainWindowsCodeBehind codeBehind)
         {
-            DataAccess dataAccess = new DataAccess();//сообщения для тестов
+            Message message = new Message() { MessageProcessing = "SAMG", Login = login };
+            MessagesAsistant.SendMessage(client, message);
+
+            //DataAccess dataAccess = new DataAccess();//сообщения для тестов
             users = new ObservableCollection<User>();
             ChatList = new ObservableCollection<Message>();
             
-            Login = "User1";//заглушка для тестов
-            UsersList(dataAccess.bufusers);//сообщения для тестов 
+            Message answer = MessagesAsistant.ReadMessage(client);
+            if (answer.MessageProcessing == "ALOK")
+            {
+                UsersList(answer.obj as List<Message>);
+            }
+            
+            //Login = "User1";//заглушка для тестов
+            //UsersList(dataAccess.bufusers);//сообщения для тестов 
 
             //if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
             //_MainCodeBehind = codeBehind;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using EmployeeFinder_Server.DbClasses;
 
 namespace EmployeeFinder_Server
@@ -35,6 +36,7 @@ namespace EmployeeFinder_Server
                 messages.CompanyId = GetIdCompanies(message.FromWhom);
             }
             dataBase.Messages.Add(messages);
+            dataBase.SaveChanges();
         }
 
         public bool ThisIsACandidate(string login)
@@ -79,6 +81,56 @@ namespace EmployeeFinder_Server
                     return item.Id;
 
             return -1;
+        }
+        public Message GetAllMessages(string login)
+        {
+            Message answer = new Message();
+            List<Message> messages = new List<Message>();
+
+            int id = GetIdCandidate(login);
+            if (id == -1)
+            {
+                id = GetIdCompanies(login);
+            }
+
+            if (id != -1)
+            {
+                foreach (Messages item in dataBase.Messages)
+                {
+                    if (item.CandidateId == id && item.ToCompany)
+                    {
+                        messages.Add(new Message()
+                        {
+                            MessageText = item.Message,
+                            FromWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
+                            ToWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
+                            obj = item.Time
+                        });
+                    }
+                    if (item.CompanyId == id && !item.ToCompany)
+                    {
+                        string test1 = dataBase.Candidates.Where(c => c.Id == 1).FirstOrDefault().Login;
+                        //string test2 = dataBase.Companies.Where(c => c.Id == item.CompanyId).ToList().FirstOrDefault().Login;
+                        MessageBox.Show(test1);
+                        //MessageBox.Show(test2);
+                        //messages.Add(new Message()
+                        //{
+                        //    MessageText = item.Message,
+                        //    FromWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
+                        //    ToWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
+
+                        //    obj = item.Time
+                        //});
+                    }
+                }
+                answer.obj = messages;
+                answer.MessageProcessing = "ALOK";
+            }
+            else
+            {
+                answer.MessageProcessing = "EROR";
+            }
+            return answer;
         }
 
         /// <summary>
