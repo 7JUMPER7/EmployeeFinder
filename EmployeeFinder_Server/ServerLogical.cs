@@ -58,11 +58,11 @@ namespace EmployeeFinder_Server
         /// <param name="controller">клас взаемодействий с базой данных</param>
         private void Logical(TcpClient client, DBController controller)
         {
+            Message message = MessagesAsistent.ReadMessage(client);
             try
             {
                 while (true)
                 {
-                    Message message = MessagesAsistent.ReadMessage(client);
                     switch (message.MessageProcessing)
                     {
                         case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
