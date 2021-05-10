@@ -4,9 +4,32 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EmployeeFinder_Client.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400">
-    <Grid Height="400" Width="400">
-        <TextBlock Text="Messager"></TextBlock>
+            mc:Ignorable="d"
+        AllowsTransparency="True" WindowStyle="None"
+        Background="Transparent" ResizeMode="NoResize"
+        Title="MainWindow" Height="450" Width="600">
+
+    <Window.Clip>
+        <RectangleGeometry Rect="0,0,600,450" RadiusX="10" RadiusY="10"></RectangleGeometry>
+    </Window.Clip>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="20"></WindowChrome>
+    </WindowChrome.WindowChrome>
+
+    <Grid Background="#003459">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Background="AliceBlue" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
+            <StackPanel WindowChrome.IsHitTestVisibleInChrome="True" Orientation="Horizontal" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 0, 5, 0">
+                <Button Style="{StaticResource BarButtonStyle}" x:Name="buttonMinimized"></Button>
+                <Button Style="{StaticResource BarButtonStyle}" x:Name="buttonClose" Background="#e63946"></Button>
+            </StackPanel>
+        </Grid>
+
+        <ContentPresenter Grid.Row="1" x:Name="OutputView" Margin="5"/>
     </Grid>
 </Window>

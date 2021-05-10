@@ -64,6 +64,7 @@
     <Compile Include="Model\CurrentUser.cs" />
     <Compile Include="Model\DataAccess.cs" />
     <Compile Include="Model\Specialisations.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="ViewModel\CandidateModel.cs" />
     <Compile Include="ViewModel\CompanyModel.cs" />
     <Compile Include="ViewModel\LogInModel.cs" />
@@ -81,6 +82,9 @@
     </Compile>
     <Compile Include="View\Messager.xaml.cs">
       <DependentUpon>Messager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MessagerView.xaml.cs">
+      <DependentUpon>MessagerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
@@ -114,6 +118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Messager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MessagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

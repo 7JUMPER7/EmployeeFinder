@@ -61,35 +61,78 @@ namespace EmployeeFinder_Server
             Message message = MessagesAsistent.ReadMessage(client);
             try
             {
-                while (true)
+                bool isOnline = true;
+                while (isOnline)
                 {
                     switch (message.MessageProcessing)
                     {
-                        case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
-                        case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message), "asked for login as an employee"); break; }
-                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message), "asked to register as an company"); break; }
-                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message), "asked to register as an employee"); break; }
+                        case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message, client), "asked for login as a company"); break; }
+                        case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message, client), "asked for login as an employee"); break; }
+                        case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message, client), "asked to register as an company"); UpdateDataGrid(); break; }
+                        case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message, client), "asked to register as an employee"); UpdateDataGrid(); break; }
                         case "RECE": { ConsoleWrite(client, MessageGetCandidates("RECE", message, controller.GetCandidates()), "asked for employees"); break; }
                         case "RECC": { ConsoleWrite(client, MessageGetCandidates("RECC", message, controller.GetCities()), "asked for cities"); break; }
                         case "RECS": { ConsoleWrite(client, MessageGetCandidates("RECS", message, controller.GetSpecialisations()), "asked for specializations"); break; }
-                        case "PUBL": { ConsoleWrite(client, controller.SaveEmployeeInfo(message), "asked for updating CV"); break; }
+                        case "PUBL": { ConsoleWrite(client, controller.SaveEmployeeInfo(message), "asked for updating CV"); UpdateDataGrid(); break; }
                         case "RCBL": { ConsoleWrite(client, MessageGetCandidates("RCBL", message, controller.GetCandidateByLogin(message.Login)), "asked for candidate by login"); break; } //Receive candidate by login
+                        case "DELE": { ConsoleWrite(client, controller.DeleteCandidate(message), $"try to delete"); UpdateDataGrid(); break; } //Delete employee
+                        case "EXIT": { client.Close(); isOnline = false; ConsoleWrite(message, "close connection"); break; } //Close connection
+                        case "RECM": { MessageFormating(client, message); UpdateDataGrid(); break; };
+                        case "SAMG": { ConsoleWrite(client, controller.GetAllMessages(message.Login), "asked for all messages"); break; }; //Send all messages
+                        case "UPNM": { ConsoleWrite(client, ) } //Update new messages
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                ConsoleWrite(ex.Message);
             }
         }
 
         /// <summary>
-        /// отображает данные в консоле сервера
+        /// Обновляет визуальную таблицу в форме
+        /// </summary>
+        private void UpdateDataGrid()
+        {
+            Action action = () => Form.TableDisplay();
+            Form.Invoke(action);
+        }
+
+        private void MessageFormating(TcpClient client, Message message)
+        {
+            controller.AddMessage(message);
+            TcpClient ToWhomClient = controller.GetTcpClient(message) as TcpClient;
+            message.MessageProcessing = "SAVM";
+            if (ToWhomClient != null)
+                ConsoleWrite(ToWhomClient, message, "");
+        }
+
+        /// <summary>
+        /// отображает данные в консоли сервера
         /// </summary>
         /// <param name="client">клиент каторему нужно отправить сообщение</param>
         /// <param name="message">сообщение каторое нужно отправить клиенту</param>
-        /// <param name="messageText">сообщение каторое нужно отобразить на консоле сервера</param>
+        /// <param name="messageText">сообщение каторое нужно отобразить на консоли сервера</param>
         private void ConsoleWrite(TcpClient client, Message message, string messageText)
+        {
+            if (messageText != "")
+            {
+                lock (Form)
+                {
+                    Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                    {
+                        Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} {messageText}");
+                    });
+                }
+            }
+            MessagesAsistent.SendMessage(client, message);
+        }
+        /// <summary>
+        /// отображает данные в консоли сервера
+        /// </summary>
+        /// <param name="message">сообщение каторое нужно отправить клиенту</param>
+        /// <param name="messageText">сообщение каторое нужно отобразить на консоли сервера</param>
+        private void ConsoleWrite(Message message, string messageText)
         {
             lock (Form)
             {
@@ -98,7 +141,20 @@ namespace EmployeeFinder_Server
                     Form.ConsoleBox.Items.Add($"{DateTime.Now}: {message.Login} {messageText}");
                 });
             }
-            MessagesAsistent.SendMessage(client, message);
+        }
+        /// <summary>
+        /// отображает данные в консоли сервера
+        /// </summary>
+        /// <param name="messageText">сообщение каторое нужно отобразить на консоли сервера</param>
+        private void ConsoleWrite(string messageText)
+        {
+            lock (Form)
+            {
+                Form.ConsoleBox.Invoke((MethodInvoker)delegate
+                {
+                    Form.ConsoleBox.Items.Add($"{DateTime.Now}: {messageText}");
+                });
+            }
         }
 
         /// <summary>

@@ -25,7 +25,7 @@
     <Style x:Key="TextBoxStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="Century Gothic"></Setter>
         <Setter Property="FontSize" Value="17"></Setter>
-        <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="#ef233c"/>
         <Style.Resources>
@@ -180,6 +180,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="ScrollViewerStyle" TargetType="ScrollViewer">
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
@@ -187,20 +188,19 @@
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
                     <Grid Height="{TemplateBinding Height}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition />
+                            <ColumnDefinition  />
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Border Grid.Column="1"
-                                    BorderThickness="0"
+                        <Border BorderThickness="0"
                                     BorderBrush="Transparent"
                                     Background="Transparent">
-                            <ScrollContentPresenter />
+                            <ScrollContentPresenter/>
                         </Border>
-                        <ScrollBar x:Name="PART_VerticalScrollBar"
+                        <ScrollBar Grid.Column="1" x:Name="PART_VerticalScrollBar"
                                        Value="{TemplateBinding VerticalOffset}"
                                        Maximum="{TemplateBinding ScrollableHeight}"
                                        ViewportSize="50"
@@ -217,8 +217,7 @@
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetName="PART_VerticalScrollBar">
-                                        <DoubleAnimation 
-                                                             Storyboard.TargetProperty="Opacity"
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                                              Duration="0:0:0.3"
                                                              From="0"
                                                              To="0.7"/>
@@ -230,8 +229,7 @@
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard Storyboard.TargetName="PART_VerticalScrollBar">
-                                        <DoubleAnimation 
-                                                             Storyboard.TargetProperty="Opacity"
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
                                                              Duration="0:0:0.3"
                                                              From="0.7"
                                                              To="0"/>
@@ -244,27 +242,25 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="GroupElementStyle" TargetType="ListViewItem">
+    <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="border"
-                                Margin="10"
-                                Background="Red"
-                                BorderBrush="Transparent"
-                                BorderThickness="2"
-                                CornerRadius="5">
-                        <ContentPresenter x:Name="ct"
-                                              Content="{TemplateBinding Content}"
-                                              TextBlock.FontFamily="Century Gothic"
-                                              TextBlock.FontSize="18"
-                                              TextBlock.Foreground="White"
-                                              TextBlock.TextAlignment="Center"/>
-                    </Border>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Grid x:Name="Grid">
+                        <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto" Fill="Transparent" />
+                        <Border x:Name="Rectangle1" CornerRadius="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto"  Background="{TemplateBinding Background}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Tag" Value="Horizontal">
+                            <Setter TargetName="Rectangle1" Property="Width" Value="Auto" />
+                            <Setter TargetName="Rectangle1" Property="Height" Value="7" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style x:Key="NoteTextBoxStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="Century Gothic"></Setter>
         <Setter Property="FontSize" Value="17"></Setter>
@@ -281,7 +277,7 @@
             </Style>
         </Style.Resources>
     </Style>
-    <Style x:Key="MessageButtonStyle" TargetType="Button">
+    <Style x:Key="MessageButton" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -313,4 +309,245 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="MessageButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="15"
+                                BorderBrush="#00171f"
+                                MaxWidth="250"
+                                Margin="0,3"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                TextBlock.Foreground="White">
+                        <DockPanel MaxWidth="420">
+                            <TextBlock Text="{TemplateBinding Content}" 
+                                           DockPanel.Dock="Top"
+                                           TextWrapping="Wrap"
+                                           Margin="10"
+                                           FontFamily="Century Gothic Bold"
+                                           FontSize="20"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"></TextBlock>
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding SentMessage}" Value="True">
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="CompanyDataGridStyle" TargetType="DataGrid">
+        <!-- Make the border and grid lines a little less imposing -->
+        <Setter Property="BorderBrush" Value="#003459" />
+        <Setter Property="HorizontalGridLinesBrush" Value="#003459" />
+        <Setter Property="VerticalGridLinesBrush" Value="#003459" />
+        <Setter Property="Foreground" Value="#003459"/>
+
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Style.Triggers>
+                        <!-- Highlight a grid row as the mouse passes over -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightCyan" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#007EA7" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <!-- Highlight selected rows -->
+                        <!--<Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#007EA7" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="#007EA7" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>-->
+                    </Style.Triggers>
+                    <!-- Add some padding around the contents of a cell -->
+                    <Setter Property="Padding" Value="4,3,4,3" />
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Background="{TemplateBinding Background}">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="FocusVisualStyle">
+                        <Setter.Value>
+                            <Style TargetType="Control">
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ColumnHeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Height" Value="30"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Padding" Value="3 0 0 0"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightCyan"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SendMessage" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate x:Name="bg" TargetType="{x:Type Button}">
+                    <Border x:Name="border"
+                                Background="White"
+                                CornerRadius="5"
+                                TextBlock.Foreground="#003459">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                              TextBlock.FontFamily="Century Gothic Bold"
+                                              TextBlock.FontSize="18"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="White"/>
+                            <Setter TargetName="border" Property="TextBlock.Foreground" Value="#00171f"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Opacity" Value=".7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Century Gothic"></Setter>
+        <Setter Property="FontSize" Value="18"></Setter>
+    </Style>
+    <Style TargetType="ListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="border"
+                                Margin="0,2,0,0"
+                                Height="70"
+                                Padding="5,0"
+                                Background="#caf0f8"
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                        <DockPanel>
+                            <TextBlock 
+                                       Text="{TemplateBinding Content}" 
+                                       TextBlock.FontFamily="Century Gothic"
+                                       TextBlock.FontSize="18"
+                                       TextBlock.Foreground="Black"
+                                       TextBlock.TextAlignment="Left"
+                                       VerticalAlignment="Center"></TextBlock>
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter TargetName="border" Property="Background" Value="#0077b6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
+        <Setter Property="Foreground" Value="LightGray" />
+        <Setter Property="Background" Value="DarkGray" />
+        <Setter Property="Width" Value="10" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    <Grid x:Name="GridRoot" Width="7" Background="{TemplateBinding Background}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.00001*" />
+                        </Grid.RowDefinitions>
+
+                        <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Focusable="false">
+                            <Track.Thumb>
+                                <Thumb x:Name="Thumb" Background="{TemplateBinding Foreground}" Style="{DynamicResource ScrollThumbs}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="false" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton x:Name="PageDown" Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="false" />
+                            </Track.DecreaseRepeatButton>
+                        </Track>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
+                            <Setter Value="{DynamicResource ButtonSelectBrush}" TargetName="Thumb" Property="Background" />
+                        </Trigger>
+                        <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
+                            <Setter Value="{DynamicResource DarkBrush}" TargetName="Thumb" Property="Background" />
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Thumb" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter TargetName="GridRoot" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="PART_Track" Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="12" />
+                            <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
+                            <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
+                            <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

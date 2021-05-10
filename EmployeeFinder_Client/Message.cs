@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace EmployeeFinder_Client
 {
     [Serializable]
-    class Message
+    public class Message
     {
         private string messageProcessing;
         
@@ -73,6 +73,8 @@ namespace EmployeeFinder_Client
             File = null;
             client = null;
         }
+
+        public bool SentMessage { get; set; }
 
         public override string ToString()
         {

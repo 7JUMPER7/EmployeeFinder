@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using EmployeeFinder_Server.DbClasses;
 
 namespace EmployeeFinder_Server
@@ -17,12 +19,134 @@ namespace EmployeeFinder_Server
             //dataBase.Messages.Add(new Messages()); //УБРАТЬ ПОСЛЕ ПЕРВОГО СОЗДАНИЕ БД
         }
 
+        public void AddMessage(Message message)
+        {
+            Messages messages = new Messages();
+            messages.Message = message.MessageText;
+            messages.Time = message.obj.ToString();
+            if (ThisIsACandidate(message.FromWhom))
+            {
+                messages.CandidateId = GetIdCandidate(message.FromWhom);
+                messages.CompanyId = GetIdCompanies(message.ToWhom);
+                messages.ToCompany = true;
+            }
+            else
+            {
+                messages.CandidateId = GetIdCandidate(message.ToWhom);
+                messages.CompanyId = GetIdCompanies(message.FromWhom);
+                messages.ToCompany = false;
+            }
+            dataBase.Messages.Add(messages);
+            dataBase.SaveChanges();
+        }
+
+        public bool ThisIsACandidate(string login)
+        {
+            foreach (var item in dataBase.Candidates)
+                if (item.Login == login)
+                    return true;
+
+            return false;
+        }
+
+        public object GetTcpClient(Message message)
+        {
+            if (ThisIsACandidate(message.FromWhom))
+            {
+                foreach (var item in dataBase.Candidates)
+                    if (item.Login == message.FromWhom)
+                        return item.Client;
+            }
+            else
+            {
+                foreach (var item in dataBase.Companies)
+                    if (item.Login == message.FromWhom)
+                        return item.Client;
+            }
+            return null;
+        }
+
+        public int GetIdCandidate(string login)
+        {
+            foreach (var item in dataBase.Candidates)
+                if (item.Login == login)
+                    return item.Id;
+
+            return -1;
+        }
+
+        public int GetIdCompanies(string login)
+        {
+            foreach (var item in dataBase.Companies)
+                if (item.Login == login)
+                    return item.Id;
+
+            return -1;
+        }
+
+        public Message IsNewMeesagesAvailable(string login)
+        {
+            Message answer = new Message();
+
+        }
+        public Message GetAllMessages(string login)
+        {
+            Message answer = new Message();
+            List<Message> messages = new List<Message>();
+
+            int id = GetIdCandidate(login);
+            if (id == -1)
+            {
+                id = GetIdCompanies(login);
+            }
+
+            if (id != -1)
+            {
+                List<Messages> bufMessages = dataBase.Messages.ToList();
+                foreach (Messages item in bufMessages)
+                {
+                    if (item.CandidateId == id || item.CompanyId == id)
+                    {
+                        if (item.ToCompany)
+                        {
+                            messages.Add(new Message()
+                            {
+                                MessageText = item.Message,
+                                FromWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
+                                ToWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
+                                obj = item.Time,
+                                MessageProcessing = "BUFM"
+                            });
+                        }
+                        else
+                        {
+                            messages.Add(new Message()
+                            {
+                                MessageText = item.Message,
+                                FromWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
+                                ToWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
+                                obj = item.Time,
+                                MessageProcessing = "BUFM"
+                            });
+                        }
+                    }
+                }
+                answer.obj = messages;
+                answer.MessageProcessing = "ALOK";
+            }
+            else
+            {
+                answer.MessageProcessing = "EROR";
+            }
+            return answer;
+        }
+
         /// <summary>
         /// Проверяет есть ли филиал с такими данными в базе данных
         /// </summary>
         /// <param name="message">Сообщение с данными о филиале</param>
         /// <returns>Сообщение с обработаными данными</returns>
-        public Message IsLoginCorrectCompany(Message message)
+        public Message IsLoginCorrectCompany(Message message, TcpClient client)
         {
             Message answer = new Message();
             foreach (Companies company in dataBase.Companies)
@@ -30,7 +154,11 @@ namespace EmployeeFinder_Server
                 {
                     //Если пароль совпал
                     if (message.Password == company.Password)
+                    {
                         answer.MessageProcessing = "ALOK";
+                        company.Client = client;
+                        dataBase.SaveChanges();
+                    }
                     //Если пароль не совпал
                     else
                         answer.MessageProcessing = "PASS";
@@ -46,7 +174,7 @@ namespace EmployeeFinder_Server
         /// </summary>
         /// <param name="message">Сообщение с данными о пользователи</param>
         /// <returns>Сообщение с обработаными данными</returns>
-        public Message IsLoginCorrectEmployee(Message message)
+        public Message IsLoginCorrectEmployee(Message message, TcpClient client)
         {
             Message answer = new Message();
             foreach (Candidates candidate in dataBase.Candidates)
@@ -54,7 +182,11 @@ namespace EmployeeFinder_Server
                 {
                     //Если пароль совпал
                     if (message.Password == candidate.Password)
+                    {
                         answer.MessageProcessing = "ALOK";
+                        candidate.Client = client;
+                        dataBase.SaveChanges();
+                    }
                     //Если пароль не совпал
                     else
                         answer.MessageProcessing = "PASS";
@@ -70,7 +202,7 @@ namespace EmployeeFinder_Server
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public Message RegisterCompany(Message message)
+        public Message RegisterCompany(Message message, TcpClient client)
         {
             Message answer = new Message();
             bool LoginIsNotAvailable = false;
@@ -92,6 +224,7 @@ namespace EmployeeFinder_Server
             {
                 Companies company = new Companies()
                 {
+                    Client = client,
                     Login = message.Login,
                     Password = message.Password,
                     Name = message.MessageText
@@ -106,7 +239,6 @@ namespace EmployeeFinder_Server
                 {
                     answer.MessageProcessing = "EROR";
                     answer.MessageText = ex.Message;
-                    throw;
                 }
             }
             return answer;
@@ -117,7 +249,7 @@ namespace EmployeeFinder_Server
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public Message RegisterEmployee(Message message)
+        public Message RegisterEmployee(Message message, TcpClient client)
         {
             Message answer = new Message();
             bool LoginIsNotAvailable = false;
@@ -139,6 +271,7 @@ namespace EmployeeFinder_Server
             {
                 Candidates candidate = new Candidates()
                 {
+                    Client = client,
                     Login = message.Login,
                     Password = message.Password
                 };
@@ -152,7 +285,6 @@ namespace EmployeeFinder_Server
                 {
                     answer.MessageProcessing = "EROR";
                     answer.MessageText = ex.Message;
-                    throw;
                 }
             }
             return answer;
@@ -191,6 +323,7 @@ namespace EmployeeFinder_Server
                     candidate.SpecialisationId = SpecId;
                 else
                     candidate.SpecialisationId = CreateAndAddSpecialisation(EmployeeInfo[4]).Id;
+                dataBase.SaveChanges();
 
                 //Формирование ответа
                 answer.MessageProcessing = "ALOK";
@@ -202,6 +335,7 @@ namespace EmployeeFinder_Server
             }
             return answer;
         }
+
         private int IsCityInTable(string cityName)
         {
             Cities city = dataBase.Cities.Where(c => c.Name == cityName).FirstOrDefault();
@@ -209,6 +343,7 @@ namespace EmployeeFinder_Server
                 return city.Id;
             return -1;
         }
+
         private Cities CreateAndAddCity(string cityName)
         {
             Cities city = new Cities() { Name = cityName };
@@ -216,6 +351,7 @@ namespace EmployeeFinder_Server
             dataBase.SaveChanges();
             return city;
         }
+
         private int IsSpecialisationInTable(string specName)
         {
             Specialisations specialisation = dataBase.Specialisations.Where(s => s.Name == specName).FirstOrDefault();
@@ -223,12 +359,62 @@ namespace EmployeeFinder_Server
                 return specialisation.Id;
             return -1;
         }
+
         private Specialisations CreateAndAddSpecialisation(string specName)
         {
             Specialisations specialisation = new Specialisations() { Name = specName };
             dataBase.Specialisations.Add(specialisation);
             dataBase.SaveChanges();
             return specialisation;
+        }
+
+        /// <summary>
+        /// Удаление работника
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Message DeleteCandidate(Message message)
+        {
+            Message answer = new Message();
+            Candidates candidate = dataBase.Candidates.Where(c => c.Login == message.Login).FirstOrDefault();
+            if (candidate == null)
+            {
+                answer.MessageProcessing = "EROR";
+            }
+            else
+            {
+                try
+                {
+                    DeleteCityIfCandidateOne(candidate.CityId);
+                    DeleteSpecIfCandidateOne(candidate.SpecialisationId);
+                    dataBase.Candidates.Remove(candidate);
+                    dataBase.SaveChanges();
+                    answer.MessageProcessing = "ALOK";
+                }
+                catch (Exception)
+                {
+                    answer.MessageProcessing = "EROR";
+                }
+            }
+            return answer;
+        }
+        private void DeleteCityIfCandidateOne(int cityId)
+        {
+            DbClasses.Cities city = dataBase.Cities.Where(c => c.Id == cityId).FirstOrDefault();
+            int count = dataBase.Candidates.Where(c => c.CityId == city.Id).Count();
+            if (count == 1)
+            {
+                dataBase.Cities.Remove(city);
+            }
+        }
+        private void DeleteSpecIfCandidateOne(int specId)
+        {
+            DbClasses.Specialisations spec = dataBase.Specialisations.Where(s => s.Id == specId).FirstOrDefault();
+            int count = dataBase.Candidates.Where(c => c.SpecialisationId == spec.Id).Count();
+            if (count == 1)
+            {
+                dataBase.Specialisations.Remove(spec);
+            }
         }
 
         /// <summary>
@@ -239,10 +425,12 @@ namespace EmployeeFinder_Server
         {
             return dataBase.Candidates.ToList();
         }
+
         public object GetCandidatesName()
         {
             return dataBase.Candidates.ToList();
         }
+
         public object GetCandidateByLogin(string login)
         {
             Candidates buf = dataBase.Candidates.Where(c => c.Login == login).FirstOrDefault();
@@ -272,13 +460,13 @@ namespace EmployeeFinder_Server
         {
             return dataBase.Cities.ToList();
         }
+
         /// <summary>
         /// Возвращает список названий городов
         /// </summary>
         /// <returns>список с названиями городов</returns>
         public object GetCitiesName()
         {
-            
             return dataBase.Cities.Select(c => c.Name).ToList();
         }
 
@@ -308,6 +496,7 @@ namespace EmployeeFinder_Server
         {
             return dataBase.Specialisations.ToList();
         }
+
         /// <summary>
         /// Возвращает список названий Специализаций
         /// </summary>

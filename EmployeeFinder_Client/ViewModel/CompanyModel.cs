@@ -166,11 +166,62 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnMessagerrUC()
         {
-            Messager messager = new Messager();
-            messager.Height = 400;
-            messager.Width = 400;
+            Messager messager = new Messager(CurrentUser.CurrentUserLogin, client);
+            messager.Height = 450;
+            messager.Width = 600;
             messager.Show();
         }
+
+        /// <summary>
+        /// Открытие нового окна Messager
+        /// </summary>
+        private RelayCommand _NewMessageToCandidate;
+        public RelayCommand NewMessageToCandidate
+        {
+            get
+            {
+                return _NewMessageToCandidate = _NewMessageToCandidate ??
+                  new RelayCommand(OnMessagerr2UC, CanMessager2UC);
+            }
+        }
+        private bool CanMessager2UC()
+        {
+            return true;
+        }
+        private void OnMessagerr2UC()
+        {
+            try
+            {
+                Message newMessage = new Message()
+                {
+                    FromWhom = CurrentUser.CurrentUserLogin,
+                    ToWhom = SelectedEmployee.Login,
+                    MessageText = "Здравствуйте!",
+                    obj = DateTime.Now.ToShortTimeString(),
+                    MessageProcessing = "RECM"
+                };
+                MessagesAsistant.SendMessage(client, newMessage);
+
+                Message answer = MessagesAsistant.ReadMessage(client);
+                if (answer.MessageProcessing == "SAVM")
+                {
+                    Messager messager = new Messager(CurrentUser.CurrentUserLogin, client);
+                    messager.Height = 450;
+                    messager.Width = 600;
+                    messager.Show();
+                }
+                else
+                {
+                    _MainCodeBehind.ShowErrorWindow("Не удалось отправить");
+                }
+            }
+            catch (Exception)
+            {
+                _MainCodeBehind.ShowErrorWindow("Ошибка");
+            }
+
+        }
+
         /// <summary>
         /// Копирование информации о работнике в буфер обмена
         /// </summary>
