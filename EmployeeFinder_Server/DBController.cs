@@ -87,6 +87,7 @@ namespace EmployeeFinder_Server
         public Message IsNewMeesagesAvailable(string login)
         {
             Message answer = new Message();
+            return answer;
 
         }
         public Message GetAllMessages(string login)
