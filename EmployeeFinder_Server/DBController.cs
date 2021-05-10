@@ -28,12 +28,13 @@ namespace EmployeeFinder_Server
             {
                 messages.CandidateId = GetIdCandidate(message.FromWhom);
                 messages.CompanyId = GetIdCompanies(message.ToWhom);
-                messages.ToCompany = false;
+                messages.ToCompany = true;
             }
             else
             {
                 messages.CandidateId = GetIdCandidate(message.ToWhom);
                 messages.CompanyId = GetIdCompanies(message.FromWhom);
+                messages.ToCompany = false;
             }
             dataBase.Messages.Add(messages);
             dataBase.SaveChanges();
@@ -53,13 +54,13 @@ namespace EmployeeFinder_Server
             if (ThisIsACandidate(message.FromWhom))
             {
                 foreach (var item in dataBase.Candidates)
-                    if (item.Login == message.Login)
+                    if (item.Login == message.FromWhom)
                         return item.Client;
             }
             else
             {
                 foreach (var item in dataBase.Companies)
-                    if (item.Login == message.Login)
+                    if (item.Login == message.FromWhom)
                         return item.Client;
             }
             return null;
@@ -82,6 +83,12 @@ namespace EmployeeFinder_Server
 
             return -1;
         }
+
+        public Message IsNewMeesagesAvailable(string login)
+        {
+            Message answer = new Message();
+
+        }
         public Message GetAllMessages(string login)
         {
             Message answer = new Message();
@@ -98,27 +105,30 @@ namespace EmployeeFinder_Server
                 List<Messages> bufMessages = dataBase.Messages.ToList();
                 foreach (Messages item in bufMessages)
                 {
-                    if (item.CandidateId == id && item.ToCompany)
+                    if (item.CandidateId == id || item.CompanyId == id)
                     {
-                        messages.Add(new Message()
+                        if (item.ToCompany)
                         {
-                            MessageText = item.Message,
-                            FromWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
-                            ToWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
-                            obj = item.Time,
-                            MessageProcessing = "BUFM"
-                        });
-                    }
-                    if (item.CompanyId == id && !item.ToCompany)
-                    {
-                        messages.Add(new Message()
+                            messages.Add(new Message()
+                            {
+                                MessageText = item.Message,
+                                FromWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
+                                ToWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
+                                obj = item.Time,
+                                MessageProcessing = "BUFM"
+                            });
+                        }
+                        else
                         {
-                            MessageText = item.Message,
-                            FromWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
-                            ToWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
-                            obj = item.Time,
-                            MessageProcessing = "BUFM"
-                        });
+                            messages.Add(new Message()
+                            {
+                                MessageText = item.Message,
+                                FromWhom = dataBase.Companies.Where(c => c.Id == item.CompanyId).FirstOrDefault().Login,
+                                ToWhom = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault().Login,
+                                obj = item.Time,
+                                MessageProcessing = "BUFM"
+                            });
+                        }
                     }
                 }
                 answer.obj = messages;
@@ -136,7 +146,7 @@ namespace EmployeeFinder_Server
         /// </summary>
         /// <param name="message">Сообщение с данными о филиале</param>
         /// <returns>Сообщение с обработаными данными</returns>
-        public Message IsLoginCorrectCompany(Message message)
+        public Message IsLoginCorrectCompany(Message message, TcpClient client)
         {
             Message answer = new Message();
             foreach (Companies company in dataBase.Companies)
@@ -144,7 +154,11 @@ namespace EmployeeFinder_Server
                 {
                     //Если пароль совпал
                     if (message.Password == company.Password)
+                    {
                         answer.MessageProcessing = "ALOK";
+                        company.Client = client;
+                        dataBase.SaveChanges();
+                    }
                     //Если пароль не совпал
                     else
                         answer.MessageProcessing = "PASS";
@@ -160,7 +174,7 @@ namespace EmployeeFinder_Server
         /// </summary>
         /// <param name="message">Сообщение с данными о пользователи</param>
         /// <returns>Сообщение с обработаными данными</returns>
-        public Message IsLoginCorrectEmployee(Message message)
+        public Message IsLoginCorrectEmployee(Message message, TcpClient client)
         {
             Message answer = new Message();
             foreach (Candidates candidate in dataBase.Candidates)
@@ -168,7 +182,11 @@ namespace EmployeeFinder_Server
                 {
                     //Если пароль совпал
                     if (message.Password == candidate.Password)
+                    {
                         answer.MessageProcessing = "ALOK";
+                        candidate.Client = client;
+                        dataBase.SaveChanges();
+                    }
                     //Если пароль не совпал
                     else
                         answer.MessageProcessing = "PASS";

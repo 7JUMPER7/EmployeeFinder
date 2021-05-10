@@ -5,16 +5,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace EmployeeFinder_Client.ViewModel
 {
     public class MessagerModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        //private IMainWindowsCodeBehind _MainCodeBehind;
 
         public ObservableCollection<Message> ChatList { get; set; }
         public ObservableCollection<User> users { get; set; }
+        private string Login { get; set; }
+        private TcpClient Client;
 
         /// <summary>
         /// Выбранный контакт
@@ -31,30 +33,40 @@ namespace EmployeeFinder_Client.ViewModel
             }
         }
 
-        private string Login { get; set; }
-        /// <summary>
-        //конструктор страницы
-        /// </summary>
-        public MessagerModel(string login, TcpClient client)//IMainWindowsCodeBehind codeBehind)
-        {
-            Message message = new Message() { MessageProcessing = "SAMG", Login = login };
-            MessagesAsistant.SendMessage(client, message);
 
-            //DataAccess dataAccess = new DataAccess();//сообщения для тестов
+        /// <summary>
+        /// конструктор страницы
+        /// </summary>
+        public MessagerModel(string login, TcpClient client)
+        {
+            Client = client;
+            Message message = new Message() { MessageProcessing = "SAMG", Login = login };
+            MessagesAsistant.SendMessage(Client, message);
+
             users = new ObservableCollection<User>();
-            ChatList = new ObservableCollection<Message>();
-            
+            ChatList = new ObservableCollection<Message>();           
             Login = login;
-            Message answer = MessagesAsistant.ReadMessage(client);
+            ReceiveAllMessages();
+
+            Thread updateThread = new Thread(Updater);
+            updateThread.IsBackground = true;
+            updateThread.Start();
+        }
+        private void ReceiveAllMessages()
+        {
+            Message answer = MessagesAsistant.ReadMessage(Client);
             if (answer.MessageProcessing == "ALOK")
             {
                 UsersList((answer.obj as JArray).ToObject<List<Message>>());
             }
-            
-            //UsersList(dataAccess.bufusers);//сообщения для тестов 
-
-            //if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
-            //_MainCodeBehind = codeBehind;
+        }
+        private void Updater()
+        {
+            while (true)
+            {
+                MessagesAsistant.SendMessage(Client, new Message() { Login = this.Login, MessageProcessing = "UPNM" });
+                Thread.Sleep(1500);
+            }
         }
 
         /// <summary>
@@ -91,22 +103,36 @@ namespace EmployeeFinder_Client.ViewModel
         {
             if (_SelectedUser != null)
             {
-                if (_InputMessageUser != "")
+                if (_InputMessageUser != "" && _InputMessageUser != " ")
                 {
                     Message message = new Message()
                     {
                         FromWhom = $"{Login}",
-                        ToWhom = $"{_SelectedUser}",
+                        ToWhom = $"{_SelectedUser.Сontact}",
                         MessageText = $"{_InputMessageUser}",
-                        SentMessage = true
+                        SentMessage = true,
+                        MessageProcessing = "RECM",
+                        obj = DateTime.Now.ToShortTimeString()
                     };
                     SelectedUser.messages.Add(message);
-                    ListMessage();
-                    //
-                    //Отправка на сервер тут
-                    //
-                    InputMessageUser = "";
+
+                    //Отправка на сервер
+                    MessagesAsistant.SendMessage(Client, message);
+
+                    Thread thread = new Thread(ReceiveMethod);
+                    thread.IsBackground = true;
+                    thread.Start();
                 }
+            }
+        }
+        private void ReceiveMethod()
+        {
+            Message answer = MessagesAsistant.ReadMessage(Client);
+            if (answer.MessageProcessing == "SAVM")
+            {
+                InputMessageUser = "";
+                Action action = () => ListMessage();
+                System.Windows.Application.Current.Dispatcher.Invoke(action);
             }
         }
 

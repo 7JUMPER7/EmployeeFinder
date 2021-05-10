@@ -197,7 +197,6 @@ namespace EmployeeFinder_Client.ViewModel
                     FromWhom = CurrentUser.CurrentUserLogin,
                     ToWhom = SelectedEmployee.Login,
                     MessageText = "Здравствуйте!",
-                    client = this.client,
                     obj = DateTime.Now.ToShortTimeString(),
                     MessageProcessing = "RECM"
                 };

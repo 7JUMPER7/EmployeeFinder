@@ -66,8 +66,8 @@ namespace EmployeeFinder_Server
                     Message message = MessagesAsistent.ReadMessage(client);
                     switch (message.MessageProcessing)
                     {
-                        case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message), "asked for login as a company"); break; }
-                        case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message), "asked for login as an employee"); break; }
+                        case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message, client), "asked for login as a company"); break; }
+                        case "LOGE": { ConsoleWrite(client, controller.IsLoginCorrectEmployee(message, client), "asked for login as an employee"); break; }
                         case "REGC": { ConsoleWrite(client, controller.RegisterCompany(message, client), "asked to register as an company"); UpdateDataGrid(); break; }
                         case "REGE": { ConsoleWrite(client, controller.RegisterEmployee(message, client), "asked to register as an employee"); UpdateDataGrid(); break; }
                         case "RECE": { ConsoleWrite(client, MessageGetCandidates("RECE", message, controller.GetCandidates()), "asked for employees"); break; }
@@ -79,6 +79,7 @@ namespace EmployeeFinder_Server
                         case "EXIT": { client.Close(); isOnline = false; ConsoleWrite(message, "close connection"); break; } //Close connection
                         case "RECM": { MessageFormating(client, message); UpdateDataGrid(); break; };
                         case "SAMG": { ConsoleWrite(client, controller.GetAllMessages(message.Login), "asked for all messages"); break; }; //Send all messages
+                        case "UPNM": { ConsoleWrite(client, ) } //Update new messages
                     }
                 }
             }
