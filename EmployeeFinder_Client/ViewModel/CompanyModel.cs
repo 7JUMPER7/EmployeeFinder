@@ -34,8 +34,10 @@ namespace EmployeeFinder_Client.ViewModel
 
             List<Cities> cities = ReceiveCities(client);
             CityFilter = cities.Select(c => c.Name).ToList();
+            CityFilter.Add("Все");
             List<Specialisations> specialisations = ReceiveSpecs(client);
             SpecFilter = specialisations.Select(s => s.Name).ToList();
+            SpecFilter.Add("Все");
             var candidates = ReceiveCandidates(client);
 
             AllCandidates = candidates
@@ -258,11 +260,11 @@ namespace EmployeeFinder_Client.ViewModel
             var candidates = AllCandidates;
             if (SelectedCity != null)
             {
-                candidates = candidates.Where(c => c.City == SelectedCity).ToList();
+                candidates = candidates.Where(c => c.City == SelectedCity || SelectedCity=="Все").ToList();
             }
             if (SelectedSpec != null)
             {
-                candidates = candidates.Where(c => c.Specialisation == SelectedSpec).ToList();
+                candidates = candidates.Where(c => c.Specialisation == SelectedSpec || SelectedSpec == "Все").ToList();
             }
             if (FromAgeFilter != 0)
             {

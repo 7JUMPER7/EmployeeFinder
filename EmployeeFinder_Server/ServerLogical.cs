@@ -58,12 +58,12 @@ namespace EmployeeFinder_Server
         /// <param name="controller">клас взаемодействий с базой данных</param>
         private void Logical(TcpClient client, DBController controller)
         {
+            Message message = MessagesAsistent.ReadMessage(client);
             try
             {
                 bool isOnline = true;
                 while (isOnline)
                 {
-                    Message message = MessagesAsistent.ReadMessage(client);
                     switch (message.MessageProcessing)
                     {
                         case "LOGC": { ConsoleWrite(client, controller.IsLoginCorrectCompany(message, client), "asked for login as a company"); break; }
@@ -79,7 +79,7 @@ namespace EmployeeFinder_Server
                         case "EXIT": { client.Close(); isOnline = false; ConsoleWrite(message, "close connection"); break; } //Close connection
                         case "RECM": { MessageFormating(client, message); UpdateDataGrid(); break; };
                         case "SAMG": { ConsoleWrite(client, controller.GetAllMessages(message.Login), "asked for all messages"); break; }; //Send all messages
-                        case "UPNM": { ConsoleWrite(client, ) } //Update new messages
+                        //case "UPNM": { ConsoleWrite(client, ) } //Update new messages
                     }
                 }
             }
