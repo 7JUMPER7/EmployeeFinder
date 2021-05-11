@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using EmployeeFinder_Client.ViewModel;
 
 namespace EmployeeFinder_Client.View
 {

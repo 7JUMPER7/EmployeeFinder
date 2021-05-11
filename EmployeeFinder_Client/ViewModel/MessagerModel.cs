@@ -17,6 +17,7 @@ namespace EmployeeFinder_Client.ViewModel
         public ObservableCollection<User> users { get; set; }
         private string Login { get; set; }
         private TcpClient Client;
+        private bool IsFormClosed;
 
         /// <summary>
         /// Выбранный контакт
@@ -39,6 +40,8 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         public MessagerModel(string login, TcpClient client)
         {
+            IsFormClosed = false;
+
             Client = client;
             Message message = new Message() { MessageProcessing = "SAMG", Login = login };
             MessagesAsistant.SendMessage(Client, message);
@@ -62,10 +65,23 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void Updater()
         {
-            while (true)
+            while (!IsFormClosed)
             {
-                MessagesAsistant.SendMessage(Client, new Message() { Login = this.Login, MessageProcessing = "UPNM" });
                 Thread.Sleep(1500);
+                int messagesCount = 0;
+                foreach (User user in users)
+                {
+                    messagesCount += user.messages.Count;
+                }
+                MessagesAsistant.SendMessage(Client, new Message() { Login = this.Login, MessageProcessing = "UPNM", MessageText = messagesCount.ToString() });
+                Message answer = MessagesAsistant.ReadMessage(Client);
+                if (answer.MessageProcessing == "ALOK")
+                {
+                    Action action = () => UsersList((answer.obj as JArray).ToObject<List<Message>>());
+                    System.Windows.Application.Current.Dispatcher.Invoke(action);
+                    action = () => ListMessage();
+                    System.Windows.Application.Current.Dispatcher.Invoke(action);
+                }                  
             }
         }
 
@@ -136,9 +152,32 @@ namespace EmployeeFinder_Client.ViewModel
             }
         }
 
+
+        /// <summary>
+        /// Отправка сообщения
+        /// </summary>
+        private RelayCommand _CloseWindow;
+        public RelayCommand CloseWindow
+        {
+            get
+            {
+                return _CloseWindow = _CloseWindow ??
+                  new RelayCommand(OnClose, CanClose);
+            }
+        }
+        private bool CanClose()
+        {
+            return true;
+        }
+        private void OnClose()
+        {
+            IsFormClosed = true;
+        }
+
         //Сортировка сообщений по контактам
         private void UsersList(List<Message> messages)
         {
+            //users.Clear();
             foreach (var item in messages)
             {
                 if (item.FromWhom == Login)

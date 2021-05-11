@@ -84,12 +84,54 @@ namespace EmployeeFinder_Server
             return -1;
         }
 
-        public Message IsNewMeesagesAvailable(string login)
+        /// <summary>
+        /// Проверка наличия новых сообщений для пользователя
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Message IsNewMeesagesAvailable(Message message)
         {
             Message answer = new Message();
 
+            int lastCount = GetMessagesCountByLogin(message.Login) - Int32.Parse(message.MessageText);
+
+            if (lastCount > 0)
+                answer = GetAllMessages(message.Login, lastCount);
+            else
+                answer.MessageProcessing = "ALUP"; //All is updated
+            return answer;
         }
-        public Message GetAllMessages(string login)
+        private int GetMessagesCountByLogin(string login)
+        {
+            int counter = 0;
+
+            int id = GetIdCandidate(login);
+            if (id == -1)
+            {
+                id = GetIdCompanies(login);
+            }
+
+            if (id != -1)
+            {
+                foreach (Messages item in dataBase.Messages.ToList())
+                {
+                    if (item.CandidateId == id || item.CompanyId == id)
+                    {
+                        counter++;
+                    }
+                }
+                return counter;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Получение всех сообщений для пользователя
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <param name="count">Кол-во последних сообщений которые нужно получить</param>
+        /// <returns></returns>
+        public Message GetAllMessages(string login, int count = -1)
         {
             Message answer = new Message();
             List<Message> messages = new List<Message>();
@@ -131,7 +173,15 @@ namespace EmployeeFinder_Server
                         }
                     }
                 }
-                answer.obj = messages;
+
+                if (count != -1)
+                {
+                    answer.obj = messages.GetRange(messages.Count - count, count);
+                }
+                else
+                {
+                    answer.obj = messages;
+                }
                 answer.MessageProcessing = "ALOK";
             }
             else
