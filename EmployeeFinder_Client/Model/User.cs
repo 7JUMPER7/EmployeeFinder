@@ -9,8 +9,8 @@ namespace EmployeeFinder_Client.Model
 {
     public class User
     {
-        public string Сontact;
-        public ObservableCollection<Message> messages;
+        public string Сontact { get; set; }
+        public ObservableCollection<Message> messages { get; set; }
 
         public User(string _Сontact)
         {
