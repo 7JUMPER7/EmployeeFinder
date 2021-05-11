@@ -331,6 +331,14 @@
                                            FontSize="20"
                                            TextAlignment="Center"
                                            VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Text="{Binding obj}" 
+                                           DockPanel.Dock="Top"
+                                           TextWrapping="Wrap"
+                                           Margin="10"
+                                           FontFamily="Century Gothic Bold"
+                                           FontSize="20"
+                                           TextAlignment="Center"
+                                           VerticalAlignment="Center"></TextBlock>
                         </DockPanel>
                     </Border>
                 </ControlTemplate>
@@ -472,13 +480,14 @@
                                 BorderThickness="1"
                                 CornerRadius="5">
                         <DockPanel>
-                            <TextBlock 
-                                       Text="{TemplateBinding Content}" 
-                                       TextBlock.FontFamily="Century Gothic"
-                                       TextBlock.FontSize="18"
-                                       TextBlock.Foreground="Black"
-                                       TextBlock.TextAlignment="Left"
-                                       VerticalAlignment="Center"></TextBlock>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                TextBlock.FontFamily="Century Gothic"
+                                TextBlock.FontSize="18"
+                                TextBlock.Foreground="Black"
+                                TextBlock.TextAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="5"/>
                         </DockPanel>
                     </Border>
                     <ControlTemplate.Triggers>

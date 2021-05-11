@@ -24,7 +24,7 @@
                   SelectedItem="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Contact, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBlock Text="{Binding Path=Сontact}"
                                Style="{StaticResource TextBlockStyle}"></TextBlock>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
