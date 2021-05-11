@@ -92,7 +92,6 @@ namespace EmployeeFinder_Server
         public Message IsNewMeesagesAvailable(Message message)
         {
             Message answer = new Message();
-            return answer;
 
             int lastCount = GetMessagesCountByLogin(message.Login) - Int32.Parse(message.MessageText);
 
