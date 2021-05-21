@@ -191,6 +191,35 @@ namespace EmployeeFinder_Server
             return answer;
         }
 
+        public Message AddOrRemoveCandidateFromWishList(Message message)
+        {
+            Message answer = new Message();
+
+            int companyId = dataBase.Companies.Where(c => c.Login == message.FromWhom).FirstOrDefault().Id;
+            int candidateId = Int32.Parse(message.MessageText);
+            if (companyId != 0)
+            {
+                CompaniesWishLists wishItem = dataBase.CompaniesWishLists.Where(w => w.CompanyId == companyId && w.CandidateId == candidateId).FirstOrDefault();
+                if (wishItem != null)
+                {
+                    dataBase.CompaniesWishLists.Remove(wishItem);
+                    answer.MessageProcessing = "REMV";
+                }
+                else
+                {
+                    CompaniesWishLists newWish = new CompaniesWishLists() { CompanyId = companyId, CandidateId = Int32.Parse(message.MessageText) };
+                    dataBase.CompaniesWishLists.Add(newWish);
+                    answer.MessageProcessing = "ADED";
+                }
+                dataBase.SaveChanges();
+            }
+            else
+            {
+                answer.MessageProcessing = "EROR";
+            }
+            return answer;
+        }
+
         /// <summary>
         /// Проверяет есть ли филиал с такими данными в базе данных
         /// </summary>

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Windows;
 using System.Linq;
+using System.Threading;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -249,6 +250,56 @@ namespace EmployeeFinder_Client.ViewModel
             info += "Портфолио: " + SelectedEmployee.Portfolio + '\n';
             Clipboard.SetText(info);
             _MainCodeBehind.ShowSuccessWindow("Скопировано");
+        }
+
+        /// <summary>
+        /// Добавления кандидата в избранное
+        /// </summary>
+        private RelayCommand _AddToWishList;
+        public RelayCommand AddToWishList
+        {
+            get
+            {
+                return _AddToWishList = _AddToWishList ??
+                  new RelayCommand(OnAddToWishUC, CanAddToWishUC);
+            }
+        }
+        private bool CanAddToWishUC()
+        {
+            return true;
+        }
+        private void OnAddToWishUC()
+        {
+            Message newMessage = new Message()
+            {
+                MessageProcessing = "ADWL",
+                MessageText = SelectedEmployee.Id.ToString(),
+                FromWhom = CurrentUser.CurrentUserLogin
+            };
+            MessagesAsistant.SendMessage(client, newMessage);
+
+            Thread thread = new Thread(WishListListener);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+        private void WishListListener()
+        {
+            Message answer = MessagesAsistant.ReadMessage(client);
+            if (answer.MessageProcessing == "ADED")
+            {
+                Action action = () => _MainCodeBehind.ShowSuccessWindow("Добавлено в избранное");
+                System.Windows.Application.Current.Dispatcher.Invoke(action);
+            }
+            else if (answer.MessageProcessing == "REMV")
+            {
+                Action action = () => _MainCodeBehind.ShowSuccessWindow("Удалено из избранного");
+                System.Windows.Application.Current.Dispatcher.Invoke(action);
+            }
+            else
+            {
+                Action action = () => _MainCodeBehind.ShowErrorWindow("Ошибка");
+                System.Windows.Application.Current.Dispatcher.Invoke(action);
+            }
         }
 
 

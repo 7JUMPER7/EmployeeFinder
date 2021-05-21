@@ -80,6 +80,7 @@ namespace EmployeeFinder_Server
                         case "RECM": { MessageFormating(client, message); UpdateDataGrid(); break; };
                         case "SAMG": { ConsoleWrite(client, controller.GetAllMessages(message.Login), "asked for all messages"); break; }; //Send all messages
                         case "UPNM": { ConsoleWrite(client, controller.IsNewMeesagesAvailable(message), "update messages"); break; } //Update new messages
+                        case "ADWL": { ConsoleWrite(client, controller.AddOrRemoveCandidateFromWishList(message), "add / remove from wishlist"); break; } //Add or remove candidate to wish list
                     }
                 }
             }
