@@ -13,6 +13,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
+            <RowDefinition Height="60"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         
@@ -33,7 +34,7 @@
             <StackPanel Width="150">
                 <Label Content="Возраст от до:" Foreground="#FFFFFF" FontSize="14"  Margin="5, 0, 0, 0"></Label>
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding FromAgeFilter}" Width="30" Height="20" Margin="5, 0, 10, 0" PreviewTextInput="NumberInput" Style="{StaticResource TextBoxStyle}"></TextBox>
+                    <TextBox Text="{Binding FromAgeFilter}" Width="30" Height="20" Margin="25, 0, 10, 0" PreviewTextInput="NumberInput" Style="{StaticResource TextBoxStyle}"></TextBox>
                     <TextBox Text="{Binding ToAgeFilter}" Width="30" Height="20" Margin="5, 0, 10, 0" PreviewTextInput="NumberInput" Style="{StaticResource TextBoxStyle}"></TextBox>
                 </StackPanel>
                 <!--<ComboBox x:Name="AgeFilter" Height="20" Margin="10, 0, 10, 0"></ComboBox>-->
@@ -49,37 +50,41 @@
                     <Run Text="&#xE715;" FontSize="24" Foreground="#FFFFFF" />
                     </TextBlock>
                 </Button.Content>
+                <Button.ToolTip>
+                    <ToolTip Background="#80ced7" Foreground="White"
+                         Placement="Relative" HorizontalOffset="-125" VerticalOffset="25">
+                        <TextBlock>Открытие мессенджера</TextBlock>
+                    </ToolTip>
+                </Button.ToolTip>
             </Button>
-
-            <TextBlock Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
-            <TextBlock FontFamily="Segoe MDL2 Assets">
-                    <Run Text="&#xE7C8;" FontSize="24" Foreground="#e63946" />
-            </TextBlock>
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility" Value="Hidden"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding NewMessage }" Value="true">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                        <Style.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="5"/>
-                            </Style>
-                        </Style.Resources>
-                    </Style>
-            </TextBlock.Style>
-        </TextBlock>
         </Grid>
-        
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7" Style="{StaticResource MessageButton}"
+                VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding RefreshCandidate}" Margin="10,-20,0,0">
+                <Button.Content>
+                    <TextBlock Grid.Row="3" FontFamily="Segoe MDL2 Assets">
+                        <Run Text="&#xE72C;" FontSize="24" Foreground="#FFFFFF"/>
+                    </TextBlock>
+                </Button.Content>
+                <Button.ToolTip>
+                    <ToolTip Background="#80ced7" Foreground="White"
+                         Placement="Relative" HorizontalOffset="25" VerticalOffset="25">
+                        <TextBlock>Обновление списка кандидатов</TextBlock>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <CheckBox Style="{StaticResource CheckBoxStyle}" Command="{Binding FavoriteСandidates}" Margin="130,0,0,0">></CheckBox>
+            <Label Content="Избранные кандидаты" Foreground="#FFFFFF" FontSize="14" VerticalAlignment="Center"></Label>
+            
+        </StackPanel>
 
         <!--Отображение всех кандидатов-->
         <DataGrid x:Name="AllEmployees"
                   Style="{StaticResource CompanyDataGridStyle}"
                   IsReadOnly="True"
                   ItemsSource="{Binding Candidates}"
-                  Grid.Row="1" Margin="10"
+                  Grid.Row="2" Margin="10,-5, 10, 10"
                   SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
@@ -91,7 +96,7 @@
 
 
         <!--Подробная информация о кандидате-->
-        <Grid Grid.Column="1" Grid.Row="1">
+        <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition/>
@@ -110,7 +115,7 @@
                 <TextBox x:Name="ESpecBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Specialisation, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <TextBox x:Name="EAgeBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Age, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 <TextBox x:Name="ECityBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.City, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <TextBox x:Name="EPortBox" Style="{StaticResource TextBoxStyle}" Height="100" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Text="{Binding SelectedEmployee.Portfolio, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox x:Name="EPortBox" Style="{StaticResource TextBoxStyle}" Height="145" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Text="{Binding SelectedEmployee.Portfolio, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
@@ -121,6 +126,12 @@
                     <Run Text="&#xE715;" FontSize="24" Foreground="#FFFFFF" />
                         </TextBlock>
                     </Button.Content>
+                    <Button.ToolTip>
+                        <ToolTip Background="#80ced7" Foreground="White"
+                         Placement="Relative" HorizontalOffset="-225" VerticalOffset="-10">
+                            <TextBlock>Новое сообщение выбранному кандидату</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
                 </Button>
                 <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7" Style="{StaticResource MessageButton}"
                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding CopyEmployeeInfoCommand}">
@@ -129,6 +140,12 @@
                     <Run Text="&#xEA35;" FontSize="24" Foreground="#FFFFFF" />
                         </TextBlock>
                     </Button.Content>
+                    <Button.ToolTip>
+                        <ToolTip Background="#80ced7" Foreground="White"
+                         Placement="Relative" HorizontalOffset="-65" VerticalOffset="-10">
+                            <TextBlock>Копирование</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
                 </Button>
                 <Button Grid.Column="2" Width="50" Height="50" HorizontalAlignment="Right" Background="#007EA7" Style="{StaticResource MessageButton}"
                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Command="{Binding AddToWishList}">
@@ -137,6 +154,12 @@
                     <Run Text="&#xE734;" FontSize="24" Foreground="#FFFFFF" />
                         </TextBlock>
                     </Button.Content>
+                    <Button.ToolTip>
+                        <ToolTip Background="#80ced7" Foreground="White"
+                         Placement="Relative" HorizontalOffset="-175" VerticalOffset="-10">
+                            <TextBlock>Добавить кандидата в избранное</TextBlock>
+                        </ToolTip>
+                    </Button.ToolTip>
                 </Button>
             </StackPanel>
         </Grid>

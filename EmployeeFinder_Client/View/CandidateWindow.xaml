@@ -57,27 +57,12 @@
                     <Run Text="&#xE715;" FontSize="24" Foreground="#FFFFFF" />
                 </TextBlock>
             </Button.Content>
+            <Button.ToolTip>
+                <ToolTip Background="#80ced7" Foreground="White"
+                         Placement="Relative" HorizontalOffset="-125" VerticalOffset="25">
+                    <TextBlock>Открытие мессенджера</TextBlock>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
-        
-        <TextBlock Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
-            <TextBlock FontFamily="Segoe MDL2 Assets">
-                    <Run Text="&#xE7C8;" FontSize="24" Foreground="#e63946" />
-            </TextBlock>
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility" Value="Hidden"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding NewMessage }" Value="true">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                        <Style.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="5"/>
-                            </Style>
-                        </Style.Resources>
-                    </Style>
-            </TextBlock.Style>
-        </TextBlock>
     </Grid>
 </UserControl>

@@ -88,7 +88,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
                     <Border x:Name="border" CornerRadius="5"
-                                BorderBrush="#00171f"
+                                BorderBrush="White"
                                 BorderThickness="3"
                                 Background="Transparent"
                                 HorizontalAlignment="Right"
@@ -347,6 +347,11 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding SentMessage}" Value="True">
                 <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Background" Value="#0096c7"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SentMessage}" Value="False">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Background" Value="Transparent"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -476,7 +481,7 @@
                                 Height="70"
                                 Padding="5,0"
                                 Background="#caf0f8"
-                                BorderBrush="Transparent"
+                                BorderBrush="White"
                                 BorderThickness="1"
                                 CornerRadius="5">
                         <DockPanel>
@@ -559,4 +564,41 @@
         </Setter>
     </Style>
 
+    <Style x:Key="{x:Type ToolTip}"
+       TargetType="ToolTip">
+        <Setter Property="OverridesDefaultStyle"
+          Value="true" />
+        <Setter Property="HasDropShadow"
+          Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border Name="Border"
+                BorderThickness="1"
+                Width="{TemplateBinding Width}"
+                Height="{TemplateBinding Height}"
+                Background="{TemplateBinding Background}">
+
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="#FF888888" />
+                        </Border.BorderBrush>
+                        <ContentPresenter Margin="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasDropShadow"
+                   Value="true">
+                            <Setter TargetName="Border"
+                    Property="CornerRadius"
+                    Value="4" />
+                            <Setter TargetName="Border"
+                    Property="SnapsToDevicePixels"
+                    Value="true" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

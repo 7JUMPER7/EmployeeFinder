@@ -33,13 +33,13 @@ namespace EmployeeFinder_Client.ViewModel
             ObservableCollection<Candidates> SelectedEmployee = new ObservableCollection<Candidates>();
             client = _client;
 
-            List<Cities> cities = ReceiveCities(client);
+            List<Cities> cities = ReceiveCities();
             CityFilter = cities.Select(c => c.Name).ToList();
             CityFilter.Add("Все");
-            List<Specialisations> specialisations = ReceiveSpecs(client);
+            List<Specialisations> specialisations = ReceiveSpecs();
             SpecFilter = specialisations.Select(s => s.Name).ToList();
             SpecFilter.Add("Все");
-            var candidates = ReceiveCandidates(client);
+            var candidates = ReceiveCandidates();
 
             AllCandidates = candidates
                 .Join(cities,
@@ -152,6 +152,20 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
         /// <summary>
+        /// Избранные кандидаты
+        /// </summary>
+        private bool _FavoriteСandidates;
+        public bool FavoriteСandidates
+        {
+            get { return _FavoriteСandidates; }
+            set
+            {
+                if (_FavoriteСandidates == value) return;
+                _FavoriteСandidates = value;
+            }
+        }
+
+        /// <summary>
         /// Открытие нового окна Messager
         /// </summary>
         private RelayCommand _OpenMessagerCommand;
@@ -176,7 +190,7 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
         /// <summary>
-        /// Открытие нового окна Messager
+        /// Новое сообщение выбранному кандидату
         /// </summary>
         private RelayCommand _NewMessageToCandidate;
         public RelayCommand NewMessageToCandidate
@@ -335,7 +349,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private List<Cities> ReceiveCities(TcpClient client)
+        private List<Cities> ReceiveCities()
         {
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECC" });
             Message answer = MessagesAsistant.ReadMessage(client);
@@ -353,7 +367,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private List<Specialisations> ReceiveSpecs(TcpClient client)
+        private List<Specialisations> ReceiveSpecs()
         {
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECS" });
             Message answer = MessagesAsistant.ReadMessage(client);
@@ -371,7 +385,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private List<Candidates> ReceiveCandidates(TcpClient client)
+        private List<Candidates> ReceiveCandidates()
         {
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECE" });
             Message answer = MessagesAsistant.ReadMessage(client);
@@ -383,6 +397,26 @@ namespace EmployeeFinder_Client.ViewModel
                 }
             }
             return null;
+        }
+
+        private RelayCommand _RefreshCandidate;
+        public RelayCommand RefreshCandidate
+        {
+            get
+            {
+                return _RefreshCandidate = _RefreshCandidate ??
+                  new RelayCommand(OnRefreshCandidate, CanRefreshCandidate);
+            }
+        }
+        private bool CanRefreshCandidate()
+        {
+            return true;
+        }
+        private void OnRefreshCandidate()
+        {
+            //var candidates = new List<Candidates>();
+            //Action action = () => candidates = ReceiveCandidates();
+            //System.Windows.Application.Current.Dispatcher.Invoke(action);
         }
     }
 }
