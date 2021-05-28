@@ -23,12 +23,12 @@
             <!--Город-->
             <StackPanel Width="150">
                 <Label Content="Город:" Foreground="#FFFFFF" FontSize="14" Margin="5, 0, 0, 0"></Label>
-                <ComboBox ItemsSource = "{Binding CityFilter}" SelectedItem="{Binding SelectedCity}" Height="20" Margin="10, 0, 10, 0"></ComboBox>
+                <ComboBox ItemsSource = "{Binding CityObsFilter}" SelectedItem="{Binding SelectedCity}" Height="20" Margin="10, 0, 10, 0"></ComboBox>
             </StackPanel>
             <!--Специализация-->
             <StackPanel Width="150">
                 <Label Content="Специализация:" Foreground="#FFFFFF" FontSize="14"  Margin="5, 0, 0, 0"></Label>
-                <ComboBox ItemsSource = "{Binding SpecFilter}" SelectedItem="{Binding SelectedSpec}" Height="20" Margin="10, 0, 10, 0"></ComboBox>
+                <ComboBox ItemsSource = "{Binding SpecObsFilter}" SelectedItem="{Binding SelectedSpec}" Height="20" Margin="10, 0, 10, 0"></ComboBox>
             </StackPanel>
             <!--Возраст-->
             <StackPanel Width="150">

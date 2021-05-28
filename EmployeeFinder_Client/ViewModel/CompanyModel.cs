@@ -20,6 +20,8 @@ namespace EmployeeFinder_Client.ViewModel
 
         public List<string> CityFilter { get; set; }
         public List<string> SpecFilter { get; set; }
+        public ObservableCollection<string> CityObsFilter { get; set; }
+        public ObservableCollection<string> SpecObsFilter { get; set; }
         public ObservableCollection<CandidatesChosen> Candidates { get; set; }
         public List<CandidatesChosen> AllCandidates { get; set; }
 
@@ -33,6 +35,14 @@ namespace EmployeeFinder_Client.ViewModel
             ObservableCollection<Candidates> SelectedEmployee = new ObservableCollection<Candidates>();
             client = _client;
 
+            FillCandidates();
+
+            if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
+            _MainCodeBehind = codeBehind;
+        }
+
+        private void FillCandidates()
+        {
             List<Cities> cities = ReceiveCities();
             CityFilter = cities.Select(c => c.Name).ToList();
             CityFilter.Add("Все");
@@ -68,9 +78,14 @@ namespace EmployeeFinder_Client.ViewModel
                     Portfolio = cand.Portfolio,
                     Login = cand.Login
                 }).ToList();
+            CityObsFilter = new ObservableCollection<string>(CityFilter);
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(CityObsFilter)));
+
+            SpecObsFilter = new ObservableCollection<string>(SpecFilter);
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(SpecObsFilter)));
+
             Candidates = new ObservableCollection<CandidatesChosen>(AllCandidates);
-            if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
-            _MainCodeBehind = codeBehind;
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
         }
 
 
@@ -347,7 +362,6 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         /// Получает массив доступных названий городов от сервера
         /// </summary>
-        /// <param name="client"></param>
         /// <returns></returns>
         private List<Cities> ReceiveCities()
         {
@@ -365,7 +379,6 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         /// Получает массив доступных названий специализаций от сервера.
         /// </summary>
-        /// <param name="client"></param>
         /// <returns></returns>
         private List<Specialisations> ReceiveSpecs()
         {
@@ -414,9 +427,13 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnRefreshCandidate()
         {
-            //var candidates = new List<Candidates>();
-            //Action action = () => candidates = ReceiveCandidates();
-            //System.Windows.Application.Current.Dispatcher.Invoke(action);
+            CityFilter.Clear();
+            SpecFilter.Clear();
+            AllCandidates.Clear();
+            Candidates.Clear();
+            Thread thread = new Thread(FillCandidates);
+            thread.IsBackground = true;
+            thread.Start();
         }
     }
 }

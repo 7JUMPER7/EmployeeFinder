@@ -42,10 +42,10 @@ namespace EmployeeFinder_Server
 
         public bool ThisIsACandidate(string login)
         {
-            foreach (var item in dataBase.Candidates)
+            List<Candidates> buf = dataBase.Candidates.ToList();
+            foreach (var item in buf)
                 if (item.Login == login)
                     return true;
-
             return false;
         }
 
@@ -53,13 +53,13 @@ namespace EmployeeFinder_Server
         {
             if (ThisIsACandidate(message.FromWhom))
             {
-                foreach (var item in dataBase.Candidates)
+                foreach (var item in dataBase.Candidates.ToList())
                     if (item.Login == message.FromWhom)
                         return item.Client;
             }
             else
             {
-                foreach (var item in dataBase.Companies)
+                foreach (var item in dataBase.Companies.ToList())
                     if (item.Login == message.FromWhom)
                         return item.Client;
             }
@@ -502,6 +502,12 @@ namespace EmployeeFinder_Server
         /// <returns>список кандидатов</returns>
         public object GetCandidates()
         {
+            //List<Candidates> buf = dataBase.Candidates.ToList();
+            //foreach (Candidates item in buf)
+            //{
+            //    item.Client = null;
+            //}
+            //return buf;
             return dataBase.Candidates.ToList();
         }
 

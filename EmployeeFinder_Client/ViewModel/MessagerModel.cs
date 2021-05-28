@@ -143,13 +143,17 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void ReceiveMethod()
         {
-            Message answer = MessagesAsistant.ReadMessage(Client);
-            if (answer.MessageProcessing == "SAVM")
+            do
             {
-                InputMessageUser = "";
-                Action action = () => ListMessage();
-                System.Windows.Application.Current.Dispatcher.Invoke(action);
-            }
+                Message answer = MessagesAsistant.ReadMessage(Client);
+                if (answer.MessageProcessing == "SAVM")
+                {
+                    InputMessageUser = "";
+                    Action action = () => ListMessage();
+                    System.Windows.Application.Current.Dispatcher.Invoke(action);
+                    break;
+                }
+            } while (true);
         }
 
 
