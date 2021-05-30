@@ -102,10 +102,6 @@ namespace EmployeeFinder_Server
         private void MessageFormating(TcpClient client, Message message)
         {
             controller.AddMessage(message);
-            if (message.MessageText == "testTest")
-            {
-
-            }
             TcpClient ToWhomClient = controller.GetTcpClient(message) as TcpClient;
             message.MessageProcessing = "SAVM";
             if (ToWhomClient != null)

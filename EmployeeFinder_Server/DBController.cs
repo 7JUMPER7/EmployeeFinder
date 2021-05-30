@@ -466,6 +466,7 @@ namespace EmployeeFinder_Server
                 {
                     DeleteCityIfCandidateOne(candidate.CityId);
                     DeleteSpecIfCandidateOne(candidate.SpecialisationId);
+                    DeleteMessages(candidate.Id);
                     dataBase.Candidates.Remove(candidate);
                     dataBase.SaveChanges();
                     answer.MessageProcessing = "ALOK";
@@ -495,6 +496,16 @@ namespace EmployeeFinder_Server
                 dataBase.Specialisations.Remove(spec);
             }
         }
+        private void DeleteMessages(int userId)
+        {
+            foreach (Messages item in dataBase.Messages.ToList())
+            {
+                if (item.CandidateId == userId)
+                {
+                    dataBase.Messages.Remove(item);
+                }
+            }
+        }
 
         /// <summary>
         /// Возвращает список кандидатов
@@ -502,13 +513,25 @@ namespace EmployeeFinder_Server
         /// <returns>список кандидатов</returns>
         public object GetCandidates()
         {
-            //List<Candidates> buf = dataBase.Candidates.ToList();
-            //foreach (Candidates item in buf)
-            //{
-            //    item.Client = null;
-            //}
-            //return buf;
-            return dataBase.Candidates.ToList();
+            List<Candidates> buf = new List<Candidates>();
+            foreach (Candidates item in dataBase.Candidates.ToList())
+            {
+                Candidates bufCandidate = new Candidates()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    CityId = item.CityId,
+                    Age = item.Age,
+                    SpecialisationId = item.SpecialisationId,
+                    Portfolio = item.Portfolio,
+                    Login = item.Login,
+                    Password = item.Password,
+                    Client = null
+                };
+                buf.Add(bufCandidate);
+            }
+            return buf;
+            //return dataBase.Candidates.ToList();
         }
 
         public object GetCandidatesName()

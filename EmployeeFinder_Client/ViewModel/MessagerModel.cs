@@ -250,9 +250,12 @@ namespace EmployeeFinder_Client.ViewModel
         public void ListMessage()
         {
             ChatList.Clear();
-            foreach (var item in SelectedUser.messages)
+            if (SelectedUser != null)
             {
-                ChatList.Add(item);
+                foreach (var item in SelectedUser.messages)
+                {
+                    ChatList.Add(item);
+                }
             }
         }
     }
