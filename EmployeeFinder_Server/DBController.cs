@@ -560,6 +560,43 @@ namespace EmployeeFinder_Server
             return toSend;
         }
 
+        public Message GetWishListByLogin(Message message)
+        {
+            int companyId = GetIdCompanies(message.Login);
+            List<CandidatesChosen> buf = new List<CandidatesChosen>();
+            Message answer = new Message();
+            foreach (CompaniesWishLists item in dataBase.CompaniesWishLists.ToList())
+            {
+                if (item.CompanyId == companyId)
+                {
+                    Candidates bufCandidate = dataBase.Candidates.Where(c => c.Id == item.CandidateId).FirstOrDefault();
+                    CandidatesChosen bufCandidateChosen = new CandidatesChosen()
+                    {
+                        Id = item.Id,
+                        Name = bufCandidate.Name,
+                        City = dataBase.Cities.Where(c => c.Id == bufCandidate.CityId).FirstOrDefault().Name,
+                        Age = bufCandidate.Age,
+                        Specialisation = dataBase.Specialisations.Where(s => s.Id == bufCandidate.SpecialisationId).FirstOrDefault().Name,
+                        Portfolio = bufCandidate.Portfolio,
+                        Login = bufCandidate.Login
+                    };
+                    buf.Add(bufCandidateChosen);
+                }
+            }
+
+            if (buf != null)
+            {
+                answer.obj = buf;
+                answer.MessageProcessing = "ALOK";
+            }
+            else
+            {
+                answer.MessageProcessing = "EROR";
+            }
+
+            return answer;
+        }
+
         /// <summary>
         /// Возвращает список городов
         /// </summary>

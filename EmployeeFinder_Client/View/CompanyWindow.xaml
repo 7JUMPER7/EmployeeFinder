@@ -74,7 +74,7 @@
                     </ToolTip>
                 </Button.ToolTip>
             </Button>
-            <CheckBox Style="{StaticResource CheckBoxStyle}" Command="{Binding FavoriteСandidates}" Margin="130,0,0,0">></CheckBox>
+            <CheckBox Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding FavoriteСandidates}" Margin="130,0,0,0">></CheckBox>
             <Label Content="Избранные кандидаты" Foreground="#FFFFFF" FontSize="14" VerticalAlignment="Center"></Label>
             
         </StackPanel>

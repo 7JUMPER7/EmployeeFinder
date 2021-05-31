@@ -177,6 +177,39 @@ namespace EmployeeFinder_Client.ViewModel
             {
                 if (_FavoriteСandidates == value) return;
                 _FavoriteСandidates = value;
+                Thread thread = new Thread(ShowWishList);
+                thread.IsBackground = true;
+                thread.Start();
+            }
+        }
+        private void ShowWishList()
+        {
+            if (_FavoriteСandidates)
+            {
+                Message message = new Message()
+                {
+                    MessageProcessing = "GTWL",
+                    Login = CurrentUser.CurrentUserLogin
+                };
+                MessagesAsistant.SendMessage(client, message);
+
+                Message answer = MessagesAsistant.ReadMessage(client);
+                if (answer.MessageProcessing == "ALOK")
+                {
+                    var candidates = new List<CandidatesChosen>();
+                    if (answer.obj is JArray && answer.obj != null)
+                    {
+                        candidates = (answer.obj as JArray).ToObject<List<CandidatesChosen>>();
+                    }
+
+                    Candidates = new ObservableCollection<CandidatesChosen>(candidates);
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
+                }            
+            }
+            else
+            {
+                Candidates = new ObservableCollection<CandidatesChosen>(AllCandidates);
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
             }
         }
 
@@ -356,7 +389,6 @@ namespace EmployeeFinder_Client.ViewModel
             }
             Candidates = new ObservableCollection<CandidatesChosen>(candidates); 
             PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
-
         }
 
         /// <summary>
