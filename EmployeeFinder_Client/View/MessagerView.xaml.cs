@@ -16,23 +16,13 @@ using System.Windows.Shapes;
 namespace EmployeeFinder_Client.View
 {
     /// <summary>
-    /// Interaction logic for CompanyWindow.xaml
+    /// Interaction logic for MessagerView.xaml
     /// </summary>
-    public partial class CompanyWindow : UserControl
+    public partial class MessagerView : UserControl
     {
-        public CompanyWindow()
+        public MessagerView()
         {
             InitializeComponent();
-        }
-
-        private void NumberInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = !(Char.IsDigit(e.Text, 0));
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

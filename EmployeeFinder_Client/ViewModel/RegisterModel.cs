@@ -165,6 +165,8 @@ namespace EmployeeFinder_Client.ViewModel
             {
                 case "ALOK": //Всё правильно
                     {
+                        CurrentUser.CurrentUserLogin = InputLogin;
+                        CurrentUser.IsCurrentUserCompany = IsLikeCompanyCheck;
                         if (_IsLikeCompanyCheck == true)
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CompanyWindow, client)));
@@ -173,8 +175,6 @@ namespace EmployeeFinder_Client.ViewModel
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(new Action(() => _MainCodeBehind.LoadView(ViewType.CandidateWindow, client)));
                         }
-                        CurrentUser.CurrentUserLogin = InputLogin;
-                        CurrentUser.IsCurrentUserCompany = IsLikeCompanyCheck;
                         _MainCodeBehind.ShowSuccessWindow("Упешно");
                         break;
                     }

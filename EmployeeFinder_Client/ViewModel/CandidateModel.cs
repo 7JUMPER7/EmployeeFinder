@@ -177,7 +177,33 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnDelUC()
         {
-            //логика
+            Message message = new Message()
+            {
+                Login = CurrentUser.CurrentUserLogin,
+                MessageProcessing = "DELE"
+            };
+            Thread thread = new Thread(new ParameterizedThreadStart(DeleteInfo));
+            thread.IsBackground = true;
+            thread.Start(client);
+
+            MessagesAsistant.SendMessage(client, message);
+        }
+        private void DeleteInfo(object obj)
+        {
+            TcpClient client = obj as TcpClient;
+            Message answer = MessagesAsistant.ReadMessage(client);
+            switch (answer.MessageProcessing)
+            {
+                case "ALOK":
+                    _MainCodeBehind.ShowSuccessWindow("Успешно удалено");
+                    Thread.Sleep(700);
+                    Action action = () => _MainCodeBehind.CloseWindow();
+                    System.Windows.Application.Current.Dispatcher.Invoke(action);
+                    break;
+                case "EROR":
+                    _MainCodeBehind.ShowErrorWindow("Ошибка удаления");
+                    break;
+            }
         }
 
         /// <summary>
@@ -198,9 +224,9 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnMessagerrUC()
         {
-            Messager messager = new Messager();
-            messager.Height = 400;
-            messager.Width = 400;
+            Messager messager = new Messager(CurrentUser.CurrentUserLogin, client);
+            messager.Height = 450;
+            messager.Width = 600;
             messager.Show();
         }
     }

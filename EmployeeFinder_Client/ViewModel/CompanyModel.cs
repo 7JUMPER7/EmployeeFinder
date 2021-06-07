@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Windows;
 using System.Linq;
+using System.Threading;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -19,23 +20,34 @@ namespace EmployeeFinder_Client.ViewModel
 
         public List<string> CityFilter { get; set; }
         public List<string> SpecFilter { get; set; }
+        public ObservableCollection<string> CityObsFilter { get; set; }
+        public ObservableCollection<string> SpecObsFilter { get; set; }
         public ObservableCollection<CandidatesChosen> Candidates { get; set; }
         public List<CandidatesChosen> AllCandidates { get; set; }
-
-        public bool NewMessage { get; set; }
 
         /// <summary>
         /// конструктор страницы
         /// </summary>
         public CompanyModel(IMainWindowsCodeBehind codeBehind, TcpClient _client)
         {
+            ObservableCollection<Candidates> SelectedEmployee = new ObservableCollection<Candidates>();
             client = _client;
 
-            List<Cities> cities = ReceiveCities(client);
+            FillCandidates();
+
+            if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
+            _MainCodeBehind = codeBehind;
+        }
+
+        private void FillCandidates()
+        {
+            List<Cities> cities = ReceiveCities();
             CityFilter = cities.Select(c => c.Name).ToList();
-            List<Specialisations> specialisations = ReceiveSpecs(client);
+            CityFilter.Add("Все");
+            List<Specialisations> specialisations = ReceiveSpecs();
             SpecFilter = specialisations.Select(s => s.Name).ToList();
-            var candidates = ReceiveCandidates(client);
+            SpecFilter.Add("Все");
+            var candidates = ReceiveCandidates();
 
             AllCandidates = candidates
                 .Join(cities,
@@ -64,9 +76,14 @@ namespace EmployeeFinder_Client.ViewModel
                     Portfolio = cand.Portfolio,
                     Login = cand.Login
                 }).ToList();
+            CityObsFilter = new ObservableCollection<string>(CityFilter);
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(CityObsFilter)));
+
+            SpecObsFilter = new ObservableCollection<string>(SpecFilter);
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(SpecObsFilter)));
+
             Candidates = new ObservableCollection<CandidatesChosen>(AllCandidates);
-            if (codeBehind == null) throw new ArgumentNullException(nameof(codeBehind));
-            _MainCodeBehind = codeBehind;
+            PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
         }
 
 
@@ -106,6 +123,20 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
 
+        /// <summary>
+        /// Выбранный работник
+        /// </summary>
+        private CandidatesChosen _SelectedEmployee;
+        public CandidatesChosen SelectedEmployee
+        {
+            get { return _SelectedEmployee; }
+            set
+            {
+                _SelectedEmployee = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(SelectedEmployee)));
+            }
+        }
+
 
         /// <summary>
         /// Значения фильтра возраста
@@ -134,6 +165,53 @@ namespace EmployeeFinder_Client.ViewModel
         }
 
         /// <summary>
+        /// Избранные кандидаты
+        /// </summary>
+        private bool _FavoriteСandidates;
+        public bool FavoriteСandidates
+        {
+            get { return _FavoriteСandidates; }
+            set
+            {
+                if (_FavoriteСandidates == value) return;
+                _FavoriteСandidates = value;
+                Thread thread = new Thread(ShowWishList);
+                thread.IsBackground = true;
+                thread.Start();
+            }
+        }
+        private void ShowWishList()
+        {
+            if (_FavoriteСandidates)
+            {
+                Message message = new Message()
+                {
+                    MessageProcessing = "GTWL",
+                    Login = CurrentUser.CurrentUserLogin
+                };
+                MessagesAsistant.SendMessage(client, message);
+
+                Message answer = MessagesAsistant.ReadMessage(client);
+                if (answer.MessageProcessing == "ALOK")
+                {
+                    var candidates = new List<CandidatesChosen>();
+                    if (answer.obj is JArray && answer.obj != null)
+                    {
+                        candidates = (answer.obj as JArray).ToObject<List<CandidatesChosen>>();
+                    }
+
+                    Candidates = new ObservableCollection<CandidatesChosen>(candidates);
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
+                }            
+            }
+            else
+            {
+                Candidates = new ObservableCollection<CandidatesChosen>(AllCandidates);
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
+            }
+        }
+
+        /// <summary>
         /// Открытие нового окна Messager
         /// </summary>
         private RelayCommand _OpenMessagerCommand;
@@ -151,10 +229,137 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnMessagerrUC()
         {
-            Messager messager = new Messager();
-            messager.Height = 400;
-            messager.Width = 400;
+            Messager messager = new Messager(CurrentUser.CurrentUserLogin, client);
+            messager.Height = 450;
+            messager.Width = 600;
             messager.Show();
+        }
+
+        /// <summary>
+        /// Новое сообщение выбранному кандидату
+        /// </summary>
+        private RelayCommand _NewMessageToCandidate;
+        public RelayCommand NewMessageToCandidate
+        {
+            get
+            {
+                return _NewMessageToCandidate = _NewMessageToCandidate ??
+                  new RelayCommand(OnMessagerr2UC, CanMessager2UC);
+            }
+        }
+        private bool CanMessager2UC()
+        {
+            return true;
+        }
+        private void OnMessagerr2UC()
+        {
+            try
+            {
+                Message newMessage = new Message()
+                {
+                    FromWhom = CurrentUser.CurrentUserLogin,
+                    ToWhom = SelectedEmployee.Login,
+                    MessageText = "Здравствуйте!",
+                    obj = DateTime.Now.ToShortTimeString(),
+                    MessageProcessing = "RECM"
+                };
+                MessagesAsistant.SendMessage(client, newMessage);
+
+                Message answer = MessagesAsistant.ReadMessage(client);
+                if (answer.MessageProcessing == "SAVM")
+                {
+                    Messager messager = new Messager(CurrentUser.CurrentUserLogin, client);
+                    messager.Height = 450;
+                    messager.Width = 600;
+                    messager.Show();
+                }
+                else
+                {
+                    _MainCodeBehind.ShowErrorWindow("Не удалось отправить");
+                }
+            }
+            catch (Exception)
+            {
+                _MainCodeBehind.ShowErrorWindow("Ошибка");
+            }
+
+        }
+
+        /// <summary>
+        /// Копирование информации о работнике в буфер обмена
+        /// </summary>
+        private RelayCommand _CopyEmployeeInfoCommand;
+        public RelayCommand CopyEmployeeInfoCommand
+        {
+            get
+            {
+                return _CopyEmployeeInfoCommand = _CopyEmployeeInfoCommand ??
+                  new RelayCommand(OnCopyUC, CanCopyUC);
+            }
+        }
+        private bool CanCopyUC()
+        {
+            return true;
+        }
+        private void OnCopyUC()
+        {
+            string info = "ФИО: " + SelectedEmployee.Name + '\n';
+            info += "Специализация: " + SelectedEmployee.Specialisation + '\n';
+            info += "Возраст: " + SelectedEmployee.Age + '\n';
+            info += "Город: " + SelectedEmployee.City + '\n';
+            info += "Портфолио: " + SelectedEmployee.Portfolio + '\n';
+            Clipboard.SetText(info);
+            _MainCodeBehind.ShowSuccessWindow("Скопировано");
+        }
+
+        /// <summary>
+        /// Добавления кандидата в избранное
+        /// </summary>
+        private RelayCommand _AddToWishList;
+        public RelayCommand AddToWishList
+        {
+            get
+            {
+                return _AddToWishList = _AddToWishList ??
+                  new RelayCommand(OnAddToWishUC, CanAddToWishUC);
+            }
+        }
+        private bool CanAddToWishUC()
+        {
+            return true;
+        }
+        private void OnAddToWishUC()
+        {
+            Message newMessage = new Message()
+            {
+                MessageProcessing = "ADWL",
+                MessageText = SelectedEmployee.Id.ToString(),
+                FromWhom = CurrentUser.CurrentUserLogin
+            };
+            MessagesAsistant.SendMessage(client, newMessage);
+
+            Thread thread = new Thread(WishListListener);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+        private void WishListListener()
+        {
+            Message answer = MessagesAsistant.ReadMessage(client);
+            if (answer.MessageProcessing == "ADED")
+            {
+                Action action = () => _MainCodeBehind.ShowSuccessWindow("Добавлено в избранное");
+                System.Windows.Application.Current.Dispatcher.Invoke(action);
+            }
+            else if (answer.MessageProcessing == "REMV")
+            {
+                Action action = () => _MainCodeBehind.ShowSuccessWindow("Удалено из избранного");
+                System.Windows.Application.Current.Dispatcher.Invoke(action);
+            }
+            else
+            {
+                Action action = () => _MainCodeBehind.ShowErrorWindow("Ошибка");
+                System.Windows.Application.Current.Dispatcher.Invoke(action);
+            }
         }
 
 
@@ -166,11 +371,11 @@ namespace EmployeeFinder_Client.ViewModel
             var candidates = AllCandidates;
             if (SelectedCity != null)
             {
-                candidates = candidates.Where(c => c.City == SelectedCity).ToList();
+                candidates = candidates.Where(c => c.City == SelectedCity || SelectedCity=="Все").ToList();
             }
             if (SelectedSpec != null)
             {
-                candidates = candidates.Where(c => c.Specialisation == SelectedSpec).ToList();
+                candidates = candidates.Where(c => c.Specialisation == SelectedSpec || SelectedSpec == "Все").ToList();
             }
             if (FromAgeFilter != 0)
             {
@@ -182,15 +387,13 @@ namespace EmployeeFinder_Client.ViewModel
             }
             Candidates = new ObservableCollection<CandidatesChosen>(candidates); 
             PropertyChanged(this, new PropertyChangedEventArgs(nameof(Candidates)));
-
         }
 
         /// <summary>
         /// Получает массив доступных названий городов от сервера
         /// </summary>
-        /// <param name="client"></param>
         /// <returns></returns>
-        private List<Cities> ReceiveCities(TcpClient client)
+        private List<Cities> ReceiveCities()
         {
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECC" });
             Message answer = MessagesAsistant.ReadMessage(client);
@@ -206,9 +409,8 @@ namespace EmployeeFinder_Client.ViewModel
         /// <summary>
         /// Получает массив доступных названий специализаций от сервера.
         /// </summary>
-        /// <param name="client"></param>
         /// <returns></returns>
-        private List<Specialisations> ReceiveSpecs(TcpClient client)
+        private List<Specialisations> ReceiveSpecs()
         {
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECS" });
             Message answer = MessagesAsistant.ReadMessage(client);
@@ -226,7 +428,7 @@ namespace EmployeeFinder_Client.ViewModel
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        private List<Candidates> ReceiveCandidates(TcpClient client)
+        private List<Candidates> ReceiveCandidates()
         {
             MessagesAsistant.SendMessage(client, new Message() { Login = CurrentUser.CurrentUserLogin, MessageProcessing = "RECE" });
             Message answer = MessagesAsistant.ReadMessage(client);
@@ -238,6 +440,30 @@ namespace EmployeeFinder_Client.ViewModel
                 }
             }
             return null;
+        }
+
+        private RelayCommand _RefreshCandidate;
+        public RelayCommand RefreshCandidate
+        {
+            get
+            {
+                return _RefreshCandidate = _RefreshCandidate ??
+                  new RelayCommand(OnRefreshCandidate, CanRefreshCandidate);
+            }
+        }
+        private bool CanRefreshCandidate()
+        {
+            return true;
+        }
+        private void OnRefreshCandidate()
+        {
+            CityFilter.Clear();
+            SpecFilter.Clear();
+            AllCandidates.Clear();
+            Candidates.Clear();
+            Thread thread = new Thread(FillCandidates);
+            thread.IsBackground = true;
+            thread.Start();
         }
     }
 }

@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace EmployeeFinder_Server.DbClasses
 {
-    class Companies
+    internal class Companies
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public object Client { get; set; }
     }
 }

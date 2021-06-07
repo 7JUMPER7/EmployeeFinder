@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeFinder_Server.DbClasses
 {
-    class Candidates
+    internal class Candidates
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,5 +17,6 @@ namespace EmployeeFinder_Server.DbClasses
         public string Portfolio { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public object Client { get; set; }
     }
 }

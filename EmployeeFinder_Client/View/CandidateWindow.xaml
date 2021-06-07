@@ -18,25 +18,25 @@
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <StackPanel Orientation="Horizontal">
                 
-                <StackPanel Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,20,0">
-                    <Label Content="ФИО:" Foreground="#FFFFFF" FontSize="14" ></Label>
-                    <Label Content="Специализация:" Foreground="#FFFFFF" FontSize="14"></Label>
-                    <Label Content="Возраст:" Foreground="#FFFFFF" FontSize="14"></Label>
-                    <Label Content="Город:" Foreground="#FFFFFF" FontSize="14"></Label>
-                    <Label Content="Портфолио:" Foreground="#FFFFFF" FontSize="14"></Label>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,10,0">
+                    <Label Content="ФИО:" Foreground="#FFFFFF" FontSize="14" Margin="0 0 0 4"></Label>
+                    <Label Content="Специализация:" Foreground="#FFFFFF" FontSize="14" Margin="0 0 0 4"></Label>
+                    <Label Content="Возраст:" Foreground="#FFFFFF" FontSize="14" Margin="0 0 0 4"></Label>
+                    <Label Content="Город:" Foreground="#FFFFFF" FontSize="14" Margin="0 0 0 4"></Label>
+                    <Label Content="Портфолио:" Foreground="#FFFFFF" FontSize="14" Margin="0 0 0 4"></Label>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputName}" Width="365"></TextBox>
+                             Text="{Binding InputName}" Height="25" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputSpecialisation}" Width="365"></TextBox>
+                             Text="{Binding InputSpecialisation}" Height="25" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputAge}" PreviewTextInput="NumberInput" Width="365"></TextBox>
+                             Text="{Binding InputAge}" PreviewTextInput="NumberInput" Height="25" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5"
-                             Text="{Binding InputCity}" Width="365"></TextBox>
+                             Text="{Binding InputCity}" Height="25" Width="365"></TextBox>
                     <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" 
-                             Text="{Binding InputPortfolio}" Height="200" Width="365"></TextBox>
+                             Text="{Binding InputPortfolio}" Height="200" Width="365" VerticalContentAlignment="Top" TextWrapping="Wrap"></TextBox>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
@@ -48,7 +48,7 @@
             </StackPanel>
         </StackPanel>
 
-        <Button Grid.Column="2" Style="{StaticResource MessageButtonStyle}"
+        <Button Grid.Column="2" Style="{StaticResource MessageButton}"
                 VerticalAlignment="Top" HorizontalAlignment="Right"
                 Background="#007EA7" Margin="10"
                 Command="{Binding OpenMessagerCommand}">
@@ -57,27 +57,12 @@
                     <Run Text="&#xE715;" FontSize="24" Foreground="#FFFFFF" />
                 </TextBlock>
             </Button.Content>
+            <Button.ToolTip>
+                <ToolTip Background="#80ced7" Foreground="White"
+                         Placement="Relative" HorizontalOffset="-125" VerticalOffset="25">
+                    <TextBlock>Открытие мессенджера</TextBlock>
+                </ToolTip>
+            </Button.ToolTip>
         </Button>
-        
-        <TextBlock Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
-            <TextBlock FontFamily="Segoe MDL2 Assets">
-                    <Run Text="&#xE7C8;" FontSize="24" Foreground="#e63946" />
-            </TextBlock>
-            <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Visibility" Value="Hidden"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding NewMessage }" Value="true">
-                                <Setter Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                        <Style.Resources>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="CornerRadius" Value="5"/>
-                            </Style>
-                        </Style.Resources>
-                    </Style>
-            </TextBlock.Style>
-        </TextBlock>
     </Grid>
 </UserControl>
