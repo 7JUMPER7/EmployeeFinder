@@ -25,8 +25,6 @@ namespace EmployeeFinder_Client.ViewModel
         public ObservableCollection<CandidatesChosen> Candidates { get; set; }
         public List<CandidatesChosen> AllCandidates { get; set; }
 
-        public bool NewMessage { get; set; }
-
         /// <summary>
         /// конструктор страницы
         /// </summary>

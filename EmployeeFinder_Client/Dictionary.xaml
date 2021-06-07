@@ -34,23 +34,6 @@
             </Style>
         </Style.Resources>
     </Style>
-    <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
-        <Setter Property="FontFamily" Value="Century Gothic"></Setter>
-        <Setter Property="FontSize" Value="17"></Setter>
-        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type PasswordBox}">
-                    <Border Background="{TemplateBinding Background}" 
-                                x:Name="Bd" BorderBrush="#ef233c"
-                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
-                        <ScrollViewer Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
     <Style x:Key="LogInButtonStyle" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -203,7 +186,7 @@
                         <ScrollBar Grid.Column="1" x:Name="PART_VerticalScrollBar"
                                        Value="{TemplateBinding VerticalOffset}"
                                        Maximum="{TemplateBinding ScrollableHeight}"
-                                       ViewportSize="50"
+                                       ViewportSize="NaN"
                                        Visibility="Hidden"
                                        Background="Transparent"
                                        Opacity="0"
@@ -317,7 +300,7 @@
                     <Border x:Name="border"
                                 Background="{TemplateBinding Background}"
                                 CornerRadius="15"
-                                BorderBrush="#00171f"
+                                BorderBrush="White"
                                 MaxWidth="250"
                                 Margin="0,3"
                                 BorderThickness="{TemplateBinding BorderThickness}"
@@ -326,18 +309,18 @@
                             <TextBlock Text="{TemplateBinding Content}" 
                                            DockPanel.Dock="Top"
                                            TextWrapping="Wrap"
-                                           Margin="10"
+                                           Margin="10 5"
                                            FontFamily="Century Gothic Bold"
-                                           FontSize="20"
+                                           FontSize="17"
                                            TextAlignment="Center"
                                            VerticalAlignment="Center"></TextBlock>
                             <TextBlock Text="{Binding obj}" 
                                            DockPanel.Dock="Top"
                                            TextWrapping="Wrap"
-                                           Margin="10"
+                                           Margin="10 3"
                                            FontFamily="Century Gothic Bold"
-                                           FontSize="20"
-                                           TextAlignment="Center"
+                                           FontSize="12"
+                                           TextAlignment="Right"
                                            VerticalAlignment="Center"></TextBlock>
                         </DockPanel>
                     </Border>
@@ -519,7 +502,7 @@
 
                         <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Focusable="false">
                             <Track.Thumb>
-                                <Thumb x:Name="Thumb" Background="{TemplateBinding Foreground}" Style="{DynamicResource ScrollThumbs}" />
+                                <Thumb x:Name="Thumb" Background="{TemplateBinding Foreground}" Style="{DynamicResource ScrollThumbs}"  Height="30"/>
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>
                                 <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="false" />

@@ -37,7 +37,6 @@
                     <TextBox Text="{Binding FromAgeFilter}" Width="30" Height="20" Margin="25, 0, 10, 0" PreviewTextInput="NumberInput" Style="{StaticResource TextBoxStyle}"></TextBox>
                     <TextBox Text="{Binding ToAgeFilter}" Width="30" Height="20" Margin="5, 0, 10, 0" PreviewTextInput="NumberInput" Style="{StaticResource TextBoxStyle}"></TextBox>
                 </StackPanel>
-                <!--<ComboBox x:Name="AgeFilter" Height="20" Margin="10, 0, 10, 0"></ComboBox>-->
             </StackPanel>
         </StackPanel>
         <Grid Grid.Column="2">
@@ -76,7 +75,6 @@
             </Button>
             <CheckBox Style="{StaticResource CheckBoxStyle}" IsChecked="{Binding FavoriteСandidates}" Margin="130,0,0,0">></CheckBox>
             <Label Content="Избранные кандидаты" Foreground="#FFFFFF" FontSize="14" VerticalAlignment="Center"></Label>
-            
         </StackPanel>
 
         <!--Отображение всех кандидатов-->
@@ -111,11 +109,11 @@
             </StackPanel>
 
             <StackPanel HorizontalAlignment="Left" Grid.Column="1">
-                <TextBox x:Name="ENameBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <TextBox x:Name="ESpecBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Specialisation, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <TextBox x:Name="EAgeBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Age, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <TextBox x:Name="ECityBox" Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.City, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <TextBox x:Name="EPortBox" Style="{StaticResource TextBoxStyle}" Height="145" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Text="{Binding SelectedEmployee.Portfolio, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Specialisation, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.Age, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox Style="{StaticResource TextBoxStyle}" Margin="0, 3, 0, 5" IsReadOnly="True" Height="25" Width="250" Text="{Binding SelectedEmployee.City, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <TextBox Style="{StaticResource TextBoxStyle}" Height="145" Width="250" Margin="0, 3, 0, 5" IsReadOnly="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Text="{Binding SelectedEmployee.Portfolio, UpdateSourceTrigger=PropertyChanged}"></TextBox>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
