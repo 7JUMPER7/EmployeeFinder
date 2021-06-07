@@ -6,6 +6,7 @@ using EmployeeFinder_Client.Model;
 using System.Threading;
 using System.Windows;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -224,10 +225,13 @@ namespace EmployeeFinder_Client.ViewModel
         }
         private void OnMessagerrUC()
         {
-            Messager messager = new Messager(CurrentUser.CurrentUserLogin, client);
-            messager.Height = 450;
-            messager.Width = 600;
-            messager.Show();
+            if (Application.Current.Windows.OfType<Messager>().Count() == 0)
+            {
+                Messager messager = new Messager(CurrentUser.CurrentUserLogin, client);
+                messager.Height = 450;
+                messager.Width = 600;
+                messager.Show();
+            }
         }
     }
 }
