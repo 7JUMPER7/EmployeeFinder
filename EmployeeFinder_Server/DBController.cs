@@ -104,18 +104,24 @@ namespace EmployeeFinder_Server
         private int GetMessagesCountByLogin(string login)
         {
             int counter = 0;
+            bool isCompany = false;
 
             int id = GetIdCandidate(login);
             if (id == -1)
             {
                 id = GetIdCompanies(login);
+                isCompany = true;
             }
 
             if (id != -1)
             {
                 foreach (Messages item in dataBase.Messages.ToList())
                 {
-                    if (item.CandidateId == id || item.CompanyId == id)
+                    if (!isCompany && item.CandidateId == id)
+                    {
+                        counter++;
+                    }
+                    else if(isCompany && item.CompanyId == id)
                     {
                         counter++;
                     }
