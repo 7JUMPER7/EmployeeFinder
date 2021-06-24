@@ -1,11 +1,14 @@
 ﻿using EmployeeFinder_Client.Model;
+using EmployeeFinder_Client.View;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows;
 
 namespace EmployeeFinder_Client.ViewModel
 {
@@ -81,7 +84,10 @@ namespace EmployeeFinder_Client.ViewModel
                     System.Windows.Application.Current.Dispatcher.Invoke(action);
                     action = () => ListMessage();
                     System.Windows.Application.Current.Dispatcher.Invoke(action);
-                }                  
+                }
+
+                Action action1 = () => IsFormClosed = Application.Current.Windows.OfType<Messager>().Count() == 0 ? true : false;
+                System.Windows.Application.Current.Dispatcher.Invoke(action1);
             }
         }
 
